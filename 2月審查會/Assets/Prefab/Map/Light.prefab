@@ -112,7 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4311911467608311988}
   m_Layer: 0
-  m_Name: Wall_Torch
+  m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
