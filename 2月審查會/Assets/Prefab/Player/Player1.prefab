@@ -437,7 +437,6 @@ GameObject:
   - component: {fileID: 728908972993385022}
   - component: {fileID: 3258725540673287109}
   - component: {fileID: 4928516315169149200}
-  - component: {fileID: 6853649067004353464}
   - component: {fileID: 1018738809684736451}
   - component: {fileID: 3442595579621461482}
   m_Layer: 5
@@ -3452,21 +3451,6 @@ MonoBehaviour:
   rotateAngle: 360
   visualRoot: {fileID: 7634090642794860669}
   graphics: {fileID: 6339408119880525057}
---- !u!114 &6853649067004353464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512937436338139454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa622d2b19772eb42b36cafe8414617d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapons:
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!50 &1018738809684736451
 Rigidbody2D:
   serializedVersion: 5
