@@ -5,14 +5,16 @@ TagManager:
   serializedVersion: 3
   tags:
   - Boss
+  - Hole
+  - Floor
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 

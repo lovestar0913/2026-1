@@ -8,14 +8,13 @@ public class WFCMapGenerator : MonoBehaviour
     public const int HEIGHT = 50;
     public float cellSize = 1f;
 
-    // ⭐ 地圖起始座標（左下角）
     public Vector3 origin = new Vector3(-25f, -25f, 0f);
 
-    // ================= Tile 定義 =================
+    //Tile
     public enum TileType
     {
-        Floor0, Floor1, Floor2, Floor3, Floor4, Floor5,
-        Floor6, Floor7, Floor8, Floor9, Floor10, Floor11,
+        Floor0, Floor1, Floor2, Floor3, Floor4,
+        Floor5, Floor6, Floor7, Floor8, Floor9, Floor10, Floor11,
 
         Wall1,
         Wall2_L,
@@ -29,7 +28,6 @@ public class WFCMapGenerator : MonoBehaviour
         Hole
     }
 
-    // ================= Prefab =================
     [System.Serializable]
     public class TilePrefab
     {
@@ -42,7 +40,6 @@ public class WFCMapGenerator : MonoBehaviour
 
     Dictionary<TileType, GameObject> prefabDict;
 
-    // ================= Cell =================
     class Cell
     {
         public HashSet<TileType> possible;
@@ -57,7 +54,7 @@ public class WFCMapGenerator : MonoBehaviour
 
     Cell[,] grid = new Cell[WIDTH, HEIGHT];
 
-    // ================= Unity =================
+    //Unity
     void Awake()
     {
         prefabDict = new Dictionary<TileType, GameObject>();
@@ -70,7 +67,7 @@ public class WFCMapGenerator : MonoBehaviour
         Generate();
     }
 
-    // ================= 主流程 =================
+    //Generate
     void Generate()
     {
         foreach (Transform c in transform)
@@ -85,7 +82,7 @@ public class WFCMapGenerator : MonoBehaviour
         PlaceLights();
     }
 
-    // ================= 初始化 =================
+    //Init
     void InitCells()
     {
         for (int x = 0; x < WIDTH; x++)
@@ -119,13 +116,13 @@ public class WFCMapGenerator : MonoBehaviour
         return new[]
         {
             TileType.Floor0, TileType.Floor1, TileType.Floor2,
-            TileType.Floor3, TileType.Floor4, TileType.Floor5,
-            TileType.Floor6, TileType.Floor7, TileType.Floor8,
-            TileType.Floor9, TileType.Floor10, TileType.Floor11
+            TileType.Floor3, TileType.Floor4,
+            TileType.Floor5, TileType.Floor6, TileType.Floor7,
+            TileType.Floor8, TileType.Floor9, TileType.Floor10, TileType.Floor11
         };
     }
 
-    // ================= 固定牆 =================
+    //Borders
     void BuildBorders()
     {
         for (int y = 0; y < HEIGHT; y++)
@@ -168,7 +165,7 @@ public class WFCMapGenerator : MonoBehaviour
         }
     }
 
-    // ================= WFC（Floor only） =================
+    //WFC
     void ApplyWFC()
     {
         while (true)
@@ -177,7 +174,7 @@ public class WFCMapGenerator : MonoBehaviour
             if (pos.x < 0) break;
 
             Cell cell = grid[pos.x, pos.y];
-            TileType chosen = cell.possible.OrderBy(_ => Random.value).First();
+            TileType chosen = ChooseWeighted(cell.possible);
 
             cell.possible.Clear();
             cell.possible.Add(chosen);
@@ -249,7 +246,7 @@ public class WFCMapGenerator : MonoBehaviour
         if (p.y < HEIGHT - 3) yield return new Vector2Int(p.x, p.y + 1);
     }
 
-    // ================= Hole =================
+    //Hole
     void PlaceHoles(int count)
     {
         List<Vector2Int> floors = new List<Vector2Int>();
@@ -271,7 +268,7 @@ public class WFCMapGenerator : MonoBehaviour
         }
     }
 
-    // ================= 生 Tile =================
+    //Spawn
     void SpawnTiles()
     {
         for (int x = 0; x < WIDTH; x++)
@@ -281,22 +278,16 @@ public class WFCMapGenerator : MonoBehaviour
                 TileType type = grid[x, y].Value;
                 if (!prefabDict.ContainsKey(type)) continue;
 
-                // ⭐ 關鍵：套用 origin
-                Vector3 pos = origin + new Vector3(
-                    x * cellSize,
-                    y * cellSize,
-                    0
-                );
-
+                Vector3 pos = origin + new Vector3(x * cellSize, y * cellSize, 0);
                 Instantiate(prefabDict[type], pos, Quaternion.identity, transform);
             }
         }
     }
 
-    // ================= Light =================
+    //Light
     void PlaceLights()
     {
-        int y = HEIGHT - 2;
+        int y = HEIGHT - 3; // 第三排
         int gap = Random.Range(5, 11);
         int count = 0;
 
@@ -317,5 +308,43 @@ public class WFCMapGenerator : MonoBehaviour
                 gap = Random.Range(5, 11);
             }
         }
+    }
+
+    //Weight
+    float GetWeight(TileType type)
+    {
+        switch (type)
+        {
+            case TileType.Floor0:
+            case TileType.Floor1:
+            case TileType.Floor2:
+            case TileType.Floor3:
+            case TileType.Floor4:
+                return 5f; // 常見
+
+            case TileType.Floor5:
+            case TileType.Floor6:
+            case TileType.Floor7:
+            case TileType.Floor8:
+            case TileType.Floor9:
+            case TileType.Floor10:
+            case TileType.Floor11:
+                return 1f; // 稀有
+        }
+        return 1f;
+    }
+
+    TileType ChooseWeighted(IEnumerable<TileType> tiles)
+    {
+        float total = tiles.Sum(t => GetWeight(t));
+        float r = Random.value * total;
+
+        foreach (var t in tiles)
+        {
+            r -= GetWeight(t);
+            if (r <= 0)
+                return t;
+        }
+        return tiles.First();
     }
 }
