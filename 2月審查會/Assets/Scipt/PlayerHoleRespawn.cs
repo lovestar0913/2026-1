@@ -1,63 +1,96 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 
 public class PlayerHoleRespawn : MonoBehaviour
 {
-    [Header("¦å¶q")]
-    public int maxHP = 10;
-    public int currentHP;
+    [Header("Layer")]
+    public LayerMask holeLayer;
+    public LayerMask groundLayer;
 
-    [Header("±¼¬}³]©w")]
-    public int holeDamage = 1;
-    public float respawnDelay = 0.4f;
-    public float invincibleTime = 1.2f;
+    [Header("æ‰æ´å‹•ç•«")]
+    public float fallDuration = 0.6f;
+    public float rotateSpeed = 720f;
+    public float shrinkScale = 0.1f;
 
-    private Vector3 lastSafePosition;
-    private bool isRespawning;
-    private Collider2D col;
+    [Header("é‡ç”Ÿ")]
+    public float respawnRadius = 2f;
+    public int fallDamage = 5;
+
+    [Header("åƒè€ƒ")]
+    public Transform visualRoot; // â­ æ‹– VisualRoot
+
+    private bool isFalling;
+    private Vector3 originalScale;
+    private Quaternion originalRotation;
+
     private Rigidbody2D rb;
+    private PlayerController controller;
+    private PlayerHealth health;
 
     void Awake()
     {
-        currentHP = maxHP;
-        col = GetComponent<Collider2D>();
         rb = GetComponent<Rigidbody2D>();
-        lastSafePosition = transform.position;
-    }
+        controller = GetComponent<PlayerController>();
+        health = GetComponent<PlayerHealth>();
 
-    void Update()
-    {
-        // ¥u­n¯¸¦b¦w¥ş¦a­±¡A´N§ó·s¦w¥şÂI
-        lastSafePosition = transform.position;
+        originalScale = visualRoot.localScale;
+        originalRotation = visualRoot.localRotation;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isRespawning) return;
-
-        if (other.CompareTag("Hole"))
+        if (((1 << other.gameObject.layer) & holeLayer) != 0)
         {
-            StartCoroutine(FallIntoHole());
+            if (!isFalling)
+                StartCoroutine(FallAndRespawn());
         }
     }
 
-    IEnumerator FallIntoHole()
+    IEnumerator FallAndRespawn()
     {
-        isRespawning = true;
+        isFalling = true;
 
+        controller.SetLock(true);
         rb.linearVelocity = Vector2.zero;
-        col.enabled = false;
 
-        currentHP -= holeDamage;
-        currentHP = Mathf.Max(currentHP, 0);
+        health.TakeDamage(fallDamage);
 
-        yield return new WaitForSeconds(respawnDelay);
+        float t = 0f;
 
-        transform.position = lastSafePosition;
+        while (t < fallDuration)
+        {
+            visualRoot.Rotate(0, 0, rotateSpeed * Time.deltaTime);
 
-        yield return new WaitForSeconds(invincibleTime);
+            float lerp = t / fallDuration;
+            visualRoot.localScale = Vector3.Lerp(
+                originalScale,
+                originalScale * shrinkScale,
+                lerp
+            );
 
-        col.enabled = true;
-        isRespawning = false;
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = FindGroundPosition();
+
+        visualRoot.localScale = originalScale;
+        visualRoot.localRotation = originalRotation;
+
+        controller.SetLock(false);
+        isFalling = false;
+    }
+
+    Vector2 FindGroundPosition()
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            Vector2 pos = (Vector2)transform.position
+                + Random.insideUnitCircle * respawnRadius;
+
+            if (Physics2D.OverlapCircle(pos, 0.2f, groundLayer))
+                return pos;
+        }
+        return transform.position;
     }
 }

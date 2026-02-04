@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &46086103 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7634090642794860669, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+  m_PrefabInstance: {fileID: 152878068}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &152878068
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -162,10 +167,6 @@ PrefabInstance:
     - target: {fileID: 728908972993385022, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
       propertyPath: m_SizeDelta.y
       value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 728908972993385022, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 728908972993385022, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -215,18 +216,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6853649067004353464, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+    - target: {fileID: 4928516315169149200, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+      propertyPath: graphics
+      value: 
+      objectReference: {fileID: 665150743}
+    - target: {fileID: 4928516315169149200, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+      propertyPath: visualRoot
+      value: 
+      objectReference: {fileID: 46086103}
+    - target: {fileID: 7804178951157680565, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+      propertyPath: visualRoot
+      value: 
+      objectReference: {fileID: 46086103}
+    - target: {fileID: 7804178951157680565, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+      propertyPath: rotateSpeed
+      value: 720
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804178951157680565, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+      propertyPath: holeLayer.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7804178951157680565, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 512937436338139454, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1359193460}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
---- !u!1 &152878069 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 512937436338139454, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
+--- !u!4 &665150743 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1573263301543878407, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
   m_PrefabInstance: {fileID: 152878068}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
@@ -583,23 +604,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 728908972993385022, guid: ec3e5ddc0eed847b29e7c75698f3bab0, type: 3}
   m_PrefabInstance: {fileID: 152878068}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1359193460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 152878069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 228ea29b3a37d824e8a0a66a2881f348, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHP: 10
-  currentHP: 0
-  holeDamage: 5
-  respawnDelay: 0.5
-  invincibleTime: 1
 --- !u!1001 &1818375483
 PrefabInstance:
   m_ObjectHideFlags: 0

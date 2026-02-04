@@ -10,78 +10,82 @@ public class PlayerController : MonoBehaviour
     public float dodgeSpeed = 12f;
     public float dodgeTime = 0.25f;
     public float dodgeCooldown = 0.8f;
-
-    [Header("旋轉")]
-    public float rotateAngle = 360f;
+    public float dodgeRotateAngle = 360f;
 
     [Header("參考")]
-    public Transform visualRoot; // ⭐ 拖 VisualRoot 進來
-    public Transform graphics;   // ⭐ 拖 Graphics（給翻面用）
+    public Transform visualRoot; // ⭐ 拖 VisualRoot
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
+
     private bool isDodging;
+    private bool isLocked;
     private float lastDodgeTime;
-    private Vector3 graphicsOriginalScale;
+
+    private Vector3 originalScale;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        graphicsOriginalScale = graphics.localScale;
+        originalScale = visualRoot.localScale;
     }
 
     void Update()
     {
+        if (isLocked) return;
+
         HandleInput();
         HandleFlip();
     }
 
     void FixedUpdate()
     {
-        if (!isDodging)
-        {
-            rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
-        }
+        if (isLocked || isDodging) return;
+
+        rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
     }
 
+    // =====================
     // 輸入
+    // =====================
     void HandleInput()
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         moveInput = new Vector2(h, v).normalized;
 
-        // 右鍵閃避
         if (Input.GetMouseButtonDown(1))
         {
-            Vector2 dodgeDir = moveInput == Vector2.zero
-                ? Vector2.right * Mathf.Sign(graphics.localScale.x)
+            Vector2 dir = moveInput == Vector2.zero
+                ? new Vector2(Mathf.Sign(visualRoot.localScale.x), 0)
                 : moveInput;
 
-            StartDodge(dodgeDir);
+            StartDodge(dir);
         }
     }
 
-    // 翻面
+    // =====================
+    // 翻面（只翻 Scale）
+    // =====================
     void HandleFlip()
     {
-        if (isDodging) return;
-
         if (moveInput.x > 0)
-            graphics.localScale = new Vector3(
-                -Mathf.Abs(graphicsOriginalScale.x),
-                graphicsOriginalScale.y,
-                graphicsOriginalScale.z
+            visualRoot.localScale = new Vector3(
+                -Mathf.Abs(originalScale.x),
+                originalScale.y,
+                originalScale.z
             );
         else if (moveInput.x < 0)
-            graphics.localScale = new Vector3(
-                Mathf.Abs(graphicsOriginalScale.x),
-                graphicsOriginalScale.y,
-                graphicsOriginalScale.z
+            visualRoot.localScale = new Vector3(
+                Mathf.Abs(originalScale.x),
+                originalScale.y,
+                originalScale.z
             );
     }
 
-    // 閃避
+    // =====================
+    // 閃避（身體中心旋轉）
+    // =====================
     void StartDodge(Vector2 dir)
     {
         if (isDodging) return;
@@ -96,21 +100,34 @@ public class PlayerController : MonoBehaviour
         lastDodgeTime = Time.time;
 
         float t = 0f;
+        Quaternion startRot = visualRoot.localRotation;
+
         while (t < dodgeTime)
         {
-            // 位移
             rb.linearVelocity = dir * dodgeSpeed;
 
-            // ⭐ 只旋轉 VisualRoot（Animator 碰不到）
-            float delta = (rotateAngle / dodgeTime) * Time.deltaTime;
-            visualRoot.Rotate(0f, 0f, delta);
+            float delta = (dodgeRotateAngle / dodgeTime) * Time.deltaTime;
+            visualRoot.localRotation *= Quaternion.Euler(0, 0, delta);
 
             t += Time.deltaTime;
             yield return null;
         }
 
         rb.linearVelocity = Vector2.zero;
-        visualRoot.localRotation = Quaternion.identity;
+        visualRoot.localRotation = startRot;
         isDodging = false;
+    }
+
+    // =====================
+    // 給掉洞用
+    // =====================
+    public void SetLock(bool value)
+    {
+        isLocked = value;
+        if (value)
+        {
+            rb.linearVelocity = Vector2.zero;
+            isDodging = false;
+        }
     }
 }
