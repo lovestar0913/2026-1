@@ -1,52 +1,70 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerWeapon : MonoBehaviour
 {
-    [Header("�̦h�˳� 2 ��")]
+    [Header("武器點")]
+    public Transform handPoint;
+    public Transform backPoint;
+
+    [Header("最多 2 把")]
     public WeaponBase[] weapons = new WeaponBase[2];
 
     private int currentIndex = 0;
 
-    void Start()
-    {
-        EquipWeapon(0);
-    }
-
     void Update()
     {
-        HandleScrollSwitch();
+        HandleScroll();
     }
 
-    public void Fire()
+    // ⭐ 給 WeaponPickup 呼叫
+    public bool AddWeapon(WeaponBase weaponPrefab)
     {
-        if (weapons[currentIndex] != null)
-            weapons[currentIndex].Fire();
+        // Item1
+        if (weapons[0] == null)
+        {
+            weapons[0] = Instantiate(weaponPrefab, handPoint);
+            Equip(0);
+            return true;
+        }
+
+        // Item2
+        if (weapons[1] == null)
+        {
+            weapons[1] = Instantiate(weaponPrefab, backPoint);
+            weapons[1].gameObject.SetActive(false);
+            return true;
+        }
+
+        // 滿了
+        return false;
     }
 
-    void HandleScrollSwitch()
+    void HandleScroll()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-        if (scroll > 0f)
-            SwitchWeapon(1);
-        else if (scroll < 0f)
-            SwitchWeapon(-1);
+        if (scroll > 0) Switch(1);
+        else if (scroll < 0) Switch(-1);
     }
 
-    void SwitchWeapon(int dir)
+    void Switch(int dir)
     {
-        int nextIndex = (currentIndex + dir + weapons.Length) % weapons.Length;
-        EquipWeapon(nextIndex);
+        int next = (currentIndex + dir + 2) % 2;
+        if (weapons[next] == null) return;
+
+        Equip(next);
     }
 
-    void EquipWeapon(int index)
+    void Equip(int index)
     {
-        if (weapons[index] == null) return;
-
         for (int i = 0; i < weapons.Length; i++)
         {
-            if (weapons[i] != null)
-                weapons[i].gameObject.SetActive(i == index);
+            if (weapons[i] == null) continue;
+
+            bool active = (i == index);
+            weapons[i].gameObject.SetActive(active);
+            weapons[i].transform.SetParent(active ? handPoint : backPoint);
+            weapons[i].transform.localPosition = Vector3.zero;
+            weapons[i].transform.localRotation = Quaternion.identity;
         }
 
         currentIndex = index;
