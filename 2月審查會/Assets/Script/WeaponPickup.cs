@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WeaponPickup : MonoBehaviour
 {
-    public WeaponBase weaponPrefab;
+    public WeaponBase weapon;
 
     private void OnTriggerStay2D(Collider2D other)
     {
@@ -13,11 +13,10 @@ public class WeaponPickup : MonoBehaviour
             PlayerWeapon pw = other.GetComponent<PlayerWeapon>();
             if (pw == null) return;
 
-            bool success = pw.AddWeapon(weaponPrefab);
-            if (success)
-            {
-                Destroy(gameObject); // 撿到就消失
-            }
+            pw.AddWeapon(weapon);
+
+            // 拿起後移除 Pickup
+            Destroy(this);
         }
     }
 }

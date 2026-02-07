@@ -12,8 +12,11 @@ public class PlayerController : MonoBehaviour
     public float dodgeCooldown = 0.8f;
     public float dodgeRotateAngle = 360f;
 
+    [Header("武器")]
+    public WeaponBase currentWeapon;
+
     [Header("參考")]
-    public Transform visualRoot; // ⭐ 拖 VisualRoot
+    public Transform visualRoot; // 拖角色圖像根節點
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
@@ -24,36 +27,49 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 originalScale;
 
+    // =====================
+    // 初始化
+    // =====================
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         originalScale = visualRoot.localScale;
     }
 
+    // =====================
+    // Update（只處理 Input）
+    // =====================
     void Update()
     {
         if (isLocked) return;
 
-        HandleInput();
+        HandleMoveInput();
+        HandleFireInput();
         HandleFlip();
     }
 
+    // =====================
+    // FixedUpdate（物理移動）
+    // =====================
     void FixedUpdate()
     {
         if (isLocked || isDodging) return;
 
-        rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        rb.MovePosition(
+            rb.position + moveInput * moveSpeed * Time.fixedDeltaTime
+        );
     }
 
     // =====================
-    // 輸入
+    // 輸入：移動 + 閃避
     // =====================
-    void HandleInput()
+    void HandleMoveInput()
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         moveInput = new Vector2(h, v).normalized;
 
+        // 右鍵閃避
         if (Input.GetMouseButtonDown(1))
         {
             Vector2 dir = moveInput == Vector2.zero
@@ -65,26 +81,44 @@ public class PlayerController : MonoBehaviour
     }
 
     // =====================
+    // 輸入：射擊（唯一入口）
+    // =====================
+    void HandleFireInput()
+    {
+        if (currentWeapon == null) return;
+        if (isDodging) return; // 閃避中不能射
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            currentWeapon.TryFire();
+        }
+    }
+
+    // =====================
     // 翻面（只翻 Scale）
     // =====================
     void HandleFlip()
     {
         if (moveInput.x > 0)
+        {
             visualRoot.localScale = new Vector3(
                 -Mathf.Abs(originalScale.x),
                 originalScale.y,
                 originalScale.z
             );
+        }
         else if (moveInput.x < 0)
+        {
             visualRoot.localScale = new Vector3(
                 Mathf.Abs(originalScale.x),
                 originalScale.y,
                 originalScale.z
             );
+        }
     }
 
     // =====================
-    // 閃避（身體中心旋轉）
+    // 閃避
     // =====================
     void StartDodge(Vector2 dir)
     {
@@ -119,11 +153,34 @@ public class PlayerController : MonoBehaviour
     }
 
     // =====================
-    // 給掉洞用
+    // 武器裝備 / 卸下
+    // =====================
+    public void EquipWeapon(WeaponBase weapon)
+    {
+        if (currentWeapon != null)
+            currentWeapon.OnUnequip();
+
+        currentWeapon = weapon;
+
+        if (currentWeapon != null)
+            currentWeapon.OnEquip();
+    }
+
+    public void UnequipWeapon()
+    {
+        if (currentWeapon == null) return;
+
+        currentWeapon.OnUnequip();
+        currentWeapon = null;
+    }
+
+    // =====================
+    // 掉洞 / 強制鎖定
     // =====================
     public void SetLock(bool value)
     {
         isLocked = value;
+
         if (value)
         {
             rb.linearVelocity = Vector2.zero;
