@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerHoleHandler : MonoBehaviour
 {
     [Header("參考")]
-    public Transform graphics;          // 身體中心（SPUM Graphics）
+    public Transform graphics;
     public Rigidbody2D rb;
 
     [Header("掉洞動畫")]
@@ -14,6 +14,9 @@ public class PlayerHoleHandler : MonoBehaviour
 
     [Header("復活")]
     public float respawnOffset = 1.2f;
+
+    [Header("傷害")]
+    public int holeDamage = 3;
 
     private bool isFalling;
     private Vector3 originalScale;
@@ -29,6 +32,10 @@ public class PlayerHoleHandler : MonoBehaviour
     public void FallIntoHole(Vector3 holePos)
     {
         if (isFalling) return;
+
+        PlayerHealth health = GetComponent<PlayerHealth>();
+        if (health != null && health.IsDead()) return; // ⭐ 死亡不執行
+
         StartCoroutine(FallCoroutine(holePos));
     }
 
@@ -36,28 +43,21 @@ public class PlayerHoleHandler : MonoBehaviour
     {
         isFalling = true;
 
-        // 🔒 鎖玩家
         rb.linearVelocity = Vector2.zero;
         rb.simulated = false;
-
-        // TODO：這裡可以扣血
-        // GetComponent<PlayerHealth>().TakeDamage(5);
 
         float t = 0f;
 
         while (t < fallDuration)
         {
-            // 吸向洞中心
             transform.position = Vector3.Lerp(
                 transform.position,
                 holePos,
                 Time.deltaTime * 8f
             );
 
-            // ⭐ 以身體中心旋轉
             graphics.Rotate(0, 0, rotateSpeed * Time.deltaTime);
 
-            // 縮小
             graphics.localScale = Vector3.Lerp(
                 graphics.localScale,
                 Vector3.zero,
@@ -68,22 +68,29 @@ public class PlayerHoleHandler : MonoBehaviour
             yield return null;
         }
 
+        // ⭐ 扣血
+        PlayerHealth health = GetComponent<PlayerHealth>();
+        if (health != null)
+        {
+            health.TakeDamage(holeDamage);
+
+            // 如果死亡就不復活
+            if (health.IsDead())
+            {
+                isFalling = false;
+                yield break;
+            }
+        }
+
         // ====== 傳送復活 ======
-        Vector3 respawnPos = FindSafeRespawnPos(holePos);
+        Vector3 respawnPos = holePos + Vector3.up * respawnOffset;
         transform.position = respawnPos;
 
-        // 重置外觀
         graphics.localScale = originalScale;
         graphics.localRotation = Quaternion.identity;
 
         rb.simulated = true;
         isFalling = false;
-    }
-
-    Vector3 FindSafeRespawnPos(Vector3 holePos)
-    {
-        // 簡單版：往上復活（保證不是洞）
-        return holePos + Vector3.up * respawnOffset;
     }
 
     public bool IsFalling()

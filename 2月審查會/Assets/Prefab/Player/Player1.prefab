@@ -439,6 +439,7 @@ GameObject:
   - component: {fileID: 4928516315169149200}
   - component: {fileID: 8807933933858025321}
   - component: {fileID: 3318534860592052783}
+  - component: {fileID: 1436333313454134865}
   - component: {fileID: 1018738809684736451}
   - component: {fileID: 3442595579621461482}
   m_Layer: 6
@@ -512,6 +513,7 @@ MonoBehaviour:
   dodgeTime: 0.25
   dodgeCooldown: 0.8
   dodgeRotateAngle: 360
+  currentWeapon: {fileID: 0}
   visualRoot: {fileID: 7634090642794860669}
 --- !u!114 &8807933933858025321
 MonoBehaviour:
@@ -544,6 +546,24 @@ MonoBehaviour:
   - {fileID: 0}
   handPoint: {fileID: 4539150578167048090}
   backPoint: {fileID: 5596322835695812079}
+--- !u!114 &1436333313454134865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512937436338139454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ed17827be60dda40889ac7fb83b4b56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphics: {fileID: 7634090642794860669}
+  rb: {fileID: 1018738809684736451}
+  fallDuration: 0.6
+  rotateSpeed: 720
+  shrinkSpeed: 3
+  respawnOffset: 1.2
 --- !u!50 &1018738809684736451
 Rigidbody2D:
   serializedVersion: 5

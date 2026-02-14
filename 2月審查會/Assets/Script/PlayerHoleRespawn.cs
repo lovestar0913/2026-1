@@ -11,7 +11,6 @@ public class PlayerHoleRespawn : MonoBehaviour
 
         if (holeHandler == null) return;
 
-        // 通知玩家「你掉洞了」
         holeHandler.FallIntoHole(transform.position);
     }
 }
