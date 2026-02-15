@@ -1,29 +1,21 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [Header("°ò¥»³]©w")]
-    public float speed = 15f;
+    [Header("å­å½ˆè¨­å®š")]
+    public float lifeTime = 3f;
     public int damage = 1;
-    public float lifeTime = 2f;
+    public float speed = 10f; // æ–°å¢å­å½ˆé€Ÿåº¦
 
-    [Header("¯S®Ä")]
-    public bool rotateWithDirection = true;
+    private Rigidbody2D rb;
 
-    private Vector2 direction;
-
-    // =========================
-    // ªì©l¤Æ¡]¥ÑªZ¾¹©I¥s¡^
-    // =========================
-    public void Init(Vector2 dir)
+    void Start()
     {
-        direction = dir.normalized;
-
-        // Åı¤l¼u­±¦V­¸¦æ¤è¦V
-        if (rotateWithDirection)
+        // å¦‚æœå­å½ˆæœ‰ Rigidbody2Dï¼Œå°±è®“å®ƒç”¨é€Ÿåº¦ç§»å‹•
+        rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
         {
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, 0, angle);
+            rb.linearVelocity = transform.right * speed; // å­å½ˆæ²¿è‘— X è»¸æ–¹å‘å‰é€²
         }
 
         Destroy(gameObject, lifeTime);
@@ -31,28 +23,18 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
-        transform.position += (Vector3)(direction * speed * Time.deltaTime);
+        // å¦‚æœæ²’æœ‰ Rigidbody2Dï¼Œä¹Ÿå¯ä»¥ç”¨ transform ç§»å‹•
+        if (rb == null)
+        {
+            transform.position += transform.right * speed * Time.deltaTime;
+        }
     }
 
-    // =========================
-    // ©R¤¤§P©w
-    // =========================
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        // ¤£¥´¦Û¤v
-        if (other.CompareTag("Player"))
-            return;
-
-        // ¥´¼Ä¤H¡]¦pªG¦³¡^
-        /*
-        EnemyHealth enemy = other.GetComponent<EnemyHealth>();
-        if (enemy != null)
+        if (other.CompareTag("Enemy") || other.CompareTag("Boss"))
         {
-            enemy.TakeDamage(damage);
+            Destroy(gameObject);
         }
-        */
-
-        // ©R¤¤´N®ø¥¢
-        Destroy(gameObject);
     }
 }

@@ -1,73 +1,29 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public abstract class WeaponBase : MonoBehaviour
 {
-    public Transform firePoint;
+    [Header("åŸºç¤Žè¨­å®š")]
     public GameObject bulletPrefab;
+    public float fireRate = 0.2f;
+    public float bulletSpeed = 10f;
 
-    public float fireCooldown = 0.2f;
-    protected float lastFireTime;
+    protected float nextFireTime;
+    protected PlayerController owner;
 
-    // ¡¹¡¹¡¹ ·s¼W¡G¬O§_¸Ë³Æ¤¤ ¡¹¡¹¡¹
-    protected bool isEquipped = false;
+    public PlayerController Owner => owner;
 
-    public virtual void TryFire()
+    public virtual void OnEquip(PlayerController player)
     {
-        if (!isEquipped) return;
-
-        if (Time.time < lastFireTime + fireCooldown)
-            return;
-
-        lastFireTime = Time.time;
-
-        Vector2 dir = GetFireDirection();
-
-        GameObject bullet = Instantiate(
-            bulletPrefab,
-            firePoint.position,
-            Quaternion.identity
-        );
-
-        bullet.GetComponent<Bullet>().Init(dir);
+        owner = player;
     }
 
-    protected virtual Vector2 GetFireDirection()
+    public void TryFire()
     {
-        GameObject boss = GameObject.FindGameObjectWithTag("Boss");
+        if (Time.time < nextFireTime) return;
 
-        if (boss != null)
-        {
-            Vector2 dir = boss.transform.position - firePoint.position;
-            return dir.normalized;
-        }
-
-        return GetPlayerFacingDirection();
+        nextFireTime = Time.time + fireRate;
+        Fire();
     }
 
-    protected Vector2 GetPlayerFacingDirection()
-    {
-        Transform visualRoot = transform.root.Find("VisualRoot");
-
-        if (visualRoot == null)
-            return Vector2.right;
-
-        return visualRoot.localScale.x < 0
-            ? Vector2.right
-            : Vector2.left;
-    }
-
-    // =====================
-    // ¸Ë³Æ / ¨ø¤U
-    // =====================
-    public virtual void OnEquip()
-    {
-        isEquipped = true;
-        gameObject.SetActive(true);
-    }
-
-    public virtual void OnUnequip()
-    {
-        isEquipped = false;
-        gameObject.SetActive(false);
-    }
+    protected abstract void Fire();
 }

@@ -1,22 +1,25 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 public class WeaponPickup : MonoBehaviour
 {
-    public WeaponBase weapon;
+    public WeaponBase weaponPrefab;
 
-    private void OnTriggerStay2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (weaponPrefab == null)
         {
-            PlayerWeapon pw = other.GetComponent<PlayerWeapon>();
-            if (pw == null) return;
-
-            pw.AddWeapon(weapon);
-
-            // Æ≥∞_´·≤æ∞£ Pickup
-            Destroy(this);
+            Debug.LogError("weaponPrefab ÊòØ nullÔºÅ");
+            return;
         }
+
+        PlayerWeapon pw = other.GetComponent<PlayerWeapon>();
+        if (pw == null) return;
+
+        WeaponBase newWeapon = Instantiate(weaponPrefab);
+        pw.AddWeapon(newWeapon);
+
+        Destroy(gameObject);
     }
 }

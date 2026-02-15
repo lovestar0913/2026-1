@@ -1,23 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHP = 10;
+    public int maxHP = 5;
     private int currentHP;
 
-    private bool isDead;
+    private bool isDead = false;
+
+    private PlayerController controller;
 
     void Start()
     {
         currentHP = maxHP;
+        controller = GetComponent<PlayerController>();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int dmg)
     {
         if (isDead) return;
 
-        currentHP -= damage;
-        Debug.Log("ª±®a¨ü¶Ë¡A³Ñ¾l¦å¶q: " + currentHP);
+        currentHP -= dmg;
 
         if (currentHP <= 0)
         {
@@ -27,27 +29,15 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-        if (isDead) return;
-
         isDead = true;
 
-        Debug.Log("ª±®a¦º¤`");
-
-        // ³qª¾ GameManager
-        if (GameManager.Instance != null)
-            GameManager.Instance.GameOver();
-
-        // Âê©wª±®a±±¨î
-        PlayerController controller = GetComponent<PlayerController>();
         if (controller != null)
             controller.SetLock(true);
 
-        // °±¤îª«²z
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        if (rb != null)
-            rb.linearVelocity = Vector2.zero;
+        Debug.Log("Player Dead");
     }
 
+    // â­ æ–°å¢é€™å€‹æ–¹æ³•
     public bool IsDead()
     {
         return isDead;

@@ -1,45 +1,62 @@
 ﻿using UnityEngine;
 
-public class MachineGun : Gun
+public class MachineGun : WeaponBase
 {
-    public float holdFireInterval = 0.4f;
-    public float holdThreshold = 0.2f;
+    [Header("開火位置")]
+    public Transform firePoint; // 子彈生成位置
 
-    float pressStartTime;
-    bool isHolding;
+    private float fireCooldown = 0f; // 射擊冷卻計時
 
-    void Update()
+    private void Awake()
     {
-        if (!isEquipped) return;
+        // 修改父類 fireRate
+        fireRate = 3f; // 每秒 3 發
+    }
 
-        // 按下（單發）
-        if (Input.GetMouseButtonDown(0))
+    private void Update()
+    {
+        if (owner == null) return;
+
+        fireCooldown -= Time.deltaTime;
+
+        // 點擊射擊
+        if (Input.GetButtonDown("Fire1"))
         {
-            pressStartTime = Time.time;
-            isHolding = false;
-
-            TryFire(); // ✅ 只走唯一入口
+            Fire();
         }
 
-        // 持續按住（連射）
-        if (Input.GetMouseButton(0))
+        // 按住射擊
+        if (Input.GetButton("Fire1") && fireCooldown <= 0f)
         {
-            if (!isHolding && Time.time - pressStartTime >= holdThreshold)
-            {
-                isHolding = true;
-                lastFireTime = Time.time; // 重置冷卻
-            }
+            Fire();
+            fireCooldown = 1f / fireRate; // 使用父類 fireRate
+        }
+    }
 
-            if (isHolding && Time.time >= lastFireTime + holdFireInterval)
-            {
-                TryFire(); // ✅ 冷卻由 WeaponBase 控制
-            }
+    protected override void Fire()
+    {
+        if (bulletPrefab == null || owner == null) return;
+
+        Vector2 dir = owner.GetAimDirection().normalized;
+
+        // 如果 firePoint 有設置，從 firePoint 發射，否則從武器中心
+        Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
+
+        GameObject bullet = Instantiate(
+            bulletPrefab,
+            spawnPos,
+            Quaternion.identity
+        );
+
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = dir * bulletSpeed; // ← 正確寫法
+            rb.gravityScale = 0f;
         }
 
-        // 放開
-        if (Input.GetMouseButtonUp(0))
-        {
-            isHolding = false;
-        }
+        // 子彈旋轉方向
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
     }
 }

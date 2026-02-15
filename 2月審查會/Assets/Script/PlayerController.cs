@@ -7,184 +7,158 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
 
     [Header("閃避")]
-    public float dodgeSpeed = 12f;
-    public float dodgeTime = 0.25f;
-    public float dodgeCooldown = 0.8f;
-    public float dodgeRotateAngle = 360f;
+    public float dodgeSpeed = 10f;
+    public float dodgeDuration = 0.2f;
+    public float dodgeCooldownTime = 1f;
+    public float invincibleDuration = 0.5f;
 
-    [Header("武器")]
-    public WeaponBase currentWeapon;
-
-    [Header("參考")]
-    public Transform visualRoot; // 拖角色圖像根節點
+    [Header("Graphics")]
+    public Transform graphics; // 玩家模型，用來旋轉
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
+    private Vector2 lastMoveDir = Vector2.left; // 預設面向左
 
-    private bool isDodging;
-    private bool isLocked;
-    private float lastDodgeTime;
+    private bool isLocked = false;
+    private bool isDodging = false;
+    private bool isInvincible = false;
+    private float dodgeCooldown = 0f;
+    private float dodgeTimer = 0f;
+    private float invincibleTimer = 0f;
 
-    private Vector3 originalScale;
+    private PlayerWeapon playerWeapon;
 
-    // =====================
-    // 初始化
-    // =====================
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        originalScale = visualRoot.localScale;
+        playerWeapon = GetComponent<PlayerWeapon>();
+
+        // 玩家預設面向左
+        if (graphics != null)
+        {
+            Vector3 scale = graphics.localScale;
+            scale.x = -Mathf.Abs(scale.x);
+            graphics.localScale = scale;
+        }
+
+        lastMoveDir = Vector2.left;
     }
 
-    // =====================
-    // Update（只處理 Input）
-    // =====================
     void Update()
     {
         if (isLocked) return;
 
-        HandleMoveInput();
-        HandleFireInput();
-        HandleFlip();
-    }
-
-    // =====================
-    // FixedUpdate（物理移動）
-    // =====================
-    void FixedUpdate()
-    {
-        if (isLocked || isDodging) return;
-
-        rb.MovePosition(
-            rb.position + moveInput * moveSpeed * Time.fixedDeltaTime
-        );
-    }
-
-    // =====================
-    // 輸入：移動 + 閃避
-    // =====================
-    void HandleMoveInput()
-    {
+        // ===== 移動輸入 =====
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         moveInput = new Vector2(h, v).normalized;
 
-        // 右鍵閃避
-        if (Input.GetMouseButtonDown(1))
-        {
-            Vector2 dir = moveInput == Vector2.zero
-                ? new Vector2(Mathf.Sign(visualRoot.localScale.x), 0)
-                : moveInput;
+        if (moveInput != Vector2.zero)
+            lastMoveDir = moveInput;
 
-            StartDodge(dir);
+        // ===== 攻擊 =====
+        if (Input.GetMouseButton(0))
+            playerWeapon?.TryFire();
+
+        // ===== 滾輪切換武器 =====
+        if (Input.mouseScrollDelta.y != 0)
+            playerWeapon?.SwitchWeapon();
+
+        // ===== 閃避輸入 =====
+        dodgeCooldown -= Time.deltaTime;
+
+        if (!isDodging && Input.GetKeyDown(KeyCode.Space) && dodgeCooldown <= 0f)
+        {
+            StartCoroutine(DodgeCoroutine());
+        }
+
+        // 無敵倒計時
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer <= 0f)
+                isInvincible = false;
         }
     }
 
-    // =====================
-    // 輸入：射擊（唯一入口）
-    // =====================
-    void HandleFireInput()
+    void FixedUpdate()
     {
-        if (currentWeapon == null) return;
-        if (isDodging) return; // 閃避中不能射
+        if (isLocked) return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (!isDodging)
         {
-            currentWeapon.TryFire();
+            rb.linearVelocity = moveInput * moveSpeed;
+
+            // 左右翻轉 Graphics
+            if (graphics != null)
+            {
+                if (moveInput.x > 0)
+                    graphics.localScale = new Vector3(-1, 1, 1);
+                else if (moveInput.x < 0)
+                    graphics.localScale = new Vector3(1, 1, 1);
+
+                graphics.localRotation = Quaternion.identity; // 恢復旋轉
+            }
         }
     }
 
-    // =====================
-    // 翻面（只翻 Scale）
-    // =====================
-    void HandleFlip()
-    {
-        if (moveInput.x > 0)
-        {
-            visualRoot.localScale = new Vector3(
-                -Mathf.Abs(originalScale.x),
-                originalScale.y,
-                originalScale.z
-            );
-        }
-        else if (moveInput.x < 0)
-        {
-            visualRoot.localScale = new Vector3(
-                Mathf.Abs(originalScale.x),
-                originalScale.y,
-                originalScale.z
-            );
-        }
-    }
-
-    // =====================
-    // 閃避
-    // =====================
-    void StartDodge(Vector2 dir)
-    {
-        if (isDodging) return;
-        if (Time.time < lastDodgeTime + dodgeCooldown) return;
-
-        StartCoroutine(DodgeCoroutine(dir.normalized));
-    }
-
-    IEnumerator DodgeCoroutine(Vector2 dir)
+    private IEnumerator DodgeCoroutine()
     {
         isDodging = true;
-        lastDodgeTime = Time.time;
+        isInvincible = true;
 
-        float t = 0f;
-        Quaternion startRot = visualRoot.localRotation;
+        // 將翻滾持續時間同步為無敵時間
+        float dodgeTime = invincibleDuration;
+        dodgeCooldown = dodgeCooldownTime;
+        invincibleTimer = invincibleDuration;
 
-        while (t < dodgeTime)
+        float elapsed = 0f;
+        float startRotation = graphics != null ? graphics.eulerAngles.z : 0f;
+        float endRotation = startRotation + 720f;
+
+        while (elapsed < dodgeTime)
         {
-            rb.linearVelocity = dir * dodgeSpeed;
+            rb.linearVelocity = lastMoveDir.normalized * dodgeSpeed;
 
-            float delta = (dodgeRotateAngle / dodgeTime) * Time.deltaTime;
-            visualRoot.localRotation *= Quaternion.Euler(0, 0, delta);
+            if (graphics != null)
+            {
+                float t = elapsed / dodgeTime;
+                float angle = Mathf.Lerp(startRotation, endRotation, t);
+                graphics.rotation = Quaternion.Euler(0, 0, angle);
+            }
 
-            t += Time.deltaTime;
+            elapsed += Time.deltaTime;
             yield return null;
         }
 
-        rb.linearVelocity = Vector2.zero;
-        visualRoot.localRotation = startRot;
+        if (graphics != null)
+            graphics.rotation = Quaternion.identity; // 翻滾結束恢復
+
         isDodging = false;
     }
 
-    // =====================
-    // 武器裝備 / 卸下
-    // =====================
-    public void EquipWeapon(WeaponBase weapon)
+
+    // =========================
+    // 給 WeaponBase 使用
+    // =========================
+    public Vector2 GetAimDirection()
     {
-        if (currentWeapon != null)
-            currentWeapon.OnUnequip();
+        GameObject boss = GameObject.FindGameObjectWithTag("Boss");
 
-        currentWeapon = weapon;
+        if (boss != null)
+            return (boss.transform.position - transform.position).normalized;
 
-        if (currentWeapon != null)
-            currentWeapon.OnEquip();
+        return lastMoveDir.normalized;
     }
 
-    public void UnequipWeapon()
-    {
-        if (currentWeapon == null) return;
-
-        currentWeapon.OnUnequip();
-        currentWeapon = null;
-    }
-
-    // =====================
-    // 掉洞 / 強制鎖定
-    // =====================
     public void SetLock(bool value)
     {
         isLocked = value;
+        rb.linearVelocity = Vector2.zero;
+    }
 
-        if (value)
-        {
-            rb.linearVelocity = Vector2.zero;
-            isDodging = false;
-        }
+    public bool IsInvincible()
+    {
+        return isInvincible;
     }
 }

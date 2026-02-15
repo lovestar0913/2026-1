@@ -2,26 +2,20 @@
 
 public class Gun : WeaponBase
 {
-    [Header("散射設定")]
-    public float spreadAngle = 10f;
+    [Header("子彈設定")]
+    public GameObject bulletPrefab;
+    public Transform firePoint;
 
-    // =========================
-    // 只改射擊方向（加散射）
-    // =========================
-    protected override Vector2 GetFireDirection()
+    protected override void Fire()
     {
-        Vector2 baseDir = base.GetFireDirection();
+        Debug.Log("Fire!");
 
-        float randomAngle = Random.Range(-spreadAngle, spreadAngle);
-        return Rotate(baseDir, randomAngle);
-    }
+        if (bulletPrefab == null || firePoint == null)
+        {
+            Debug.LogWarning("子彈或發射點沒設定");
+            return;
+        }
 
-    Vector2 Rotate(Vector2 v, float angle)
-    {
-        float rad = angle * Mathf.Deg2Rad;
-        return new Vector2(
-            v.x * Mathf.Cos(rad) - v.y * Mathf.Sin(rad),
-            v.x * Mathf.Sin(rad) + v.y * Mathf.Cos(rad)
-        );
+        Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     }
 }

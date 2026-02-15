@@ -191,13 +191,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92f0d8eb2c6f6da4bb809b6139ff92bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireInterval: 0.2
+  fireRate: 8
   bulletPrefab: {fileID: 4185561404333243811, guid: 59e83ccfb7be6f74285639138bd423ce, type: 3}
   firePoint: {fileID: 6857126514717249347}
-  targetBoss: {fileID: 5375047960093657315, guid: 64359be8b124840d0bb4846426882691, type: 3}
-  spreadAngle: 10
-  holdFireInterval: 0.2
-  holdThreshold: 0.1
+  fireInterval: 0.3
+  holdThreshold: 0.5
 --- !u!70 &7194192956277046464
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -14,15 +14,12 @@ public class PlayerWeapon : MonoBehaviour
     private int currentIndex = 0;
 
     // =========================
-    // 給 PlayerController 呼叫
-    // =========================
     public void TryFire()
     {
-        CurrentWeapon?.TryFire();
+        if (CurrentWeapon == null) return;
+        CurrentWeapon.TryFire();
     }
 
-    // =========================
-    // 滾輪切換（給 PlayerController 呼叫）
     // =========================
     public void SwitchWeapon()
     {
@@ -37,10 +34,10 @@ public class PlayerWeapon : MonoBehaviour
     }
 
     // =========================
-    // WeaponPickup 呼叫
-    // =========================
     public void AddWeapon(WeaponBase newWeapon)
     {
+        if (newWeapon == null) return;
+
         if (weapons[0] == null)
         {
             Equip(newWeapon, 0);
@@ -54,16 +51,20 @@ public class PlayerWeapon : MonoBehaviour
         }
 
         Debug.Log("已經有兩把武器了");
+        Destroy(newWeapon.gameObject);
     }
 
     void Equip(WeaponBase weapon, int slot)
     {
         weapons[slot] = weapon;
 
-        weapon.OnEquip();
+        weapon.OnEquip(GetComponent<PlayerController>());
+
         weapon.gameObject.SetActive(true);
 
-        weapon.transform.SetParent(slot == 0 ? handPoint : backPoint);
+        Transform parent = (slot == 0) ? handPoint : backPoint;
+
+        weapon.transform.SetParent(parent);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
 
@@ -73,6 +74,8 @@ public class PlayerWeapon : MonoBehaviour
 
     void SetWeaponTransform(WeaponBase weapon, Transform parent)
     {
+        if (weapon == null) return;
+
         weapon.transform.SetParent(parent);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
