@@ -1,40 +1,62 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class WeaponPickup : MonoBehaviour
 {
-    public WeaponBase weaponPrefab;
+    public Weapon weaponPrefab;
+    public float respawnTime = 2f;
+
+    private Collider2D col;
+    private SpriteRenderer sr;
+
+    private bool isOnCooldown = false;
+
+    void Awake()
+    {
+        col = GetComponent<Collider2D>();
+        sr = GetComponent<SpriteRenderer>();
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (isOnCooldown) return;
         if (!other.CompareTag("Player")) return;
+
         PlayerController player = other.GetComponent<PlayerController>();
         if (player == null) return;
 
-        PlayerWeapon pw = player.GetComponent<PlayerWeapon>();
-        if (pw == null) return;
-
-        WeaponBase newWeapon = Instantiate(weaponPrefab);
-
-        // 放入武器庫第一個空位
-        int emptyIndex = -1;
-        for (int i = 0; i < pw.allWeapons.Length; i++)
+        if (weaponPrefab == null)
         {
-            if (pw.allWeapons[i] == null)
-            {
-                emptyIndex = i;
-                break;
-            }
+            Debug.LogWarning("weaponPrefab 未設定！");
+            return;
         }
 
-        if (emptyIndex == -1)
-        {
-            // 武器庫已滿 → 換手上武器
-            emptyIndex = 0; // 手上武器位置
-        }
+        player.AddWeapon(weaponPrefab);
 
-        pw.allWeapons[emptyIndex] = newWeapon;
-        pw.EquipWeapon(emptyIndex, true, player);
+        StartCoroutine(RespawnCoroutine());
+    }
 
-        Destroy(gameObject);
+    IEnumerator RespawnCoroutine()
+    {
+        isOnCooldown = true;
+
+        // 關閉碰撞
+        if (col != null)
+            col.enabled = false;
+
+        // 隱藏圖片
+        if (sr != null)
+            sr.enabled = false;
+
+        yield return new WaitForSeconds(respawnTime);
+
+        // 重新開啟
+        if (col != null)
+            col.enabled = true;
+
+        if (sr != null)
+            sr.enabled = true;
+
+        isOnCooldown = false;
     }
 }

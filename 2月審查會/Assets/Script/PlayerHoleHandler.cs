@@ -33,7 +33,7 @@ public class PlayerHoleHandler : MonoBehaviour
     {
         if (isFalling) return;
 
-        PlayerHealth health = GetComponent<PlayerHealth>();
+        PlayerController health = GetComponent<PlayerController>();
         if (health != null && health.IsDead()) return; // ⭐ 死亡不執行
 
         StartCoroutine(FallCoroutine(holePos));
@@ -69,7 +69,7 @@ public class PlayerHoleHandler : MonoBehaviour
         }
 
         // ⭐ 扣血
-        PlayerHealth health = GetComponent<PlayerHealth>();
+        PlayerController health = GetComponent<PlayerController>();
         if (health != null)
         {
             health.TakeDamage(holeDamage);

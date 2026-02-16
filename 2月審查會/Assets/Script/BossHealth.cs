@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class BossHealth : MonoBehaviour
 {
+    [Header("Boss 血量設定")]
+    public int maxHealth = 100;
+    private int currentHealth;
+
     private BossHealthBar healthBar;
     private Canvas healthBarCanvas;
 
@@ -9,18 +13,22 @@ public class BossHealth : MonoBehaviour
     {
         if (!Application.isPlaying) return;
 
-        // Unity 2023+ 使用 FindFirstObjectByType
+        currentHealth = maxHealth;
+
+        // Unity 2023+ 尋找血條
         healthBar = Object.FindFirstObjectByType<BossHealthBar>();
+
         if (healthBar != null)
+        {
             healthBarCanvas = healthBar.GetComponentInChildren<Canvas>();
+            healthBar.Initialize(maxHealth, currentHealth);
+        }
     }
 
     void OnEnable()
     {
         if (!Application.isPlaying) return;
 
-        if (healthBar != null)
-            healthBar.Initialize(100, 100); // maxHealth 與 health 自行設定
         if (healthBarCanvas != null)
             healthBarCanvas.enabled = true;
     }
@@ -31,17 +39,42 @@ public class BossHealth : MonoBehaviour
 
         if (other.gameObject.TryGetComponent<PlayerController>(out var player))
         {
-            // 這裡改成暫時只是暫停或顯示死亡，避免找不到 Die()
-            player.SetLock(true);
+            player.TakeDamage(1); // 改成讓玩家扣血
         }
     }
 
-    public void TakeDamage(float damage)
+    // ===============================
+    // 受傷
+    // ===============================
+    public void TakeDamage(int damage)
     {
         if (!Application.isPlaying) return;
 
-        // 更新血量，假設有 health/maxHealth
+        currentHealth -= damage;
+
+        if (currentHealth < 0)
+            currentHealth = 0;
+
+        // 更新血條
         if (healthBar != null)
-            healthBar.UpdateStats(50, 100); // 測試用
+            healthBar.UpdateStats(currentHealth, maxHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    // ===============================
+    // 死亡
+    // ===============================
+    void Die()
+    {
+        Debug.Log("Boss 死亡");
+
+        if (healthBarCanvas != null)
+            healthBarCanvas.enabled = false;
+
+        Destroy(gameObject);
     }
 }

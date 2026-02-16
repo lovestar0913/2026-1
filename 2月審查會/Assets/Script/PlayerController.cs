@@ -3,34 +3,64 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    // ===============================
+    // 移動
+    // ===============================
     [Header("移動")]
-    public float moveSpeed = 5f;
+    public float moveSpeed = 7f;
 
+    // ===============================
+    // 閃避
+    // ===============================
     [Header("閃避")]
     public float dodgeSpeed = 10f;
     public float dodgeDuration = 0.2f;
     public float dodgeCooldownTime = 1f;
     public float invincibleDuration = 0.5f;
 
-    [Header("Graphics")]
+    // ===============================
+    // 血量
+    // ===============================
+    [Header("玩家血量")]
+    public int maxHP = 10;
+
+    // ===============================
+    // 武器系統
+    // ===============================
+    [Header("武器系統")]
+    public Transform weaponHoldPoint;
+
+    private Weapon[] weapons = new Weapon[2];
+    private int currentWeaponIndex = -1;
+
+    // ===============================
+    // Graphics
+    // ===============================
+    [Header("玩家模型 Graphics")]
     public Transform graphics;
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private Vector2 lastMoveDir = Vector2.left;
 
+    private int currentHP;
+    private bool isDead = false;
     private bool isLocked = false;
     private bool isDodging = false;
     private bool isInvincible = false;
+
     private float dodgeCooldown = 0f;
     private float invincibleTimer = 0f;
 
-    private PlayerWeapon playerWeapon;
-
+    // ===============================
+    // 初始化
+    // ===============================
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        playerWeapon = GetComponent<PlayerWeapon>();
+
+        currentHP = maxHP;
+        isDead = false;
 
         if (graphics != null)
         {
@@ -38,20 +68,17 @@ public class PlayerController : MonoBehaviour
             scale.x = -Mathf.Abs(scale.x);
             graphics.localScale = scale;
         }
+
         lastMoveDir = Vector2.left;
     }
 
     void Update()
     {
-        if (isLocked) return;
+        if (isLocked || isDead) return;
 
         HandleInput();
         HandleCooldowns();
-        HandleWeaponFire();
         HandleWeaponSwitch();
-
-        // 每幀更新手上武器旋轉
-        playerWeapon?.handWeapon?.AimWeapon();
     }
 
     void FixedUpdate()
@@ -59,6 +86,9 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
     }
 
+    // ===============================
+    // 移動控制
+    // ===============================
     private void HandleInput()
     {
         float h = Input.GetAxisRaw("Horizontal");
@@ -69,6 +99,28 @@ public class PlayerController : MonoBehaviour
             lastMoveDir = moveInput;
     }
 
+    private void HandleMovement()
+    {
+        if (!isDodging)
+        {
+            rb.linearVelocity = moveInput * moveSpeed;
+
+            if (graphics != null && moveInput.x != 0)
+            {
+                graphics.localScale = new Vector3(
+                    moveInput.x > 0 ? -Mathf.Abs(graphics.localScale.x) : Mathf.Abs(graphics.localScale.x),
+                    graphics.localScale.y,
+                    graphics.localScale.z
+                );
+
+                graphics.localRotation = Quaternion.identity;
+            }
+        }
+    }
+
+    // ===============================
+    // 閃避
+    // ===============================
     private void HandleCooldowns()
     {
         dodgeCooldown -= Time.deltaTime;
@@ -85,59 +137,33 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(DodgeCoroutine());
         }
     }
-
-    private void HandleWeaponFire()
+    public void SetActiveWeapon(int index)
     {
-        if (Input.GetMouseButton(0))
-            playerWeapon?.TryFireHandWeapon();
+        if (index < 0 || index >= weapons.Length) return;
+        currentWeaponIndex = index;
+        UpdateActiveWeapon();
     }
 
-    private void HandleWeaponSwitch()
-    {
-        if (Input.mouseScrollDelta.y < 0)
-            playerWeapon?.SwitchWeapon(true);
-    }
-
-    private void HandleMovement()
-    {
-        if (isLocked) return;
-
-        if (!isDodging)
-        {
-            rb.linearVelocity = moveInput * moveSpeed;
-
-            if (graphics != null && moveInput.x != 0)
-            {
-                graphics.localScale = new Vector3(
-                    moveInput.x > 0 ? -Mathf.Abs(graphics.localScale.x) : Mathf.Abs(graphics.localScale.x),
-                    graphics.localScale.y,
-                    graphics.localScale.z
-                );
-                graphics.localRotation = Quaternion.identity;
-            }
-        }
-    }
 
     private IEnumerator DodgeCoroutine()
     {
         isDodging = true;
         isInvincible = true;
 
-        float dodgeTime = dodgeDuration;
-        dodgeCooldown = dodgeCooldownTime;
-        invincibleTimer = invincibleDuration;
-
         float elapsed = 0f;
         float startRotation = graphics != null ? graphics.eulerAngles.z : 0f;
         float endRotation = startRotation + 720f;
 
-        while (elapsed < dodgeTime)
+        dodgeCooldown = dodgeCooldownTime;
+        invincibleTimer = invincibleDuration;
+
+        while (elapsed < dodgeDuration)
         {
             rb.linearVelocity = lastMoveDir.normalized * dodgeSpeed;
 
             if (graphics != null)
             {
-                float t = elapsed / dodgeTime;
+                float t = elapsed / dodgeDuration;
                 float angle = Mathf.Lerp(startRotation, endRotation, t);
                 graphics.rotation = Quaternion.Euler(0, 0, angle);
             }
@@ -152,36 +178,82 @@ public class PlayerController : MonoBehaviour
         isDodging = false;
     }
 
-    // 玩家瞄準方向（Boss優先，沒Boss用滑鼠）
-    public Vector2 GetAimDirection()
+    // ===============================
+    // 武器系統
+    // ===============================
+    public void AddWeapon(Weapon weaponPrefab)
     {
-        GameObject boss = GameObject.FindWithTag("Boss");
-        if (boss != null)
-            return (boss.transform.position - transform.position).normalized;
+        if (weaponHoldPoint == null || weaponPrefab == null) return;
 
-        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        return (mouseWorld - transform.position).normalized;
+        Weapon newWeapon = Instantiate(weaponPrefab, weaponHoldPoint);
+        newWeapon.transform.localPosition = Vector3.zero;
+        newWeapon.transform.localRotation = Quaternion.identity;
+
+        // 初始化 owner，讓武器能射擊
+        newWeapon.Initialize(this.transform);
+
+        // 找空位
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weapons[i] == null)
+            {
+                weapons[i] = newWeapon;
+                currentWeaponIndex = i;
+                UpdateActiveWeapon();
+                return;
+            }
+        }
+
+        // 滿了就替換手上武器
+        Destroy(weapons[currentWeaponIndex].gameObject);
+        weapons[currentWeaponIndex] = newWeapon;
+        UpdateActiveWeapon();
     }
 
-    public void SetLock(bool value)
+
+
+
+    private void HandleWeaponSwitch()
     {
-        isLocked = value;
-        rb.linearVelocity = Vector2.zero;
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            if (weapons[0] != null && weapons[1] != null)
+            {
+                currentWeaponIndex = currentWeaponIndex == 0 ? 1 : 0;
+                UpdateActiveWeapon();
+            }
+        }
     }
 
-    public bool IsInvincible()
+    private void UpdateActiveWeapon()
     {
-        return isInvincible;
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            if (weapons[i] != null)
+                weapons[i].gameObject.SetActive(i == currentWeaponIndex);
+        }
     }
 
-    public Vector2 GetMoveDirection()
+    // ===============================
+    // 受傷
+    // ===============================
+    public void TakeDamage(int dmg)
     {
-        return moveInput;
+        if (isDead) return;
+        if (isInvincible) return;
+
+        currentHP -= dmg;
+
+        if (currentHP <= 0)
+            Die();
     }
 
-    // 🔹 新增：玩家死亡
-    public void Die()
+    // ===============================
+    // 死亡
+    // ===============================
+    void Die()
     {
+        isDead = true;
         SetLock(true);
 
         if (graphics != null)
@@ -190,5 +262,22 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
 
         Debug.Log("玩家死亡");
+
+        if (GameManager.Instance != null)
+            GameManager.Instance.GameOver();
     }
+
+    // ===============================
+    // 工具
+    // ===============================
+    public void SetLock(bool value)
+    {
+        isLocked = value;
+        rb.linearVelocity = Vector2.zero;
+    }
+
+    public bool IsInvincible() => isInvincible;
+    public bool IsDead() => isDead;
+    public int GetCurrentHP() => currentHP;
+    public Vector2 GetMoveDirection() => moveInput;
 }

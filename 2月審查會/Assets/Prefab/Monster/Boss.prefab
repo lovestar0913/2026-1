@@ -4532,8 +4532,9 @@ GameObject:
   - component: {fileID: 5375047960093657315}
   - component: {fileID: 1922567579027789212}
   - component: {fileID: 6321205833881252105}
-  - component: {fileID: 6795915165532573013}
+  - component: {fileID: 2889864397397002528}
   - component: {fileID: 2962898052450577927}
+  - component: {fileID: -191260616956320970}
   m_Layer: 5
   m_Name: Boss
   m_TagString: Boss
@@ -4603,33 +4604,19 @@ MonoBehaviour:
   moveSpeed: 3
   minDelay: 0.5
   maxDelay: 1
---- !u!50 &6795915165532573013
-Rigidbody2D:
-  serializedVersion: 5
+--- !u!114 &2889864397397002528
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8717663361120014766}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fc30cb7162ea3947a6e1453523aaf4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1000
 --- !u!70 &2962898052450577927
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -4660,13 +4647,40 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.33}
   m_Size: {x: 0.5, y: 0.7}
   m_Direction: 0
+--- !u!50 &-191260616956320970
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8717663361120014766}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &8827643254797090275
 GameObject:
   m_ObjectHideFlags: 0
