@@ -13,17 +13,16 @@ public class PlayerController : MonoBehaviour
     public float invincibleDuration = 0.5f;
 
     [Header("Graphics")]
-    public Transform graphics; // 玩家模型，用來旋轉
+    public Transform graphics;
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
-    private Vector2 lastMoveDir = Vector2.left; // 預設面向左
+    private Vector2 lastMoveDir = Vector2.left;
 
     private bool isLocked = false;
     private bool isDodging = false;
     private bool isInvincible = false;
     private float dodgeCooldown = 0f;
-    private float dodgeTimer = 0f;
     private float invincibleTimer = 0f;
 
     private PlayerWeapon playerWeapon;
@@ -33,14 +32,12 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerWeapon = GetComponent<PlayerWeapon>();
 
-        // 玩家預設面向左
         if (graphics != null)
         {
             Vector3 scale = graphics.localScale;
             scale.x = -Mathf.Abs(scale.x);
             graphics.localScale = scale;
         }
-
         lastMoveDir = Vector2.left;
     }
 
@@ -48,40 +45,60 @@ public class PlayerController : MonoBehaviour
     {
         if (isLocked) return;
 
-        // ===== 移動輸入 =====
+        HandleInput();
+        HandleCooldowns();
+        HandleWeaponFire();
+        HandleWeaponSwitch();
+
+        // 每幀更新手上武器旋轉
+        playerWeapon?.handWeapon?.AimWeapon();
+    }
+
+    void FixedUpdate()
+    {
+        HandleMovement();
+    }
+
+    private void HandleInput()
+    {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         moveInput = new Vector2(h, v).normalized;
 
         if (moveInput != Vector2.zero)
             lastMoveDir = moveInput;
+    }
 
-        // ===== 攻擊 =====
-        if (Input.GetMouseButton(0))
-            playerWeapon?.TryFire();
-
-        // ===== 滾輪切換武器 =====
-        if (Input.mouseScrollDelta.y != 0)
-            playerWeapon?.SwitchWeapon();
-
-        // ===== 閃避輸入 =====
+    private void HandleCooldowns()
+    {
         dodgeCooldown -= Time.deltaTime;
 
-        if (!isDodging && Input.GetKeyDown(KeyCode.Space) && dodgeCooldown <= 0f)
-        {
-            StartCoroutine(DodgeCoroutine());
-        }
-
-        // 無敵倒計時
         if (isInvincible)
         {
             invincibleTimer -= Time.deltaTime;
             if (invincibleTimer <= 0f)
                 isInvincible = false;
         }
+
+        if (!isDodging && Input.GetKeyDown(KeyCode.Space) && dodgeCooldown <= 0f)
+        {
+            StartCoroutine(DodgeCoroutine());
+        }
     }
 
-    void FixedUpdate()
+    private void HandleWeaponFire()
+    {
+        if (Input.GetMouseButton(0))
+            playerWeapon?.TryFireHandWeapon();
+    }
+
+    private void HandleWeaponSwitch()
+    {
+        if (Input.mouseScrollDelta.y < 0)
+            playerWeapon?.SwitchWeapon(true);
+    }
+
+    private void HandleMovement()
     {
         if (isLocked) return;
 
@@ -89,15 +106,14 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = moveInput * moveSpeed;
 
-            // 左右翻轉 Graphics
-            if (graphics != null)
+            if (graphics != null && moveInput.x != 0)
             {
-                if (moveInput.x > 0)
-                    graphics.localScale = new Vector3(-1, 1, 1);
-                else if (moveInput.x < 0)
-                    graphics.localScale = new Vector3(1, 1, 1);
-
-                graphics.localRotation = Quaternion.identity; // 恢復旋轉
+                graphics.localScale = new Vector3(
+                    moveInput.x > 0 ? -Mathf.Abs(graphics.localScale.x) : Mathf.Abs(graphics.localScale.x),
+                    graphics.localScale.y,
+                    graphics.localScale.z
+                );
+                graphics.localRotation = Quaternion.identity;
             }
         }
     }
@@ -107,8 +123,7 @@ public class PlayerController : MonoBehaviour
         isDodging = true;
         isInvincible = true;
 
-        // 將翻滾持續時間同步為無敵時間
-        float dodgeTime = invincibleDuration;
+        float dodgeTime = dodgeDuration;
         dodgeCooldown = dodgeCooldownTime;
         invincibleTimer = invincibleDuration;
 
@@ -132,23 +147,20 @@ public class PlayerController : MonoBehaviour
         }
 
         if (graphics != null)
-            graphics.rotation = Quaternion.identity; // 翻滾結束恢復
+            graphics.rotation = Quaternion.identity;
 
         isDodging = false;
     }
 
-
-    // =========================
-    // 給 WeaponBase 使用
-    // =========================
+    // 玩家瞄準方向（Boss優先，沒Boss用滑鼠）
     public Vector2 GetAimDirection()
     {
-        GameObject boss = GameObject.FindGameObjectWithTag("Boss");
-
+        GameObject boss = GameObject.FindWithTag("Boss");
         if (boss != null)
             return (boss.transform.position - transform.position).normalized;
 
-        return lastMoveDir.normalized;
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return (mouseWorld - transform.position).normalized;
     }
 
     public void SetLock(bool value)
@@ -160,5 +172,23 @@ public class PlayerController : MonoBehaviour
     public bool IsInvincible()
     {
         return isInvincible;
+    }
+
+    public Vector2 GetMoveDirection()
+    {
+        return moveInput;
+    }
+
+    // 🔹 新增：玩家死亡
+    public void Die()
+    {
+        SetLock(true);
+
+        if (graphics != null)
+            graphics.gameObject.SetActive(false);
+
+        rb.linearVelocity = Vector2.zero;
+
+        Debug.Log("玩家死亡");
     }
 }

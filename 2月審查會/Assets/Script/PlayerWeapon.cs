@@ -2,82 +2,87 @@
 
 public class PlayerWeapon : MonoBehaviour
 {
-    [Header("武器欄位（最多2把）")]
-    public WeaponBase[] weapons = new WeaponBase[2];
+    [Header("武器庫 (預設3把)")]
+    public WeaponBase[] allWeapons = new WeaponBase[3];
 
-    [Header("手持 / 背部掛點")]
+    [Header("掛點")]
     public Transform handPoint;
     public Transform backPoint;
 
-    public WeaponBase CurrentWeapon => weapons[currentIndex];
+    [HideInInspector] public WeaponBase handWeapon;
+    [HideInInspector] public WeaponBase backWeapon;
 
-    private int currentIndex = 0;
-
-    // =========================
-    public void TryFire()
+    // 裝備武器
+    public void EquipWeapon(int weaponIndex, bool equipToHand, PlayerController player)
     {
-        if (CurrentWeapon == null) return;
-        CurrentWeapon.TryFire();
-    }
+        if (!Application.isPlaying) return; // 編輯模式不執行
 
-    // =========================
-    public void SwitchWeapon()
-    {
-        if (weapons[1] == null) return;
-
-        int other = 1 - currentIndex;
-
-        SetWeaponTransform(weapons[currentIndex], backPoint);
-        SetWeaponTransform(weapons[other], handPoint);
-
-        currentIndex = other;
-    }
-
-    // =========================
-    public void AddWeapon(WeaponBase newWeapon)
-    {
-        if (newWeapon == null) return;
-
-        if (weapons[0] == null)
-        {
-            Equip(newWeapon, 0);
-            return;
-        }
-
-        if (weapons[1] == null)
-        {
-            Equip(newWeapon, 1);
-            return;
-        }
-
-        Debug.Log("已經有兩把武器了");
-        Destroy(newWeapon.gameObject);
-    }
-
-    void Equip(WeaponBase weapon, int slot)
-    {
-        weapons[slot] = weapon;
-
-        weapon.OnEquip(GetComponent<PlayerController>());
-
-        weapon.gameObject.SetActive(true);
-
-        Transform parent = (slot == 0) ? handPoint : backPoint;
-
-        weapon.transform.SetParent(parent);
-        weapon.transform.localPosition = Vector3.zero;
-        weapon.transform.localRotation = Quaternion.identity;
-
-        if (slot == 0)
-            currentIndex = 0;
-    }
-
-    void SetWeaponTransform(WeaponBase weapon, Transform parent)
-    {
+        if (weaponIndex < 0 || weaponIndex >= allWeapons.Length) return;
+        WeaponBase weapon = allWeapons[weaponIndex];
         if (weapon == null) return;
 
-        weapon.transform.SetParent(parent);
-        weapon.transform.localPosition = Vector3.zero;
-        weapon.transform.localRotation = Quaternion.identity;
+        if (equipToHand)
+        {
+            if (handWeapon != null)
+            {
+                backWeapon = handWeapon;
+                backWeapon.transform.SetParent(backPoint);
+                backWeapon.transform.localPosition = Vector3.zero;
+                backWeapon.transform.localRotation = Quaternion.identity;
+            }
+
+            handWeapon = weapon;
+            handWeapon.gameObject.SetActive(true);
+            handWeapon.OnEquip(player);
+            handWeapon.transform.SetParent(handPoint);
+            handWeapon.transform.localPosition = Vector3.zero;
+            handWeapon.transform.localRotation = Quaternion.identity;
+        }
+        else
+        {
+            if (backWeapon != null)
+                backWeapon.gameObject.SetActive(false);
+
+            backWeapon = weapon;
+            backWeapon.gameObject.SetActive(true);
+            backWeapon.OnEquip(player);
+            backWeapon.transform.SetParent(backPoint);
+            backWeapon.transform.localPosition = Vector3.zero;
+            backWeapon.transform.localRotation = Quaternion.identity;
+        }
+    }
+
+    // 手上武器開火
+    public void TryFireHandWeapon()
+    {
+        if (!Application.isPlaying) return;
+        handWeapon?.TryFire();
+    }
+
+    // 滾輪切換武器
+    public void SwitchWeapon(bool scrollDown)
+    {
+        if (!Application.isPlaying) return;
+        if (!scrollDown || backWeapon == null) return;
+
+        WeaponBase temp = handWeapon;
+        handWeapon = backWeapon;
+        backWeapon = temp;
+
+        if (handWeapon != null)
+        {
+            handWeapon.gameObject.SetActive(true);
+            handWeapon.transform.SetParent(handPoint);
+            handWeapon.transform.localPosition = Vector3.zero;
+            handWeapon.transform.localRotation = Quaternion.identity;
+        }
+
+        if (backWeapon != null)
+        {
+            backWeapon.gameObject.SetActive(true);
+            backWeapon.transform.SetParent(backPoint);
+            backWeapon.transform.localPosition = Vector3.zero;
+            backWeapon.transform.localRotation = Quaternion.identity;
+        }
     }
 }

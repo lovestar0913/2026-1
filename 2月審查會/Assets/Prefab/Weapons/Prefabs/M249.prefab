@@ -105,7 +105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4251306428143386
 Transform:
   m_ObjectHideFlags: 0
@@ -191,11 +191,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92f0d8eb2c6f6da4bb809b6139ff92bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 8
   bulletPrefab: {fileID: 4185561404333243811, guid: 59e83ccfb7be6f74285639138bd423ce, type: 3}
+  fireRate: 0.25
+  bulletSpeed: 20
   firePoint: {fileID: 6857126514717249347}
-  fireInterval: 0.3
-  holdThreshold: 0.5
 --- !u!70 &7194192956277046464
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
