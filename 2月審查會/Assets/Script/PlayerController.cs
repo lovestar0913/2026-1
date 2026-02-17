@@ -39,6 +39,12 @@ public class PlayerController : MonoBehaviour
     [Header("玩家模型 Graphics")]
     public Transform graphics;
 
+    // ===============================
+    // 螢幕傷害閃紅
+    // ===============================
+    [Header("UI - 受傷閃紅光")]
+    public DamageFlash damageFlash; // Canvas 下的 DamageFlash 腳本
+
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private Vector2 lastMoveDir = Vector2.left;
@@ -51,12 +57,25 @@ public class PlayerController : MonoBehaviour
 
     private float dodgeCooldown = 0f;
     private float invincibleTimer = 0f;
+    public float DodgeCooldownTime
+    {
+        get => dodgeCooldownTime;
+        set => dodgeCooldownTime = value;
+    }
 
     // ===============================
     // 初始化
     // ===============================
     void Awake()
     {
+        if (Object.FindObjectsByType<PlayerController>(FindObjectsSortMode.None).Length > 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject);
+
         rb = GetComponent<Rigidbody2D>();
 
         currentHP = maxHP;
@@ -137,13 +156,6 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(DodgeCoroutine());
         }
     }
-    public void SetActiveWeapon(int index)
-    {
-        if (index < 0 || index >= weapons.Length) return;
-        currentWeaponIndex = index;
-        UpdateActiveWeapon();
-    }
-
 
     private IEnumerator DodgeCoroutine()
     {
@@ -189,7 +201,7 @@ public class PlayerController : MonoBehaviour
         newWeapon.transform.localPosition = Vector3.zero;
         newWeapon.transform.localRotation = Quaternion.identity;
 
-        // 初始化 owner，讓武器能射擊
+        // 初始化 owner
         newWeapon.Initialize(this.transform);
 
         // 找空位
@@ -204,14 +216,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // 滿了就替換手上武器
+        // 滿了就替換
         Destroy(weapons[currentWeaponIndex].gameObject);
         weapons[currentWeaponIndex] = newWeapon;
         UpdateActiveWeapon();
     }
-
-
-
 
     private void HandleWeaponSwitch()
     {
@@ -237,20 +246,30 @@ public class PlayerController : MonoBehaviour
     // ===============================
     // 受傷
     // ===============================
-    public void TakeDamage(int dmg)
+    public void TakeDamage(int dmg, bool ignoreInvincible = false)
     {
         if (isDead) return;
-        if (isInvincible) return;
+        if (isInvincible && !ignoreInvincible) return;
 
         currentHP -= dmg;
+
+        // 受傷閃紅
+        if (damageFlash != null)
+            damageFlash.Flash();
 
         if (currentHP <= 0)
             Die();
     }
 
     // ===============================
-    // 死亡
+    // 掉進洞
     // ===============================
+    public void FallIntoHole()
+    {
+        // 不受無敵限制，強制死亡
+        TakeDamage(maxHP, true);
+    }
+
     void Die()
     {
         isDead = true;

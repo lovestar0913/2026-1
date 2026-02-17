@@ -778,6 +778,37 @@ Transform:
   - {fileID: 795518977445223940}
   m_Father: {fileID: 3183631500088198040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2073926281518520382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2373034016540431962}
+  m_Layer: 0
+  m_Name: ATT1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2373034016540431962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073926281518520382}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.008726558, z: -0, w: 0.999962}
+  m_LocalPosition: {x: -1.12, y: 0.33, z: -0.02}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5375047960093657315}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2078410110256945620
 GameObject:
   m_ObjectHideFlags: 0
@@ -4555,6 +4586,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3363852483307139326}
+  - {fileID: 2373034016540431962}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 1, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4601,9 +4633,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1caa202121c1dd24b8775254b2a1704d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 5
   minDelay: 0.5
   maxDelay: 1
+  attackCooldown: 2
+  xSlashHintPrefab: {fileID: 0}
+  smokeHintPrefab: {fileID: 0}
+  stunWaveHintPrefab: {fileID: 0}
+  xSlashPrefab: {fileID: 689667626583958020, guid: 1336648bc1d8baf46a4515860950c9d4, type: 3}
+  smokePrefab: {fileID: 6526302276393259002, guid: f9d9793366789ae48a7e1b0692763acc, type: 3}
+  stunWavePrefab: {fileID: 6126188424833946103, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
 --- !u!114 &2889864397397002528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4616,7 +4655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fc30cb7162ea3947a6e1453523aaf4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1000
+  maxHealth: 500
 --- !u!70 &2962898052450577927
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

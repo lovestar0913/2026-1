@@ -75,6 +75,11 @@ public class BossHealth : MonoBehaviour
         if (healthBarCanvas != null)
             healthBarCanvas.enabled = false;
 
+        // 通知遊戲結束
+        GameManager.Instance.GameOver();
+
+        // 可以選擇保留 Boss 物件或直接刪除
         Destroy(gameObject);
     }
+
 }

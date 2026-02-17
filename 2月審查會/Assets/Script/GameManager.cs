@@ -10,15 +10,21 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
         else
+        {
             Destroy(gameObject);
+        }
     }
 
     public void GameOver()
     {
-        Time.timeScale = 0f;   // ¼È°±¹CÀ¸
-        gameOverUI.SetActive(true);
+        Time.timeScale = 0f;
+        if (gameOverUI != null)
+            gameOverUI.SetActive(true);
     }
 
     public void Restart()
@@ -27,3 +33,4 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
+
