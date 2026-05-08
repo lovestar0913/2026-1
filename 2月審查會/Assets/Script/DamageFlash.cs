@@ -4,30 +4,36 @@ using System.Collections;
 
 public class DamageFlash : MonoBehaviour
 {
-    public Image flashImage;
+    private Image image;
     public float flashDuration = 0.2f;
 
-    private Coroutine flashRoutine;
+    // 設定閃紅顏色（0~1 範圍）
+    private Color flashColor = new Color(255f / 255f, 225f / 255f, 225f / 255f, 60f / 255f);
+
+    void Awake()
+    {
+        image = GetComponent<Image>();
+        if (image != null)
+        {
+            // 一開始完全透明
+            image.color = new Color(flashColor.r, flashColor.g, flashColor.b, 0f);
+        }
+    }
 
     public void Flash()
     {
-        if (flashRoutine != null)
-            StopCoroutine(flashRoutine);
-        flashRoutine = StartCoroutine(FlashCoroutine());
+        if (image != null)
+            StartCoroutine(FlashRoutine());
     }
 
-    private IEnumerator FlashCoroutine()
+    private IEnumerator FlashRoutine()
     {
-        flashImage.color = new Color(1, 0, 0, 0.6f); // 半透明紅
-        float elapsed = 0f;
+        // 顯示閃紅顏色
+        image.color = flashColor;
 
-        while (elapsed < flashDuration)
-        {
-            elapsed += Time.deltaTime;
-            flashImage.color = new Color(1, 0, 0, Mathf.Lerp(0.6f, 0f, elapsed / flashDuration));
-            yield return null;
-        }
+        yield return new WaitForSeconds(flashDuration);
 
-        flashImage.color = new Color(1, 0, 0, 0f);
+        // 重新設成透明
+        image.color = new Color(flashColor.r, flashColor.g, flashColor.b, 0f);
     }
 }

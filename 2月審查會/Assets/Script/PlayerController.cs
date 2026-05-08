@@ -9,6 +9,10 @@ public class PlayerController : MonoBehaviour
     [Header("移動")]
     public float moveSpeed = 7f;
 
+    private Rigidbody2D rb;
+    private Vector2 moveInput;
+    private Vector2 lastMoveDir = Vector2.left;
+
     // ===============================
     // 閃避
     // ===============================
@@ -18,45 +22,43 @@ public class PlayerController : MonoBehaviour
     public float dodgeCooldownTime = 1f;
     public float invincibleDuration = 0.5f;
 
+    private bool isDodging = false;
+    private bool isInvincible = false;
+    private float dodgeCooldown = 0f;
+    private float invincibleTimer = 0f;
+
     // ===============================
     // 血量
     // ===============================
     [Header("玩家血量")]
     public int maxHP = 10;
+    private int currentHP;
+    private bool isDead = false;
 
     // ===============================
     // 武器系統
     // ===============================
     [Header("武器系統")]
     public Transform weaponHoldPoint;
-
     private Weapon[] weapons = new Weapon[2];
     private int currentWeaponIndex = -1;
 
     // ===============================
-    // Graphics
+    // 玩家模型 Graphics
     // ===============================
     [Header("玩家模型 Graphics")]
     public Transform graphics;
 
     // ===============================
-    // 螢幕傷害閃紅
+    // UI - 受傷閃紅光
     // ===============================
     [Header("UI - 受傷閃紅光")]
-    public DamageFlash damageFlash; // Canvas 下的 DamageFlash 腳本
+    public DamageFlash damageFlash;
 
-    private Rigidbody2D rb;
-    private Vector2 moveInput;
-    private Vector2 lastMoveDir = Vector2.left;
-
-    private int currentHP;
-    private bool isDead = false;
+    // ===============================
+    // 屬性
+    // ===============================
     private bool isLocked = false;
-    private bool isDodging = false;
-    private bool isInvincible = false;
-
-    private float dodgeCooldown = 0f;
-    private float invincibleTimer = 0f;
     public float DodgeCooldownTime
     {
         get => dodgeCooldownTime;
@@ -68,6 +70,7 @@ public class PlayerController : MonoBehaviour
     // ===============================
     void Awake()
     {
+        // 保持單一玩家
         if (Object.FindObjectsByType<PlayerController>(FindObjectsSortMode.None).Length > 1)
         {
             Destroy(gameObject);
@@ -77,7 +80,6 @@ public class PlayerController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         rb = GetComponent<Rigidbody2D>();
-
         currentHP = maxHP;
         isDead = false;
 
@@ -89,6 +91,13 @@ public class PlayerController : MonoBehaviour
         }
 
         lastMoveDir = Vector2.left;
+    }
+
+    void OnEnable()
+    {
+        // 防萬一，如果 damageFlash 尚未設定，自行找 Play 場景 UI
+        if (damageFlash == null)
+            damageFlash = Object.FindFirstObjectByType<DamageFlash>();
     }
 
     void Update()
@@ -106,7 +115,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // ===============================
-    // 移動控制
+    // 移動
     // ===============================
     private void HandleInput()
     {
@@ -131,7 +140,6 @@ public class PlayerController : MonoBehaviour
                     graphics.localScale.y,
                     graphics.localScale.z
                 );
-
                 graphics.localRotation = Quaternion.identity;
             }
         }
@@ -201,7 +209,6 @@ public class PlayerController : MonoBehaviour
         newWeapon.transform.localPosition = Vector3.zero;
         newWeapon.transform.localRotation = Quaternion.identity;
 
-        // 初始化 owner
         newWeapon.Initialize(this.transform);
 
         // 找空位
@@ -224,13 +231,10 @@ public class PlayerController : MonoBehaviour
 
     private void HandleWeaponSwitch()
     {
-        if (Input.mouseScrollDelta.y != 0)
+        if (Input.mouseScrollDelta.y != 0 && weapons[0] != null && weapons[1] != null)
         {
-            if (weapons[0] != null && weapons[1] != null)
-            {
-                currentWeaponIndex = currentWeaponIndex == 0 ? 1 : 0;
-                UpdateActiveWeapon();
-            }
+            currentWeaponIndex = currentWeaponIndex == 0 ? 1 : 0;
+            UpdateActiveWeapon();
         }
     }
 
@@ -244,7 +248,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // ===============================
-    // 受傷
+    // 受傷 / 死亡
     // ===============================
     public void TakeDamage(int dmg, bool ignoreInvincible = false)
     {
@@ -261,12 +265,8 @@ public class PlayerController : MonoBehaviour
             Die();
     }
 
-    // ===============================
-    // 掉進洞
-    // ===============================
     public void FallIntoHole()
     {
-        // 不受無敵限制，強制死亡
         TakeDamage(maxHP, true);
     }
 

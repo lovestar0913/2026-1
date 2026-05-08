@@ -70,7 +70,6 @@ public class BossHealth : MonoBehaviour
     // ===============================
     void Die()
     {
-        Debug.Log("Boss ¦º¤`");
 
         if (healthBarCanvas != null)
             healthBarCanvas.enabled = false;

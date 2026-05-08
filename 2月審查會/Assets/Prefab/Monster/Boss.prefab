@@ -4633,16 +4633,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1caa202121c1dd24b8775254b2a1704d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 4
   minDelay: 0.5
   maxDelay: 1
-  attackCooldown: 2
-  xSlashHintPrefab: {fileID: 0}
-  smokeHintPrefab: {fileID: 0}
-  stunWaveHintPrefab: {fileID: 0}
-  xSlashPrefab: {fileID: 689667626583958020, guid: 1336648bc1d8baf46a4515860950c9d4, type: 3}
-  smokePrefab: {fileID: 6526302276393259002, guid: f9d9793366789ae48a7e1b0692763acc, type: 3}
-  stunWavePrefab: {fileID: 6126188424833946103, guid: a58aa9a78f2b45b45bb0f3e2e1e3ad3c, type: 3}
 --- !u!114 &2889864397397002528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4655,7 +4648,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fc30cb7162ea3947a6e1453523aaf4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 500
+  maxHealth: 1
 --- !u!70 &2962898052450577927
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
