@@ -2,11 +2,18 @@ using UnityEngine;
 
 public class Note : MonoBehaviour
 {
-    public int targetSector;
+    public Lane lane;
 
-    // 這顆Note應該被打中的時間
+    // 這顆音符應該到達判定點的時間
     public float hitTime;
+}
 
-    // 是否已經被判定
-    public bool isJudged;
+public enum Lane
+{
+    Q,
+    W,
+    E,
+    D,
+    S,
+    A
 }
