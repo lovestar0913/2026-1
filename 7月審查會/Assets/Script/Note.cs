@@ -1,13 +1,5 @@
 using UnityEngine;
 
-public class Note : MonoBehaviour
-{
-    public Lane lane;
-
-    // 這顆音符應該到達判定點的時間
-    public float hitTime;
-}
-
 public enum Lane
 {
     Q,
@@ -16,4 +8,14 @@ public enum Lane
     D,
     S,
     A
+}
+
+public class Note : MonoBehaviour
+{
+    public Lane lane;
+
+    public float hitTime;
+
+    // 是否已經判定
+    public bool judged = false;
 }

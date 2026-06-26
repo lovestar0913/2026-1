@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class NoteSpawner : MonoBehaviour
 {
+    [Header("Prefab")]
     public GameObject notePrefab;
 
-    [Header("中心出生點")]
+    [Header("Spawn Point")]
     public Transform centerSpawn;
 
-    [Header("六個判定點")]
+    [Header("Judge Points")]
     public Transform qJudge;
     public Transform wJudge;
     public Transform eJudge;
@@ -15,56 +16,74 @@ public class NoteSpawner : MonoBehaviour
     public Transform sJudge;
     public Transform aJudge;
 
-    private void Start()
+    [Header("Chart")]
+    public ChartData chartData;
+
+    [Header("提前幾秒生成")]
+    public float approachTime = 2f;
+
+    void Update()
     {
-        Spawn(Lane.Q, 3f);
-        Spawn(Lane.W, 4f);
-        Spawn(Lane.E, 5f);
-        Spawn(Lane.D, 6f);
-        Spawn(Lane.S, 7f);
-        Spawn(Lane.A, 8f);
+        float currentTime = GameManager.Instance.MusicTime;
+
+        foreach (NoteData data in chartData.notes)
+        {
+            // 已生成就跳過
+            if (data.spawned)
+                continue;
+
+            // 到了生成時間
+            if (currentTime >= data.hitTime - approachTime)
+            {
+                Spawn(data);
+                data.spawned = true;
+            }
+        }
     }
 
-    void Spawn(Lane lane, float hitTime)
+    void Spawn(NoteData data)
     {
-        GameObject obj =
-            Instantiate(
-                notePrefab,
-                centerSpawn.position,
-                Quaternion.identity);
+        GameObject obj = Instantiate(
+            notePrefab,
+            centerSpawn.position,
+            Quaternion.identity);
 
+        // 取得元件
         Note note = obj.GetComponent<Note>();
-        NoteMovement move = obj.GetComponent<NoteMovement>();
+        NoteMovement movement = obj.GetComponent<NoteMovement>();
 
-        note.lane = lane;
-        note.hitTime = hitTime;
+        // 設定 Note 資料
+        note.lane = data.lane;
+        note.hitTime = data.hitTime;
 
-        move.startPos = centerSpawn.position;
+        // 起點
+        movement.startPos = centerSpawn.position;
 
-        switch (lane)
+        // 終點
+        switch (data.lane)
         {
             case Lane.Q:
-                move.targetPos = qJudge.position;
+                movement.targetPos = qJudge.position;
                 break;
 
             case Lane.W:
-                move.targetPos = wJudge.position;
+                movement.targetPos = wJudge.position;
                 break;
 
             case Lane.E:
-                move.targetPos = eJudge.position;
+                movement.targetPos = eJudge.position;
                 break;
 
             case Lane.D:
-                move.targetPos = dJudge.position;
+                movement.targetPos = dJudge.position;
                 break;
 
             case Lane.S:
-                move.targetPos = sJudge.position;
+                movement.targetPos = sJudge.position;
                 break;
 
             case Lane.A:
-                move.targetPos = aJudge.position;
+                movement.targetPos = aJudge.position;
                 break;
         }
     }

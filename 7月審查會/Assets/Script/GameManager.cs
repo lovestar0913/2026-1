@@ -6,17 +6,17 @@ public class GameManager : MonoBehaviour
 
     public AudioSource musicSource;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public float MusicTime
     {
         get
         {
             return musicSource.time;
         }
-    }
-
-    private void Awake()
-    {
-        Instance = this;
     }
 
     private void Start()
