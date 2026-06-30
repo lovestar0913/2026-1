@@ -28,10 +28,13 @@ public class NoteMovement : MonoBehaviour
         transform.position = Vector3.Lerp(startPos, targetPos, t);
 
         // 超過判定時間一點點就刪掉（之後會改成 Miss 判定）
-        if (!note.judged && currentTime > note.hitTime + 0.15f)
+        if (currentTime > note.hitTime + 0.3f)
         {
-            note.judged = true;
-            ScoreManager.Instance.Miss();
+            if (!note.judged)
+            {
+                GameManager.Instance.Miss();
+            }
+
             Destroy(gameObject);
         }
     }

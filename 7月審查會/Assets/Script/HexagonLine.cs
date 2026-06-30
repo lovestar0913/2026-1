@@ -1,37 +1,89 @@
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
 public class HexagonLine : MonoBehaviour
 {
-    public float radius = 4f;
+    [Header("父物件")]
+    public Transform frameParent;
+    public Transform redParent;
+    public Transform blueParent;
 
-    private LineRenderer line;
+    private HexagonData data;
 
     void Start()
     {
-        line = GetComponent<LineRenderer>();
+        data = HexagonData.Instance;
 
-        line.loop = true;
-        line.useWorldSpace = false;
-        line.positionCount = 6;
-
-        DrawHexagon();
+        Generate();
     }
 
-    void DrawHexagon()
+    void Generate()
     {
+        Clear(frameParent);
+        Clear(redParent);
+        Clear(blueParent);
+
+        // 白框
         for (int i = 0; i < 6; i++)
         {
-            // 從正上方開始（W）
-            float angle = Mathf.Deg2Rad * (90 - i * 60);
+            CreateEdge(
+                "Frame_" + i,
+                data.FramePoints[i],
+                data.FramePoints[(i + 1) % 6],
+                data.whiteMat,
+                frameParent,
+                data.frameWidth);
+        }
 
-            Vector3 pos = new Vector3(
-                Mathf.Cos(angle) * radius,
-                Mathf.Sin(angle) * radius,
-                0
-            );
+        // 紅色
+        CreateEdge("Red1", data.TrackPoints[5], data.TrackPoints[0], data.redMat, redParent, data.trackWidth);
+        CreateEdge("Red2", data.TrackPoints[0], data.TrackPoints[1], data.redMat, redParent, data.trackWidth);
+        CreateEdge("Red3", data.TrackPoints[1], data.TrackPoints[2], data.redMat, redParent, data.trackWidth);
 
-            line.SetPosition(i, pos);
+        // 藍色
+        CreateEdge("Blue1", data.TrackPoints[2], data.TrackPoints[3], data.blueMat, blueParent, data.trackWidth);
+        CreateEdge("Blue2", data.TrackPoints[3], data.TrackPoints[4], data.blueMat, blueParent, data.trackWidth);
+        CreateEdge("Blue3", data.TrackPoints[4], data.TrackPoints[5], data.blueMat, blueParent, data.trackWidth);
+    }
+
+    void CreateEdge(
+        string edgeName,
+        Vector3 start,
+        Vector3 end,
+        Material mat,
+        Transform parent,
+        float width)
+    {
+        GameObject edge = GameObject.CreatePrimitive(PrimitiveType.Quad);
+
+        edge.name = edgeName;
+
+        edge.transform.SetParent(parent, false);
+
+        Destroy(edge.GetComponent<Collider>());
+
+        Vector3 center = (start + end) * 0.5f;
+
+        edge.transform.localPosition = center;
+
+        Vector3 dir = end - start;
+
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        edge.transform.localRotation = Quaternion.Euler(0, 0, angle);
+
+        edge.transform.localScale = new Vector3(
+            dir.magnitude,
+            width,
+            1);
+
+        edge.GetComponent<MeshRenderer>().material = mat;
+    }
+
+    void Clear(Transform parent)
+    {
+        for (int i = parent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(parent.GetChild(i).gameObject);
         }
     }
 }
