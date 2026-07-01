@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour
         combo++;
         score += 700;
 
-        UIManager.Instance.UpdateJudge("Great");
+        UIManager.Instance.UpdateJudge("GREAT");
         UIManager.Instance.UpdateCombo(combo);
         UIManager.Instance.UpdateScore(score);
     }
@@ -205,7 +205,7 @@ public class GameManager : MonoBehaviour
         combo++;
         score += 300;
 
-        UIManager.Instance.UpdateJudge("Good");
+        UIManager.Instance.UpdateJudge("GOOD");
         UIManager.Instance.UpdateCombo(combo);
         UIManager.Instance.UpdateScore(score);
     }
@@ -214,7 +214,7 @@ public class GameManager : MonoBehaviour
     {
         combo = 0;
 
-        UIManager.Instance.UpdateJudge("Miss");
+        UIManager.Instance.UpdateJudge("MISS");
         UIManager.Instance.UpdateCombo(combo);
         UIManager.Instance.UpdateScore(score);
     }

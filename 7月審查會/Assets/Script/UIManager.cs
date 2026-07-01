@@ -38,19 +38,19 @@ public class UIManager : MonoBehaviour
         switch (judge)
         {
             case "PERFECT":
-                judgeText.color = Color.yellow;
+                judgeText.color = new Color32(255, 220, 80, 255);
                 break;
 
             case "GREAT":
-                judgeText.color = Color.green;
+                judgeText.color = new Color32(100, 255, 150, 255);
                 break;
 
             case "GOOD":
-                judgeText.color = Color.cyan;
+                judgeText.color = new Color32(120, 210, 255, 255);
                 break;
 
             case "MISS":
-                judgeText.color = Color.red;
+                judgeText.color = new Color32(255, 120, 120, 255);
                 break;
         }
 
@@ -78,7 +78,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateCombo(int combo)
     {
-        comboText.text = combo + " Combo";
+        comboText.text = combo + "\nCOMBO";
     }
 
     public void UpdateScore(int score)
