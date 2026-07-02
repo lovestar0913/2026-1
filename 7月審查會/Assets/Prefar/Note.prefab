@@ -127,6 +127,8 @@ MonoBehaviour:
   startPos: {x: 0, y: 0, z: 0}
   targetPos: {x: 0, y: 0, z: 0}
   approachTime: 2
+  startScale: 0.3
+  endScale: 0.35
 --- !u!114 &8880686151787354272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,3 +143,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lane: 0
   hitTime: 0
+  judged: 0

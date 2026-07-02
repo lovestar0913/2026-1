@@ -4,11 +4,18 @@ public class NoteMovement : MonoBehaviour
 {
     public Note note;
 
+    [HideInInspector]
     public Vector3 startPos;
+
+    [HideInInspector]
     public Vector3 targetPos;
 
-    [Header("提前幾秒出現")]
+    [Header("提前幾秒生成")]
     public float approachTime = 2f;
+
+    [Header("音符大小")]
+    public float startScale = 0.4f;
+    public float endScale = 1.0f;
 
     void Awake()
     {
@@ -17,23 +24,39 @@ public class NoteMovement : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance == null || note == null)
+            return;
+
         float currentTime = GameManager.Instance.MusicTime;
 
+        // 音符開始出現時間
         float spawnTime = note.hitTime - approachTime;
 
+        // 計算進度
         float t = (currentTime - spawnTime) / approachTime;
 
-        t = Mathf.Clamp01(t);
+        // 不限制 t，讓音符飛過判定點
+        transform.position = Vector3.LerpUnclamped(
+            startPos,
+            targetPos,
+            t
+        );
 
-        transform.position = Vector3.Lerp(startPos, targetPos, t);
+        // 音符由小變大
+        float scale = Mathf.Lerp(
+            startScale,
+            endScale,
+            Mathf.Clamp01(t)
+        );
 
-        // 超過判定時間一點點就刪掉（之後會改成 Miss 判定）
-        if (currentTime > note.hitTime + 0.3f)
+        transform.localScale = Vector3.one * scale;
+
+        // 超過判定時間後 Miss
+        if (!note.judged && currentTime > note.hitTime + 0.15f)
         {
-            if (!note.judged)
-            {
-                GameManager.Instance.Miss();
-            }
+            note.judged = true;
+
+            GameManager.Instance.Miss();
 
             Destroy(gameObject);
         }
