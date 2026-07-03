@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class JudgeRingManager : MonoBehaviour
 {
+    [Header("所有判定環")]
     public JudgeRing[] rings;
+
+    [Header("提前幾秒顯示")]
+    public float showTime = 0.5f;
 
     void Update()
     {
@@ -12,7 +16,17 @@ public class JudgeRingManager : MonoBehaviour
 
             if (nearest != null)
             {
-                ring.SetShape(nearest.judgeShape);
+                float remain =
+                    nearest.hitTime - GameManager.Instance.MusicTime;
+
+                if (remain <= showTime)
+                {
+                    ring.SetShape(nearest.judgeShape);
+                }
+                else
+                {
+                    ring.Hide();
+                }
             }
             else
             {
@@ -24,6 +38,7 @@ public class JudgeRingManager : MonoBehaviour
     Note GetNearestNote(Lane lane)
     {
         Note nearest = null;
+
         float nearestTime = Mathf.Infinity;
 
         foreach (Note note in GameManager.Instance.activeNotes)
@@ -37,7 +52,8 @@ public class JudgeRingManager : MonoBehaviour
             if (note.lane != lane)
                 continue;
 
-            float remain = note.hitTime - GameManager.Instance.MusicTime;
+            float remain =
+                note.hitTime - GameManager.Instance.MusicTime;
 
             if (remain < 0)
                 continue;

@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class ChartData : MonoBehaviour
 {
-    public List<NoteData> notes = new List<NoteData>();
+    // Tap
+    public List<NoteData> notes = new();
+
+    // Hold
+    public List<HoldData> holds = new();
 }
 
 [Serializable]
