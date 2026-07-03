@@ -35,7 +35,7 @@ public class NoteMovement : MonoBehaviour
         // 計算進度
         float t = (currentTime - spawnTime) / approachTime;
 
-        // 不限制 t，讓音符飛過判定點
+        // 超過判定點後繼續往前飛
         transform.position = Vector3.LerpUnclamped(
             startPos,
             targetPos,
@@ -51,12 +51,15 @@ public class NoteMovement : MonoBehaviour
 
         transform.localScale = Vector3.one * scale;
 
-        // 超過判定時間後 Miss
-        if (!note.judged && currentTime > note.hitTime + 0.15f)
+        // Miss
+        if (!note.judged && currentTime > note.hitTime + GameManager.Instance.goodWindow)
         {
             note.judged = true;
 
             GameManager.Instance.Miss();
+
+            // 從目前場上的音符移除
+            GameManager.Instance.activeNotes.Remove(note);
 
             Destroy(gameObject);
         }

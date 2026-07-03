@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -33,6 +34,10 @@ public class GameManager : MonoBehaviour
     [Header("Score")]
     public int combo = 0;
     public int score = 0;
+
+    // 場上所有尚未消失的音符
+    [HideInInspector]
+    public List<Note> activeNotes = new List<Note>();
 
     private void Awake()
     {
@@ -97,10 +102,16 @@ public class GameManager : MonoBehaviour
             Quaternion.identity);
 
         Note note = obj.GetComponent<Note>();
+
+        // 加入目前場上的音符
+        activeNotes.Add(note);
+
         NoteMovement movement = obj.GetComponent<NoteMovement>();
 
         note.lane = data.lane;
         note.hitTime = data.hitTime;
+        note.noteType = data.noteType;
+        note.judgeShape = data.judgeShape;
 
         movement.startPos = centerSpawn.position;
 
@@ -134,13 +145,14 @@ public class GameManager : MonoBehaviour
 
     void Judge(Lane lane)
     {
-        Note[] notes = Object.FindObjectsByType<Note>(FindObjectsSortMode.None);
-
         Note target = null;
         float smallestError = Mathf.Infinity;
 
-        foreach (Note note in notes)
+        foreach (Note note in activeNotes)
         {
+            if (note == null)
+                continue;
+
             if (note.judged)
                 continue;
 
@@ -177,6 +189,9 @@ public class GameManager : MonoBehaviour
         }
 
         target.judged = true;
+
+        activeNotes.Remove(target);
+
         Destroy(target.gameObject);
     }
 
