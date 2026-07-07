@@ -26,13 +26,16 @@ public class HoldManager : MonoBehaviour
         Instance = this;
     }
 
-    void Update()
+    private void Update()
     {
         SpawnHold();
     }
 
     void SpawnHold()
     {
+        if (GameManager.Instance == null)
+            return;
+
         float currentTime = GameManager.Instance.MusicTime;
 
         foreach (HoldData data in chartData.holds)
@@ -40,7 +43,8 @@ public class HoldManager : MonoBehaviour
             if (data.spawned)
                 continue;
 
-            if (currentTime >= data.startTime - approachTime)
+            // hitTime 取代以前的 startTime
+            if (currentTime >= data.hitTime - approachTime)
             {
                 CreateHold(data);
                 data.spawned = true;
@@ -56,31 +60,43 @@ public class HoldManager : MonoBehaviour
 
         hold.data = data;
 
+        Vector3 target = Vector3.zero;
+
         switch (data.startLane)
         {
             case Lane.Q:
-                obj.transform.position = qJudge.position;
+                target = qJudge.position;
                 break;
 
             case Lane.W:
-                obj.transform.position = wJudge.position;
+                target = wJudge.position;
                 break;
 
             case Lane.E:
-                obj.transform.position = eJudge.position;
+                target = eJudge.position;
                 break;
 
             case Lane.D:
-                obj.transform.position = dJudge.position;
+                target = dJudge.position;
                 break;
 
             case Lane.S:
-                obj.transform.position = sJudge.position;
+                target = sJudge.position;
                 break;
 
             case Lane.A:
-                obj.transform.position = aJudge.position;
+                target = aJudge.position;
                 break;
         }
+
+        // 目前先直接放到判定點
+        obj.transform.position = target;
+
+        // 下一步 HoldMovement 會改成：
+        //
+        // Vector3 start = target + target.normalized * 3f;
+        // move.Initialize(data.hitTime, start, target);
+        //
+        // 到時候 Hold 就會從六角形外飛進來。
     }
 }

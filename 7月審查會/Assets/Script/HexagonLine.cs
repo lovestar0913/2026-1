@@ -33,16 +33,6 @@ public class HexagonLine : MonoBehaviour
                 frameParent,
                 data.frameWidth);
         }
-
-        // 紅色
-        CreateEdge("Red1", data.TrackPoints[5], data.TrackPoints[0], data.redMat, redParent, data.trackWidth);
-        CreateEdge("Red2", data.TrackPoints[0], data.TrackPoints[1], data.redMat, redParent, data.trackWidth);
-        CreateEdge("Red3", data.TrackPoints[1], data.TrackPoints[2], data.redMat, redParent, data.trackWidth);
-
-        // 藍色
-        CreateEdge("Blue1", data.TrackPoints[2], data.TrackPoints[3], data.blueMat, blueParent, data.trackWidth);
-        CreateEdge("Blue2", data.TrackPoints[3], data.TrackPoints[4], data.blueMat, blueParent, data.trackWidth);
-        CreateEdge("Blue3", data.TrackPoints[4], data.TrackPoints[5], data.blueMat, blueParent, data.trackWidth);
     }
 
     void CreateEdge(

@@ -2,20 +2,22 @@ using UnityEngine;
 
 public class HexagonController : MonoBehaviour
 {
+    [Header("Track")]
     public Transform redTrack;
     public Transform blueTrack;
-
 
     private Camera cam;
 
     private float currentAngle;
 
-    void Start()
+    public float CurrentAngle => currentAngle;
+
+    private void Start()
     {
         cam = Camera.main;
     }
 
-    void Update()
+    private void Update()
     {
         RotateTrack();
     }
@@ -27,13 +29,15 @@ public class HexagonController : MonoBehaviour
 
         Vector2 dir = mouse - transform.position;
 
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+        currentAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        Quaternion rot = Quaternion.Euler(0, 0, angle);
+        Quaternion redRotation =
+            Quaternion.Euler(0, 0, currentAngle);
 
-        redTrack.localRotation = rot;
-        blueTrack.localRotation = rot;
+        Quaternion blueRotation =
+            Quaternion.Euler(0, 0, currentAngle + 180f);
+
+        redTrack.localRotation = redRotation;
+        blueTrack.localRotation = blueRotation;
     }
-
-    public float CurrentAngle => currentAngle;
 }

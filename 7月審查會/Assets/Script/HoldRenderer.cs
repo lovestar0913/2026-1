@@ -3,73 +3,91 @@ using UnityEngine;
 
 public class HoldRenderer : MonoBehaviour
 {
-    [Header("Prefab")]
+    [Header("Segment")]
     public GameObject segmentPrefab;
 
-    [Header("Parent")]
     public Transform root;
 
-    [Header("Segment")]
+    [Header("Render")]
     public float segmentLength = 0.08f;
 
     public float gap = 0.01f;
 
-    private readonly List<GameObject> segments = new();
+    private readonly List<SpriteRenderer> segments = new();
 
-    public void Generate(float length)
+    /// <summary>
+    /// 生成 Hold
+    /// </summary>
+    public void Generate(float holdLength)
     {
         Clear();
 
         float step = segmentLength + gap;
 
-        int count = Mathf.CeilToInt(length / step);
+        int count = Mathf.Max(1, Mathf.CeilToInt(holdLength / step));
 
         for (int i = 0; i < count; i++)
         {
-            GameObject obj = Instantiate(segmentPrefab, root);
+            GameObject obj =
+                Instantiate(segmentPrefab, root);
 
             obj.transform.localPosition =
-                new Vector3(i * step, 0f, 0f);
+                new Vector3(i * step, 0, 0);
 
             obj.transform.localRotation =
                 Quaternion.identity;
 
-            obj.transform.localScale = Vector3.one;
+            SpriteRenderer sr =
+                obj.GetComponent<SpriteRenderer>();
 
-            segments.Add(obj);
+            segments.Add(sr);
         }
     }
 
-    public void SetProgress(float progress)
-    {
-        progress = Mathf.Clamp01(progress);
-
-        int hideCount =
-            Mathf.FloorToInt(progress * segments.Count);
-
-        for (int i = 0; i < segments.Count; i++)
-        {
-            segments[i].SetActive(i >= hideCount);
-        }
-    }
-
+    /// <summary>
+    /// 設定顏色
+    /// </summary>
     public void SetColor(Color color)
     {
-        foreach (GameObject obj in segments)
+        foreach (SpriteRenderer sr in segments)
         {
-            SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
-
             if (sr != null)
                 sr.color = color;
         }
     }
 
-    void Clear()
+    /// <summary>
+    /// Phigros Hold 縮短
+    /// progress:
+    /// 0 = 剛開始
+    /// 1 = Hold 結束
+    /// </summary>
+    public void SetProgress(float progress)
     {
-        foreach (GameObject obj in segments)
+        progress = Mathf.Clamp01(progress);
+
+        int visible =
+            Mathf.CeilToInt(
+                segments.Count * (1f - progress));
+
+        for (int i = 0; i < segments.Count; i++)
         {
-            if (obj != null)
-                Destroy(obj);
+            if (segments[i] == null)
+                continue;
+
+            segments[i].enabled =
+                i < visible;
+        }
+    }
+
+    public void Clear()
+    {
+        foreach (SpriteRenderer sr in segments)
+        {
+            if (sr == null)
+                continue;
+
+            Destroy(sr.gameObject);
         }
 
         segments.Clear();

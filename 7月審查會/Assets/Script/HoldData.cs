@@ -5,12 +5,15 @@ using UnityEngine;
 [Serializable]
 public class HoldData
 {
-    public float startTime;
+    public float appearTime;
+
+    public float hitTime;
+
     public float endTime;
 
-    public HoldColor color;
-
     public Lane startLane;
+
+    public HoldColor color;
 
     public List<HoldRotatePoint> rotatePoints = new();
 

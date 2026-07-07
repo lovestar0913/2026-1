@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public Transform dJudge;
     public Transform sJudge;
     public Transform aJudge;
+    public CircleTrack redTrack;
+    public CircleTrack blueTrack;
 
     [Header("Chart")]
     public ChartData chartData;
@@ -46,7 +48,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        redTrack.Hide();
+        blueTrack.Hide();
+
         musicSource.Play();
+
+        redTrack.Show();
+        blueTrack.Show();
     }
 
     public float MusicTime
@@ -112,6 +120,7 @@ public class GameManager : MonoBehaviour
         note.hitTime = data.hitTime;
         note.noteType = data.noteType;
         note.judgeShape = data.judgeShape;
+        obj.GetComponent<NoteSprite>().UpdateSprite();
 
         movement.startPos = centerSpawn.position;
 

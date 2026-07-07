@@ -7,7 +7,8 @@ public class HoldNote : MonoBehaviour
     [HideInInspector]
     public HoldRenderer renderer;
 
-    private HoldMovement movement;
+    [HideInInspector]
+    public HoldMovement movement;
 
     private void Awake()
     {
@@ -17,14 +18,23 @@ public class HoldNote : MonoBehaviour
 
     private void Start()
     {
-        float length =
-            (data.endTime - data.startTime) * 2f;
+        if (data == null)
+            return;
+
+        // Hold 長度 = Hold 持續時間
+        float length = (data.endTime - data.hitTime) * 2f;
 
         renderer.Generate(length);
 
-        if (data.color == HoldColor.Red)
-            renderer.SetColor(Color.red);
-        else
-            renderer.SetColor(Color.cyan);
+        switch (data.color)
+        {
+            case HoldColor.Red:
+                renderer.SetColor(Color.red);
+                break;
+
+            case HoldColor.Blue:
+                renderer.SetColor(Color.cyan);
+                break;
+        }
     }
 }
