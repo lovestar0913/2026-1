@@ -8,6 +8,9 @@ public class HexagonData : MonoBehaviour
     public float frameRadius = 3.2f;
     public float trackRadius = 2.95f;
 
+    [Header("Hold生成圓")]
+    public float spawnRadius = 5.5f;
+
     [Header("線寬")]
     public float frameWidth = 0.08f;
     public float trackWidth = 0.18f;
@@ -39,12 +42,28 @@ public class HexagonData : MonoBehaviour
             FramePoints[i] = new Vector3(
                 Mathf.Cos(angle) * frameRadius,
                 Mathf.Sin(angle) * frameRadius,
-                0);
+                0f);
 
             TrackPoints[i] = new Vector3(
                 Mathf.Cos(angle) * trackRadius,
                 Mathf.Sin(angle) * trackRadius,
                 -0.01f);
         }
+    }
+
+    /// <summary>
+    /// 取得生成圓上的位置
+    /// </summary>
+    public Vector3 GetSpawnPosition(Vector3 direction)
+    {
+        return direction.normalized * spawnRadius;
+    }
+
+    /// <summary>
+    /// 取得判定圓上的位置
+    /// </summary>
+    public Vector3 GetJudgePosition(Vector3 direction)
+    {
+        return direction.normalized * trackRadius;
     }
 }

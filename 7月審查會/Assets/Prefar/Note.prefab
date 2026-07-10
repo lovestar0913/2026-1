@@ -128,8 +128,8 @@ MonoBehaviour:
   startPos: {x: 0, y: 0, z: 0}
   targetPos: {x: 0, y: 0, z: 0}
   approachTime: 2
-  startScale: 0.3
-  endScale: 0.35
+  startScale: 1
+  endScale: 1.3
 --- !u!114 &8880686151787354272
 MonoBehaviour:
   m_ObjectHideFlags: 0

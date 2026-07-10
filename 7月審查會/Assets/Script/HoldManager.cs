@@ -13,6 +13,9 @@ public class HoldManager : MonoBehaviour
     [Header("Spawn")]
     public float approachTime = 2f;
 
+    [Header("Spawn Circle")]
+    public Transform spawnCircle;
+
     [Header("Judge Points")]
     public Transform qJudge;
     public Transform wJudge;
@@ -43,7 +46,6 @@ public class HoldManager : MonoBehaviour
             if (data.spawned)
                 continue;
 
-            // hitTime 取代以前的 startTime
             if (currentTime >= data.hitTime - approachTime)
             {
                 CreateHold(data);
@@ -54,49 +56,81 @@ public class HoldManager : MonoBehaviour
 
     void CreateHold(HoldData data)
     {
-        GameObject obj = Instantiate(holdPrefab);
+        //----------------------------------------------------
+        // 判定點
+        //----------------------------------------------------
+
+        Transform judge = null;
+
+        switch (data.startLane)
+        {
+            case Lane.Q:
+                judge = qJudge;
+                break;
+
+            case Lane.W:
+                judge = wJudge;
+                break;
+
+            case Lane.E:
+                judge = eJudge;
+                break;
+
+            case Lane.D:
+                judge = dJudge;
+                break;
+
+            case Lane.S:
+                judge = sJudge;
+                break;
+
+            case Lane.A:
+                judge = aJudge;
+                break;
+        }
+
+        if (judge == null)
+            return;
+
+        //----------------------------------------------------
+        // 外圈生成位置
+        //----------------------------------------------------
+
+        Vector3 dir =
+            (judge.position - spawnCircle.position).normalized;
+
+        float radius = HexagonData.Instance.spawnRadius;
+
+        Vector3 spawnPos =
+            spawnCircle.position + dir * radius;
+
+        //----------------------------------------------------
+        // 建立 Hold
+        //----------------------------------------------------
+
+        GameObject obj =
+            Instantiate(
+                holdPrefab,
+                spawnPos,
+                Quaternion.identity);
 
         HoldNote hold = obj.GetComponent<HoldNote>();
 
         hold.data = data;
 
-        Vector3 target = Vector3.zero;
+        //----------------------------------------------------
+        // 初始化移動
+        //----------------------------------------------------
 
-        switch (data.startLane)
+        HoldMovement move =
+            obj.GetComponent<HoldMovement>();
+
+        if (move != null)
         {
-            case Lane.Q:
-                target = qJudge.position;
-                break;
-
-            case Lane.W:
-                target = wJudge.position;
-                break;
-
-            case Lane.E:
-                target = eJudge.position;
-                break;
-
-            case Lane.D:
-                target = dJudge.position;
-                break;
-
-            case Lane.S:
-                target = sJudge.position;
-                break;
-
-            case Lane.A:
-                target = aJudge.position;
-                break;
+            move.Initialize(
+            data.hitTime,
+            spawnPos,
+            judge);
         }
-
-        // 目前先直接放到判定點
-        obj.transform.position = target;
-
-        // 下一步 HoldMovement 會改成：
-        //
-        // Vector3 start = target + target.normalized * 3f;
-        // move.Initialize(data.hitTime, start, target);
-        //
-        // 到時候 Hold 就會從六角形外飛進來。
     }
 }
