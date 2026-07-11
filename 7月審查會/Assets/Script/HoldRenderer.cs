@@ -1,95 +1,115 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HoldRenderer : MonoBehaviour
 {
-    [Header("Segment")]
-    public GameObject segmentPrefab;
+    [Header("Parts")]
+    public Transform pivot;
 
-    public Transform root;
+    public Transform head;
 
-    [Header("Render")]
-    public float segmentLength = 0.08f;
+    public Transform body;
 
-    public float gap = 0.01f;
+    public Transform tail;
 
-    private readonly List<SpriteRenderer> segments = new();
+    private SpriteRenderer bodyRenderer;
 
-    /// <summary>
-    /// 生成 Hold
-    /// </summary>
-    public void Generate(float holdLength)
+    private float totalLength;
+
+    [Header("Body Width")]
+    public float bodyWidth = 1f;
+
+    private void Awake()
     {
-        Clear();
-
-        float step = segmentLength + gap;
-
-        int count = Mathf.Max(1, Mathf.CeilToInt(holdLength / step));
-
-        for (int i = 0; i < count; i++)
-        {
-            GameObject obj =
-                Instantiate(segmentPrefab, root);
-
-            obj.transform.localPosition =
-                new Vector3(i * step, 0, 0);
-
-            obj.transform.localRotation =
-                Quaternion.identity;
-
-            SpriteRenderer sr =
-                obj.GetComponent<SpriteRenderer>();
-
-            segments.Add(sr);
-        }
+        bodyRenderer = body.GetComponent<SpriteRenderer>();
     }
 
     /// <summary>
-    /// 設定顏色
+    /// 初始化 Hold
     /// </summary>
-    public void SetColor(Color color)
+    public void Generate(float length)
     {
-        foreach (SpriteRenderer sr in segments)
-        {
-            if (sr != null)
-                sr.color = color;
-        }
+        totalLength = Mathf.Max(0.1f, length);
+
+        UpdateBody(totalLength);
     }
 
     /// <summary>
-    /// Phigros Hold 縮短
-    /// progress:
-    /// 0 = 剛開始
-    /// 1 = Hold 結束
+    /// 每一幀更新
+    /// </summary>
+    public void Refresh()
+    {
+        Vector3 headPos = head.position;
+        Vector3 tailPos = tail.position;
+
+        Vector3 dir = tailPos - headPos;
+
+        float length = dir.magnitude;
+
+        if (length <= 0.0001f)
+            return;
+
+        //------------------------------------------------
+        // Body 長度
+        //------------------------------------------------
+
+        bodyRenderer.size =
+            new Vector2(length, bodyWidth);
+
+        //------------------------------------------------
+        // Body 放在 Head
+        //------------------------------------------------
+
+        body.position = headPos;
+
+        //------------------------------------------------
+        // Body 朝 Tail
+        //------------------------------------------------
+
+        float angle =
+            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        body.rotation =
+            Quaternion.Euler(0, 0, angle);
+    }
+
+    void UpdateBody(float length)
+    {
+        bodyRenderer.size =
+            new Vector2(length, bodyWidth);
+    }
+
+    /// <summary>
+    /// Hold縮短
     /// </summary>
     public void SetProgress(float progress)
     {
         progress = Mathf.Clamp01(progress);
 
-        int visible =
-            Mathf.CeilToInt(
-                segments.Count * (1f - progress));
+        float remainLength =
+            Mathf.Lerp(totalLength, 0f, progress);
 
-        for (int i = 0; i < segments.Count; i++)
+        remainLength = Mathf.Max(remainLength, 0.01f);
+
+        bodyRenderer.size =
+            new Vector2(remainLength, bodyWidth);
+
+        body.localPosition =
+            Vector3.zero;
+
+        tail.localPosition =
+            new Vector3(remainLength, 0f, 0f);
+        if (progress >= 1f)
         {
-            if (segments[i] == null)
-                continue;
-
-            segments[i].enabled =
-                i < visible;
+            progress = 1f;
         }
     }
 
-    public void Clear()
+    public void SetColor(Color color)
     {
-        foreach (SpriteRenderer sr in segments)
-        {
-            if (sr == null)
-                continue;
+        head.GetComponent<SpriteRenderer>().color = color;
 
-            Destroy(sr.gameObject);
-        }
+        bodyRenderer.color = color;
 
-        segments.Clear();
+        tail.GetComponent<SpriteRenderer>().color = color;
     }
 }

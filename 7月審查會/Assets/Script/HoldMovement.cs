@@ -1,28 +1,34 @@
 using UnityEngine;
 
+[RequireComponent(typeof(HoldRenderer))]
 public class HoldMovement : MonoBehaviour
 {
-    [Header("Move")]
-    public Vector3 startPosition;
-
-    [HideInInspector]
-    public Transform target;
-
-    [Header("ÁîüÊàêÂà∞Âà§ÂÆöÊôÇÈñì")]
     public float approachTime = 2f;
 
+    private Vector3 startPosition;
+
+    private Transform target;
+
     private float spawnTime;
-    private float hitTime;
 
-    private bool initialized = false;
+    private bool initialized;
 
-    public void Initialize(float hitTime, Vector3 startPos, Transform targetTransform)
+    private HoldRenderer holdRenderer;
+
+    private void Awake()
     {
-        this.hitTime = hitTime;
-        this.spawnTime = hitTime - approachTime;
+        holdRenderer = GetComponent<HoldRenderer>();
+    }
 
+    public void Initialize(
+        float hitTime,
+        Vector3 startPos,
+        Transform judge)
+    {
         startPosition = startPos;
-        target = targetTransform;
+        target = judge;
+
+        spawnTime = hitTime - approachTime;
 
         transform.position = startPosition;
 
@@ -37,22 +43,46 @@ public class HoldMovement : MonoBehaviour
         if (GameManager.Instance == null)
             return;
 
-        if (target == null)
+        float currentTime =
+            GameManager.Instance.MusicTime;
+
+        float t =
+            Mathf.Clamp01(
+            (currentTime - spawnTime) /
+            approachTime);
+
+        transform.position =
+            Vector3.Lerp(
+                startPosition,
+                target.position,
+                t);
+
+        holdRenderer.Refresh();
+
+        HoldNote holdNote = GetComponentInParent<HoldNote>();
+
+        if (holdNote == null)
             return;
 
-        float currentTime = GameManager.Instance.MusicTime;
+        if (holdNote.finished)
+            return;
 
-        float t = Mathf.Clamp01(
-            (currentTime - spawnTime) / approachTime
-        );
+        // •u¶≥™±Æa•ø¶b´ˆ¶Ì§~∂}©l¡Yµu
+        if (holdNote.isHolding)
+        {
+            float progress = Mathf.InverseLerp(
+                holdNote.data.hitTime,
+                holdNote.data.endTime,
+                GameManager.Instance.MusicTime);
 
-        // ÊØèÂπÄÂèñÂæóÊúÄÊñ∞Âà§ÂÆö‰ΩçÁΩÆ
-        Vector3 targetPosition = target.position;
+            holdRenderer.SetProgress(progress);
 
-        transform.position = Vector3.Lerp(
-            startPosition,
-            targetPosition,
-            t
-        );
+            if (progress >= 1f)
+            {
+                holdNote.finished = true;
+
+                Destroy(holdNote.gameObject);
+            }
+        }
     }
 }

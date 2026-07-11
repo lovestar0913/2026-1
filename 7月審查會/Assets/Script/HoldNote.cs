@@ -5,36 +5,18 @@ public class HoldNote : MonoBehaviour
     public HoldData data;
 
     [HideInInspector]
-    public HoldRenderer renderer;
+    public bool isHolding = false;
 
     [HideInInspector]
-    public HoldMovement movement;
+    public bool finished = false;
 
-    private void Awake()
+    public void Miss()
     {
-        renderer = GetComponent<HoldRenderer>();
-        movement = GetComponent<HoldMovement>();
-    }
+        finished = true;
 
-    private void Start()
-    {
-        if (data == null)
-            return;
+        if (GameManager.Instance != null)
+            GameManager.Instance.Miss();
 
-        // Hold 長度 = Hold 持續時間
-        float length = (data.endTime - data.hitTime) * 2f;
-
-        renderer.Generate(length);
-
-        switch (data.color)
-        {
-            case HoldColor.Red:
-                renderer.SetColor(Color.red);
-                break;
-
-            case HoldColor.Blue:
-                renderer.SetColor(Color.cyan);
-                break;
-        }
+        Destroy(gameObject);
     }
 }

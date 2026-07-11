@@ -39,6 +39,9 @@ public class HoldManager : MonoBehaviour
         if (GameManager.Instance == null)
             return;
 
+        if (chartData == null)
+            return;
+
         float currentTime = GameManager.Instance.MusicTime;
 
         foreach (HoldData data in chartData.holds)
@@ -56,81 +59,126 @@ public class HoldManager : MonoBehaviour
 
     void CreateHold(HoldData data)
     {
-        //----------------------------------------------------
-        // 判定點
-        //----------------------------------------------------
-
-        Transform judge = null;
-
-        switch (data.startLane)
-        {
-            case Lane.Q:
-                judge = qJudge;
-                break;
-
-            case Lane.W:
-                judge = wJudge;
-                break;
-
-            case Lane.E:
-                judge = eJudge;
-                break;
-
-            case Lane.D:
-                judge = dJudge;
-                break;
-
-            case Lane.S:
-                judge = sJudge;
-                break;
-
-            case Lane.A:
-                judge = aJudge;
-                break;
-        }
+        Transform judge = GetJudge(data.startLane);
 
         if (judge == null)
             return;
 
-        //----------------------------------------------------
-        // 外圈生成位置
-        //----------------------------------------------------
+        if (spawnCircle == null)
+        {
+            Debug.LogError("Spawn Circle 未指定");
+            return;
+        }
 
-        Vector3 dir =
-            (judge.position - spawnCircle.position).normalized;
+        if (HexagonData.Instance == null)
+        {
+            Debug.LogError("HexagonData 不存在");
+            return;
+        }
+
+        //------------------------------------------------
+        // Spawn Position
+        //------------------------------------------------
+
+        Vector3 dir = (judge.position - spawnCircle.position).normalized;
 
         float radius = HexagonData.Instance.spawnRadius;
 
-        Vector3 spawnPos =
-            spawnCircle.position + dir * radius;
+        Vector3 spawnPos = spawnCircle.position + dir * radius;
 
-        //----------------------------------------------------
+        //------------------------------------------------
         // 建立 Hold
-        //----------------------------------------------------
+        //------------------------------------------------
 
-        GameObject obj =
-            Instantiate(
-                holdPrefab,
-                spawnPos,
-                Quaternion.identity);
+        GameObject holdObj =
+            Instantiate(holdPrefab, spawnPos, Quaternion.identity);
 
-        HoldNote hold = obj.GetComponent<HoldNote>();
+        //------------------------------------------------
+        // 找子物件
+        //------------------------------------------------
 
-        hold.data = data;
+        Transform pivot = holdObj.transform.Find("Pivot");
+        Transform tail = holdObj.transform.Find("Tail");
 
-        //----------------------------------------------------
-        // 初始化移動
-        //----------------------------------------------------
-
-        HoldMovement move =
-            obj.GetComponent<HoldMovement>();
-
-        if (move != null)
+        if (pivot == null || tail == null)
         {
-            move.Initialize(
-            data.hitTime,
-            spawnPos,
-            judge);
+            Debug.LogError("Hold Prefab 缺少 Pivot 或 Tail");
+            Destroy(holdObj);
+            return;
         }
+
+        //------------------------------------------------
+        // 設定位置
+        //------------------------------------------------
+
+        pivot.position = spawnPos;
+        tail.position = judge.position;
+
+        //------------------------------------------------
+        // HoldNote
+        //------------------------------------------------
+
+        HoldNote holdNote = holdObj.GetComponent<HoldNote>();
+
+        if (holdNote != null)
+        {
+            holdNote.data = data;
+
+            GameManager.Instance.activeHolds.Add(holdNote);
+        }
+
+        //------------------------------------------------
+        // HoldRenderer
+        //------------------------------------------------
+
+        HoldRenderer holdRenderer =
+            pivot.GetComponent<HoldRenderer>();
+
+        if (holdRenderer != null)
+        {
+            float holdLength =
+                Mathf.Max(
+                    0.5f,
+                    (data.endTime - data.hitTime) * 2f);
+
+            holdRenderer.Generate(holdLength);
+
+            if (data.color == HoldColor.Red)
+                holdRenderer.SetColor(Color.red);
+            else
+                holdRenderer.SetColor(Color.cyan);
+        }
+
+        //------------------------------------------------
+        // HoldMovement
+        //------------------------------------------------
+
+        HoldMovement holdMovement =
+            pivot.GetComponent<HoldMovement>();
+
+        if (holdMovement != null)
+        {
+            holdMovement.approachTime = approachTime;
+
+            holdMovement.Initialize(
+                data.hitTime,
+                spawnPos,
+                judge);
+        }
+    }
+
+    Transform GetJudge(Lane lane)
+    {
+        switch (lane)
+        {
+            case Lane.Q: return qJudge;
+            case Lane.W: return wJudge;
+            case Lane.E: return eJudge;
+            case Lane.D: return dJudge;
+            case Lane.S: return sJudge;
+            case Lane.A: return aJudge;
+        }
+
+        return null;
     }
 }

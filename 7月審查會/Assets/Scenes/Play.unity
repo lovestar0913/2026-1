@@ -2393,11 +2393,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68daa8571a49ff4438e70f8409791f8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  holdPrefab: {fileID: 7915766765122865072, guid: e50591feb9ecaae49bc38ae3cb6e1007,
+  holdPrefab: {fileID: 4525331954912209166, guid: 522446db38944a44694c5ffb789dd974,
     type: 3}
   chartData: {fileID: 1809922846}
   approachTime: 2
-  spawnCircle: {fileID: 0}
+  spawnCircle: {fileID: 1372505106}
   qJudge: {fileID: 54222146}
   wJudge: {fileID: 1144787443}
   eJudge: {fileID: 1322874576}
@@ -3704,6 +3704,7 @@ MonoBehaviour:
   combo: 0
   score: 0
   activeNotes: []
+  activeHolds: []
 --- !u!4 &1809922844
 Transform:
   m_ObjectHideFlags: 0
@@ -3846,7 +3847,16 @@ MonoBehaviour:
     noteType: 0
     judgeShape: 0
     spawned: 0
-  holds: []
+  holds:
+  - appearTime: 3
+    hitTime: 3
+    endTime: 10
+    startLane: 0
+    color: 1
+    rotatePoints:
+    - time: 1
+      lane: 1
+    spawned: 0
 --- !u!1 &1941728932
 GameObject:
   m_ObjectHideFlags: 0

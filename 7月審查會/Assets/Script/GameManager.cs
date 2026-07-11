@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public List<Note> activeNotes = new List<Note>();
 
+    [HideInInspector]
+    public List<HoldNote> activeHolds = new List<HoldNote>();
+
     private void Awake()
     {
         Instance = this;
@@ -65,6 +68,8 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         SpawnNotes();
+
+        UpdateHold();
 
         if (Input.GetKeyDown(KeyCode.Q))
             Judge(Lane.Q);
@@ -241,5 +246,52 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateJudge("MISS");
         UIManager.Instance.UpdateCombo(combo);
         UIManager.Instance.UpdateScore(score);
+    }
+    void UpdateHold()
+    {
+        for (int i = activeHolds.Count - 1; i >= 0; i--)
+        {
+            HoldNote hold = activeHolds[i];
+
+            if (hold == null)
+            {
+                activeHolds.RemoveAt(i);
+                continue;
+            }
+
+            if (hold.finished)
+            {
+                activeHolds.RemoveAt(i);
+                continue;
+            }
+
+            float now = MusicTime;
+
+            if (now < hold.data.hitTime)
+                continue;
+
+            bool pressed = IsLanePressed(hold.data.startLane);
+
+            if (!hold.isHolding)
+            {
+                if (pressed)
+                {
+                    hold.isHolding = true;
+                }
+                else
+                {
+                    hold.Miss();
+                    activeHolds.RemoveAt(i);
+                }
+            }
+            else
+            {
+                if (!pressed)
+                {
+                    hold.Miss();
+                    activeHolds.RemoveAt(i);
+                }
+            }
+        }
     }
 }
