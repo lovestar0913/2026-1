@@ -3,20 +3,16 @@ using UnityEngine;
 public class HoldRenderer : MonoBehaviour
 {
     [Header("Parts")]
-    public Transform pivot;
-
     public Transform head;
-
     public Transform body;
-
     public Transform tail;
+
+    [Header("Body")]
+    public float bodyWidth = 1f;
 
     private SpriteRenderer bodyRenderer;
 
     private float totalLength;
-
-    [Header("Body Width")]
-    public float bodyWidth = 1f;
 
     private void Awake()
     {
@@ -24,58 +20,18 @@ public class HoldRenderer : MonoBehaviour
     }
 
     /// <summary>
-    /// 初始化 Hold
+    /// 建立 Hold
     /// </summary>
     public void Generate(float length)
     {
-        totalLength = Mathf.Max(0.1f, length);
+        totalLength = Mathf.Max(length, 0.01f);
+
+        head.localPosition = Vector3.zero;
+
+        tail.localPosition =
+            new Vector3(0, totalLength, 0);
 
         UpdateBody(totalLength);
-    }
-
-    /// <summary>
-    /// 每一幀更新
-    /// </summary>
-    public void Refresh()
-    {
-        Vector3 headPos = head.position;
-        Vector3 tailPos = tail.position;
-
-        Vector3 dir = tailPos - headPos;
-
-        float length = dir.magnitude;
-
-        if (length <= 0.0001f)
-            return;
-
-        //------------------------------------------------
-        // Body 長度
-        //------------------------------------------------
-
-        bodyRenderer.size =
-            new Vector2(length, bodyWidth);
-
-        //------------------------------------------------
-        // Body 放在 Head
-        //------------------------------------------------
-
-        body.position = headPos;
-
-        //------------------------------------------------
-        // Body 朝 Tail
-        //------------------------------------------------
-
-        float angle =
-            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        body.rotation =
-            Quaternion.Euler(0, 0, angle);
-    }
-
-    void UpdateBody(float length)
-    {
-        bodyRenderer.size =
-            new Vector2(length, bodyWidth);
     }
 
     /// <summary>
@@ -85,31 +41,33 @@ public class HoldRenderer : MonoBehaviour
     {
         progress = Mathf.Clamp01(progress);
 
-        float remainLength =
-            Mathf.Lerp(totalLength, 0f, progress);
+        float remain =
+            Mathf.Lerp(totalLength, 0, progress);
 
-        remainLength = Mathf.Max(remainLength, 0.01f);
-
-        bodyRenderer.size =
-            new Vector2(remainLength, bodyWidth);
-
-        body.localPosition =
-            Vector3.zero;
+        remain = Mathf.Max(remain, 0.01f);
 
         tail.localPosition =
-            new Vector3(remainLength, 0f, 0f);
-        if (progress >= 1f)
-        {
-            progress = 1f;
-        }
+            new Vector3(0, remain, 0);
+
+        UpdateBody(remain);
+    }
+
+    void UpdateBody(float length)
+    {
+        body.localPosition =
+            new Vector3(0, length * 0.5f, 0);
+
+        body.localRotation =
+            Quaternion.identity;
+
+        bodyRenderer.size =
+            new Vector2(bodyWidth, length);
     }
 
     public void SetColor(Color color)
     {
         head.GetComponent<SpriteRenderer>().color = color;
-
         bodyRenderer.color = color;
-
         tail.GetComponent<SpriteRenderer>().color = color;
     }
 }

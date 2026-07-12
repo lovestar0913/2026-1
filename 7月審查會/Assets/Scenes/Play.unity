@@ -2398,6 +2398,7 @@ MonoBehaviour:
   chartData: {fileID: 1809922846}
   approachTime: 2
   spawnCircle: {fileID: 1372505106}
+  rotateCenter: {fileID: 1809922844}
   qJudge: {fileID: 54222146}
   wJudge: {fileID: 1144787443}
   eJudge: {fileID: 1322874576}
@@ -3847,16 +3848,7 @@ MonoBehaviour:
     noteType: 0
     judgeShape: 0
     spawned: 0
-  holds:
-  - appearTime: 3
-    hitTime: 3
-    endTime: 10
-    startLane: 0
-    color: 1
-    rotatePoints:
-    - time: 1
-      lane: 1
-    spawned: 0
+  holds: []
 --- !u!1 &1941728932
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,36 +1,68 @@
 using UnityEngine;
 
-[RequireComponent(typeof(HoldRenderer))]
 public class HoldMovement : MonoBehaviour
 {
+    [Header("Move")]
     public float approachTime = 2f;
 
-    private Vector3 startPosition;
-
     private Transform target;
+    private Transform rotateCenter;
 
     private float spawnTime;
-
     private bool initialized;
 
-    private HoldRenderer holdRenderer;
+    //------------------------------------------------
+    // Arc Move
+    //------------------------------------------------
 
-    private void Awake()
-    {
-        holdRenderer = GetComponent<HoldRenderer>();
-    }
+    private float radius;
+    private float startAngle;
+    private float endAngle;
+
+    //------------------------------------------------
 
     public void Initialize(
         float hitTime,
         Vector3 startPos,
-        Transform judge)
+        Transform judge,
+        Transform center)
     {
-        startPosition = startPos;
-        target = judge;
-
         spawnTime = hitTime - approachTime;
 
-        transform.position = startPosition;
+        target = judge;
+        rotateCenter = center;
+
+        //------------------------------------------------
+        // 半徑
+        //------------------------------------------------
+
+        radius = Vector3.Distance(
+            rotateCenter.position,
+            startPos);
+
+        //------------------------------------------------
+        // 起始角度
+        //------------------------------------------------
+
+        Vector3 startDir =
+            (startPos - rotateCenter.position).normalized;
+
+        startAngle =
+            Mathf.Atan2(
+                startDir.y,
+                startDir.x) * Mathf.Rad2Deg;
+
+        //------------------------------------------------
+        // 終點角度
+        //------------------------------------------------
+
+        Vector3 endDir =
+            (judge.position - rotateCenter.position).normalized;
+
+        endAngle =
+            Mathf.Atan2(
+                endDir.y,
+                endDir.x) * Mathf.Rad2Deg;
 
         initialized = true;
     }
@@ -43,46 +75,53 @@ public class HoldMovement : MonoBehaviour
         if (GameManager.Instance == null)
             return;
 
-        float currentTime =
-            GameManager.Instance.MusicTime;
+        //------------------------------------------------
+        // 飛行進度
+        //------------------------------------------------
 
-        float t =
+        float currentTime = GameManager.Instance.MusicTime;
+
+        float moveProgress =
             Mathf.Clamp01(
-            (currentTime - spawnTime) /
-            approachTime);
+                (currentTime - spawnTime) /
+                approachTime);
+
+        //------------------------------------------------
+        // 圓弧移動
+        //------------------------------------------------
+
+        float angle =
+            Mathf.LerpAngle(
+                startAngle,
+                endAngle,
+                moveProgress);
+
+        Vector3 offset =
+            new Vector3(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad),
+                0f);
 
         transform.position =
-            Vector3.Lerp(
-                startPosition,
-                target.position,
-                t);
+            rotateCenter.position +
+            offset * radius;
 
-        holdRenderer.Refresh();
+        //------------------------------------------------
+        // 永遠朝向判定圈
+        //------------------------------------------------
 
-        HoldNote holdNote = GetComponentInParent<HoldNote>();
+        Vector3 dir =
+            (target.position - transform.position).normalized;
 
-        if (holdNote == null)
-            return;
+        transform.up = dir;
 
-        if (holdNote.finished)
-            return;
+        //------------------------------------------------
+        // 到達終點時固定位置
+        //------------------------------------------------
 
-        // 只有玩家正在按住才開始縮短
-        if (holdNote.isHolding)
+        if (moveProgress >= 1f)
         {
-            float progress = Mathf.InverseLerp(
-                holdNote.data.hitTime,
-                holdNote.data.endTime,
-                GameManager.Instance.MusicTime);
-
-            holdRenderer.SetProgress(progress);
-
-            if (progress >= 1f)
-            {
-                holdNote.finished = true;
-
-                Destroy(holdNote.gameObject);
-            }
+            transform.position = target.position;
         }
     }
 }

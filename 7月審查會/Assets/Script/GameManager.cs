@@ -267,31 +267,100 @@ public class GameManager : MonoBehaviour
 
             float now = MusicTime;
 
+            //------------------------------------------------
+            // 還沒到判定時間
+            //------------------------------------------------
+
             if (now < hold.data.hitTime)
                 continue;
 
+            //------------------------------------------------
+            // 判斷按鍵
+            //------------------------------------------------
+
             bool pressed = IsLanePressed(hold.data.startLane);
+
+            //------------------------------------------------
+            // 開始 Hold
+            //------------------------------------------------
 
             if (!hold.isHolding)
             {
-                if (pressed)
-                {
-                    hold.isHolding = true;
-                }
-                else
+                // 超過判定還沒按
+                if (now > hold.data.hitTime + goodWindow)
                 {
                     hold.Miss();
                     activeHolds.RemoveAt(i);
+                    continue;
+                }
+                if (!hold.isHolding)
+                {
+                    // 超過判定還沒按
+                    if (now > hold.data.hitTime + goodWindow)
+                    {
+                        hold.Miss();
+                        activeHolds.RemoveAt(i);
+                        continue;
+                    }
+
+                    if (pressed)
+                    {
+                        hold.isHolding = true;
+                    }
+                    continue;
                 }
             }
-            else
+
+            //------------------------------------------------
+            // 中途放開
+            //------------------------------------------------
+
+            if (!pressed)
             {
-                if (!pressed)
-                {
-                    hold.Miss();
-                    activeHolds.RemoveAt(i);
-                }
+                hold.Miss();
+                activeHolds.RemoveAt(i);
+                continue;
+            }
+
+            //------------------------------------------------
+            // Hold完成
+            //------------------------------------------------
+
+            if (now >= hold.data.endTime)
+            {
+                hold.finished = true;
+
+                Perfect();
+
+                activeHolds.RemoveAt(i);
+
+                Destroy(hold.gameObject);
             }
         }
+    }
+    bool IsLanePressed(Lane lane)
+    {
+        switch (lane)
+        {
+            case Lane.Q:
+                return Input.GetKey(KeyCode.Q);
+
+            case Lane.W:
+                return Input.GetKey(KeyCode.W);
+
+            case Lane.E:
+                return Input.GetKey(KeyCode.E);
+
+            case Lane.D:
+                return Input.GetKey(KeyCode.D);
+
+            case Lane.S:
+                return Input.GetKey(KeyCode.S);
+
+            case Lane.A:
+                return Input.GetKey(KeyCode.A);
+        }
+
+        return false;
     }
 }

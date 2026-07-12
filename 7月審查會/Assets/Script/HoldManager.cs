@@ -16,6 +16,9 @@ public class HoldManager : MonoBehaviour
     [Header("Spawn Circle")]
     public Transform spawnCircle;
 
+    [Header("Rotate Center")]
+    public Transform rotateCenter;
+
     [Header("Judge Points")]
     public Transform qJudge;
     public Transform wJudge;
@@ -70,9 +73,9 @@ public class HoldManager : MonoBehaviour
             return;
         }
 
-        if (HexagonData.Instance == null)
+        if (rotateCenter == null)
         {
-            Debug.LogError("HexagonData 不存在");
+            Debug.LogError("Rotate Center 未指定");
             return;
         }
 
@@ -80,50 +83,46 @@ public class HoldManager : MonoBehaviour
         // Spawn Position
         //------------------------------------------------
 
-        Vector3 dir = (judge.position - spawnCircle.position).normalized;
+        Vector3 dir =
+            (judge.position - spawnCircle.position).normalized;
 
         float radius = HexagonData.Instance.spawnRadius;
 
-        Vector3 spawnPos = spawnCircle.position + dir * radius;
+        Vector3 spawnPos =
+            spawnCircle.position + dir * radius;
+
+        //------------------------------------------------
+        // 初始旋轉方向
+        //------------------------------------------------
+
+        float angle =
+            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        angle += 90f;
+
+        Quaternion rotation =
+            Quaternion.Euler(0f, 0f, angle);
 
         //------------------------------------------------
         // 建立 Hold
         //------------------------------------------------
 
         GameObject holdObj =
-            Instantiate(holdPrefab, spawnPos, Quaternion.identity);
-
-        //------------------------------------------------
-        // 找子物件
-        //------------------------------------------------
-
-        Transform pivot = holdObj.transform.Find("Pivot");
-        Transform tail = holdObj.transform.Find("Tail");
-
-        if (pivot == null || tail == null)
-        {
-            Debug.LogError("Hold Prefab 缺少 Pivot 或 Tail");
-            Destroy(holdObj);
-            return;
-        }
-
-        //------------------------------------------------
-        // 設定位置
-        //------------------------------------------------
-
-        pivot.position = spawnPos;
-        tail.position = judge.position;
+            Instantiate(
+                holdPrefab,
+                spawnPos,
+                rotation);
 
         //------------------------------------------------
         // HoldNote
         //------------------------------------------------
 
-        HoldNote holdNote = holdObj.GetComponent<HoldNote>();
+        HoldNote holdNote =
+            holdObj.GetComponent<HoldNote>();
 
         if (holdNote != null)
         {
             holdNote.data = data;
-
             GameManager.Instance.activeHolds.Add(holdNote);
         }
 
@@ -132,7 +131,7 @@ public class HoldManager : MonoBehaviour
         //------------------------------------------------
 
         HoldRenderer holdRenderer =
-            pivot.GetComponent<HoldRenderer>();
+            holdObj.GetComponent<HoldRenderer>();
 
         if (holdRenderer != null)
         {
@@ -146,7 +145,7 @@ public class HoldManager : MonoBehaviour
             if (data.color == HoldColor.Red)
                 holdRenderer.SetColor(Color.red);
             else
-                holdRenderer.SetColor(Color.cyan);
+                holdRenderer.SetColor(Color.yellow);
         }
 
         //------------------------------------------------
@@ -154,7 +153,7 @@ public class HoldManager : MonoBehaviour
         //------------------------------------------------
 
         HoldMovement holdMovement =
-            pivot.GetComponent<HoldMovement>();
+            holdObj.GetComponent<HoldMovement>();
 
         if (holdMovement != null)
         {
@@ -163,7 +162,8 @@ public class HoldManager : MonoBehaviour
             holdMovement.Initialize(
                 data.hitTime,
                 spawnPos,
-                judge);
+                judge,
+                rotateCenter);
         }
     }
 
@@ -171,12 +171,23 @@ public class HoldManager : MonoBehaviour
     {
         switch (lane)
         {
-            case Lane.Q: return qJudge;
-            case Lane.W: return wJudge;
-            case Lane.E: return eJudge;
-            case Lane.D: return dJudge;
-            case Lane.S: return sJudge;
-            case Lane.A: return aJudge;
+            case Lane.Q:
+                return qJudge;
+
+            case Lane.W:
+                return wJudge;
+
+            case Lane.E:
+                return eJudge;
+
+            case Lane.D:
+                return dJudge;
+
+            case Lane.S:
+                return sJudge;
+
+            case Lane.A:
+                return aJudge;
         }
 
         return null;
