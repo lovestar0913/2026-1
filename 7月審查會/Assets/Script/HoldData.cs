@@ -1,22 +1,21 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
+[System.Serializable]
 public class HoldData
 {
-    public float appearTime;
-
     public float hitTime;
-
     public float endTime;
 
-    public Lane startLane;
+    // 出生角度
+    [Range(0, 360)]
+    public float startAngle;
+
+    // 判定角度
+    [Range(0, 360)]
+    public float endAngle;
 
     public HoldColor color;
 
-    public List<HoldRotatePoint> rotatePoints = new();
-
     [HideInInspector]
-    public bool spawned = false;
+    public bool spawned;
 }

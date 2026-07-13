@@ -1,68 +1,57 @@
 using UnityEngine;
 
+[RequireComponent(typeof(HoldRenderer))]
+[RequireComponent(typeof(HoldNote))]
 public class HoldMovement : MonoBehaviour
 {
     [Header("Move")]
     public float approachTime = 2f;
 
-    private Transform target;
     private Transform rotateCenter;
 
+    private CircleTrack spawnCircle;
+    private CircleTrack judgeCircle;
+
     private float spawnTime;
-    private bool initialized;
 
-    //------------------------------------------------
-    // Arc Move
-    //------------------------------------------------
-
-    private float radius;
     private float startAngle;
     private float endAngle;
 
-    //------------------------------------------------
+    private bool initialized;
+
+    private HoldRenderer holdRenderer;
+    private HoldNote holdNote;
+
+    private void Awake()
+    {
+        holdRenderer = GetComponent<HoldRenderer>();
+        holdNote = GetComponent<HoldNote>();
+    }
 
     public void Initialize(
         float hitTime,
-        Vector3 startPos,
-        Transform judge,
+        float startAngle,
+        float endAngle,
+        CircleTrack spawnCircle,
+        CircleTrack judgeCircle,
         Transform center)
     {
         spawnTime = hitTime - approachTime;
 
-        target = judge;
+        this.startAngle = startAngle;
+        this.endAngle = endAngle;
+
+        this.spawnCircle = spawnCircle;
+        this.judgeCircle = judgeCircle;
+
         rotateCenter = center;
 
         //------------------------------------------------
-        // 半徑
+        // 初始位置
         //------------------------------------------------
 
-        radius = Vector3.Distance(
-            rotateCenter.position,
-            startPos);
-
-        //------------------------------------------------
-        // 起始角度
-        //------------------------------------------------
-
-        Vector3 startDir =
-            (startPos - rotateCenter.position).normalized;
-
-        startAngle =
-            Mathf.Atan2(
-                startDir.y,
-                startDir.x) * Mathf.Rad2Deg;
-
-        //------------------------------------------------
-        // 終點角度
-        //------------------------------------------------
-
-        Vector3 endDir =
-            (judge.position - rotateCenter.position).normalized;
-
-        endAngle =
-            Mathf.Atan2(
-                endDir.y,
-                endDir.x) * Mathf.Rad2Deg;
+        transform.position =
+            spawnCircle.GetPoint(startAngle);
 
         initialized = true;
     }
@@ -75,11 +64,12 @@ public class HoldMovement : MonoBehaviour
         if (GameManager.Instance == null)
             return;
 
+        float currentTime =
+            GameManager.Instance.MusicTime;
+
         //------------------------------------------------
         // 飛行進度
         //------------------------------------------------
-
-        float currentTime = GameManager.Instance.MusicTime;
 
         float moveProgress =
             Mathf.Clamp01(
@@ -87,41 +77,70 @@ public class HoldMovement : MonoBehaviour
                 approachTime);
 
         //------------------------------------------------
-        // 圓弧移動
+        // 角度插值
         //------------------------------------------------
 
-        float angle =
+        float currentAngle =
             Mathf.LerpAngle(
                 startAngle,
                 endAngle,
                 moveProgress);
 
+        //------------------------------------------------
+        // 半徑插值
+        //------------------------------------------------
+
+        float spawnRadius =
+            spawnCircle.GetRadius();
+
+        float judgeRadius =
+            judgeCircle.GetRadius();
+
+        float currentRadius =
+            Mathf.Lerp(
+                spawnRadius,
+                judgeRadius,
+                moveProgress);
+
+        //------------------------------------------------
+        // 座標
+        //------------------------------------------------
+
+        float rad =
+            currentAngle * Mathf.Deg2Rad;
+
         Vector3 offset =
             new Vector3(
-                Mathf.Cos(angle * Mathf.Deg2Rad),
-                Mathf.Sin(angle * Mathf.Deg2Rad),
+                Mathf.Cos(rad),
+                Mathf.Sin(rad),
                 0f);
 
         transform.position =
             rotateCenter.position +
-            offset * radius;
+            offset * currentRadius;
 
         //------------------------------------------------
-        // 永遠朝向判定圈
+        // 永遠朝向圓心（同心旋轉）
         //------------------------------------------------
 
-        Vector3 dir =
-            (target.position - transform.position).normalized;
+        Vector3 dirToCenter =
+            (rotateCenter.position - transform.position).normalized;
 
-        transform.up = dir;
+        transform.up = dirToCenter;
 
         //------------------------------------------------
-        // 到達終點時固定位置
+        // Hold縮短
         //------------------------------------------------
 
-        if (moveProgress >= 1f)
+        if (holdNote.isHolding)
         {
-            transform.position = target.position;
+            float progress =
+                Mathf.InverseLerp(
+                    holdNote.data.hitTime,
+                    holdNote.data.endTime,
+                    currentTime);
+
+            holdRenderer.SetProgress(progress);
         }
     }
 }

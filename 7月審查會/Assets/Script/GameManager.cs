@@ -278,7 +278,10 @@ public class GameManager : MonoBehaviour
             // 判斷按鍵
             //------------------------------------------------
 
-            bool pressed = IsLanePressed(hold.data.startLane);
+            bool pressed =
+            hold.data.color == HoldColor.Red
+        ? Input.GetMouseButton(0)
+        : Input.GetMouseButton(1);
 
             //------------------------------------------------
             // 開始 Hold
@@ -286,13 +289,6 @@ public class GameManager : MonoBehaviour
 
             if (!hold.isHolding)
             {
-                // 超過判定還沒按
-                if (now > hold.data.hitTime + goodWindow)
-                {
-                    hold.Miss();
-                    activeHolds.RemoveAt(i);
-                    continue;
-                }
                 if (!hold.isHolding)
                 {
                     // 超過判定還沒按
@@ -306,6 +302,9 @@ public class GameManager : MonoBehaviour
                     if (pressed)
                     {
                         hold.isHolding = true;
+
+                        HoldRenderer renderer =
+                            hold.GetComponent<HoldRenderer>();
                     }
                     continue;
                 }
@@ -337,30 +336,5 @@ public class GameManager : MonoBehaviour
                 Destroy(hold.gameObject);
             }
         }
-    }
-    bool IsLanePressed(Lane lane)
-    {
-        switch (lane)
-        {
-            case Lane.Q:
-                return Input.GetKey(KeyCode.Q);
-
-            case Lane.W:
-                return Input.GetKey(KeyCode.W);
-
-            case Lane.E:
-                return Input.GetKey(KeyCode.E);
-
-            case Lane.D:
-                return Input.GetKey(KeyCode.D);
-
-            case Lane.S:
-                return Input.GetKey(KeyCode.S);
-
-            case Lane.A:
-                return Input.GetKey(KeyCode.A);
-        }
-
-        return false;
     }
 }

@@ -12,7 +12,11 @@ public class HoldRenderer : MonoBehaviour
 
     private SpriteRenderer bodyRenderer;
 
-    private float totalLength;
+    // Hold 原始長度
+    private float holdLength;
+
+    // Head 與 Body 的距離
+    public float headOffset = 0.25f;
 
     private void Awake()
     {
@@ -20,48 +24,61 @@ public class HoldRenderer : MonoBehaviour
     }
 
     /// <summary>
-    /// 建立 Hold
+    /// 初始化 Hold
     /// </summary>
     public void Generate(float length)
     {
-        totalLength = Mathf.Max(length, 0.01f);
+        holdLength = length;
 
-        head.localPosition = Vector3.zero;
-
-        tail.localPosition =
-            new Vector3(0, totalLength, 0);
-
-        UpdateBody(totalLength);
+        // 一開始沒有縮短
+        UpdateVisual(0f);
     }
 
     /// <summary>
-    /// Hold縮短
+    /// 更新 Hold 縮短
     /// </summary>
     public void SetProgress(float progress)
     {
-        progress = Mathf.Clamp01(progress);
-
-        float remain =
-            Mathf.Lerp(totalLength, 0, progress);
-
-        remain = Mathf.Max(remain, 0.01f);
-
-        tail.localPosition =
-            new Vector3(0, remain, 0);
-
-        UpdateBody(remain);
+        UpdateVisual(progress);
     }
 
-    void UpdateBody(float length)
+    /// <summary>
+    /// 更新外觀
+    /// </summary>
+    private void UpdateVisual(float progress)
     {
-        body.localPosition =
-            new Vector3(0, length * 0.5f, 0);
+        progress = Mathf.Clamp01(progress);
 
-        body.localRotation =
-            Quaternion.identity;
+        float currentLength =
+            Mathf.Lerp(holdLength, 0f, progress);
+
+        //------------------------------------------------
+        // Head 永遠在最前面
+        //------------------------------------------------
+
+        head.localPosition =
+            Vector3.up * headOffset;
+
+        //------------------------------------------------
+        // Tail 往 Head 靠近
+        //------------------------------------------------
+
+        tail.localPosition =
+            Vector3.down * currentLength;
+
+        //------------------------------------------------
+        // Body 在中間
+        //------------------------------------------------
+
+        body.localPosition =
+            (head.localPosition + tail.localPosition) * 0.5f;
+
+        body.localRotation = Quaternion.identity;
 
         bodyRenderer.size =
-            new Vector2(bodyWidth, length);
+            new Vector2(
+                bodyWidth,
+                currentLength + headOffset);
     }
 
     public void SetColor(Color color)

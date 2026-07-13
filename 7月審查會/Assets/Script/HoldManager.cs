@@ -13,19 +13,13 @@ public class HoldManager : MonoBehaviour
     [Header("Spawn")]
     public float approachTime = 2f;
 
-    [Header("Spawn Circle")]
-    public Transform spawnCircle;
-
-    [Header("Rotate Center")]
+    [Header("Center")]
     public Transform rotateCenter;
 
-    [Header("Judge Points")]
-    public Transform qJudge;
-    public Transform wJudge;
-    public Transform eJudge;
-    public Transform dJudge;
-    public Transform sJudge;
-    public Transform aJudge;
+    [Header("Circle")]
+    public CircleTrack spawnCircle;
+    public CircleTrack redCircle;
+    public CircleTrack blueCircle;
 
     private void Awake()
     {
@@ -62,46 +56,50 @@ public class HoldManager : MonoBehaviour
 
     void CreateHold(HoldData data)
     {
-        Transform judge = GetJudge(data.startLane);
-
-        if (judge == null)
+        if (rotateCenter == null)
+        {
+            Debug.LogError("RotateCenter 未指定");
             return;
+        }
 
         if (spawnCircle == null)
         {
-            Debug.LogError("Spawn Circle 未指定");
+            Debug.LogError("SpawnCircle 未指定");
             return;
         }
 
-        if (rotateCenter == null)
+        CircleTrack judgeCircle =
+            data.color == HoldColor.Red
+            ? redCircle
+            : blueCircle;
+
+        if (judgeCircle == null)
         {
-            Debug.LogError("Rotate Center 未指定");
+            Debug.LogError("Judge Circle 未指定");
             return;
         }
 
         //------------------------------------------------
-        // Spawn Position
+        // 起點、終點
+        //------------------------------------------------
+
+        Vector3 spawnPos =
+            spawnCircle.GetPoint(data.startAngle);
+
+        Vector3 judgePos =
+            judgeCircle.GetPoint(data.endAngle);
+
+        //------------------------------------------------
+        // 初始朝向
         //------------------------------------------------
 
         Vector3 dir =
-            (judge.position - spawnCircle.position).normalized;
-
-        float radius = HexagonData.Instance.spawnRadius;
-
-        Vector3 spawnPos =
-            spawnCircle.position + dir * radius;
-
-        //------------------------------------------------
-        // 初始旋轉方向
-        //------------------------------------------------
-
-        float angle =
-            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        angle += 90f;
+            (judgePos - spawnPos).normalized;
 
         Quaternion rotation =
-            Quaternion.Euler(0f, 0f, angle);
+            Quaternion.LookRotation(
+                Vector3.forward,
+                dir);
 
         //------------------------------------------------
         // 建立 Hold
@@ -130,66 +128,42 @@ public class HoldManager : MonoBehaviour
         // HoldRenderer
         //------------------------------------------------
 
-        HoldRenderer holdRenderer =
+        HoldRenderer renderer =
             holdObj.GetComponent<HoldRenderer>();
 
-        if (holdRenderer != null)
+        if (renderer != null)
         {
             float holdLength =
                 Mathf.Max(
                     0.5f,
                     (data.endTime - data.hitTime) * 2f);
 
-            holdRenderer.Generate(holdLength);
+            renderer.Generate(holdLength);
 
-            if (data.color == HoldColor.Red)
-                holdRenderer.SetColor(Color.red);
-            else
-                holdRenderer.SetColor(Color.yellow);
+            renderer.SetColor(
+                data.color == HoldColor.Red
+                ? Color.red
+                : Color.cyan);
         }
 
         //------------------------------------------------
         // HoldMovement
         //------------------------------------------------
 
-        HoldMovement holdMovement =
+        HoldMovement movement =
             holdObj.GetComponent<HoldMovement>();
 
-        if (holdMovement != null)
+        if (movement != null)
         {
-            holdMovement.approachTime = approachTime;
+            movement.approachTime = approachTime;
 
-            holdMovement.Initialize(
-                data.hitTime,
-                spawnPos,
-                judge,
-                rotateCenter);
+            movement.Initialize(
+            data.hitTime,
+            data.startAngle,
+            data.endAngle,
+            spawnCircle,
+            judgeCircle,
+            rotateCenter);
         }
-    }
-
-    Transform GetJudge(Lane lane)
-    {
-        switch (lane)
-        {
-            case Lane.Q:
-                return qJudge;
-
-            case Lane.W:
-                return wJudge;
-
-            case Lane.E:
-                return eJudge;
-
-            case Lane.D:
-                return dJudge;
-
-            case Lane.S:
-                return sJudge;
-
-            case Lane.A:
-                return aJudge;
-        }
-
-        return null;
     }
 }

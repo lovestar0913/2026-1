@@ -14,14 +14,14 @@ public class CircleTrack : MonoBehaviour
     [Header("圓形種類")]
     public CircleType circleType = CircleType.Half;
 
-    [Header("半徑(0=使用HexagonData)")]
+    [Header("半徑 (0 = 使用 HexagonData)")]
     public float radius = 0f;
 
     [Header("細緻度")]
     [Range(20, 360)]
     public int segments = 180;
 
-    [Header("線寬(0=使用HexagonData)")]
+    [Header("線寬 (0 = 使用 HexagonData)")]
     public float width = 0f;
 
     private void Awake()
@@ -29,8 +29,6 @@ public class CircleTrack : MonoBehaviour
         line = GetComponent<LineRenderer>();
 
         line.useWorldSpace = false;
-
-        // 完整圓需要封閉
         line.loop = (circleType == CircleType.Full);
     }
 
@@ -48,21 +46,60 @@ public class CircleTrack : MonoBehaviour
         if (line != null)
         {
             line.loop = (circleType == CircleType.Full);
-
             DrawTrack();
         }
     }
 #endif
+
+    //------------------------------------------------
+    // 半徑
+    //------------------------------------------------
+
+    public float GetRadius()
+    {
+        if (radius > 0f)
+            return radius;
+
+        if (HexagonData.Instance != null)
+            return HexagonData.Instance.trackRadius;
+
+        return 1f;
+    }
+
+    //------------------------------------------------
+    // 取得世界座標
+    //------------------------------------------------
+
+    public Vector3 GetPoint(float angle)
+    {
+        return GetPoint(angle, transform.position);
+    }
+
+    //------------------------------------------------
+    // 指定圓心取得世界座標
+    //------------------------------------------------
+
+    public Vector3 GetPoint(float angle, Vector3 center)
+    {
+        float rad = angle * Mathf.Deg2Rad;
+
+        return center +
+               new Vector3(
+                   Mathf.Cos(rad),
+                   Mathf.Sin(rad),
+                   0f) * GetRadius();
+    }
+
+    //------------------------------------------------
+    // 畫圓
+    //------------------------------------------------
 
     public void DrawTrack()
     {
         if (line == null)
             return;
 
-        float drawRadius = radius;
-
-        if (drawRadius <= 0f && HexagonData.Instance != null)
-            drawRadius = HexagonData.Instance.trackRadius;
+        float drawRadius = GetRadius();
 
         float drawWidth = width;
 
@@ -72,55 +109,48 @@ public class CircleTrack : MonoBehaviour
         line.startWidth = drawWidth;
         line.endWidth = drawWidth;
 
-        if (circleType == CircleType.Full)
+        line.loop = (circleType == CircleType.Full);
+
+        line.positionCount = segments;
+
+        float startAngle = 0f;
+        float endAngle = 360f;
+
+        if (circleType == CircleType.Half)
         {
-            line.loop = true;
-            line.positionCount = segments;
-
-            for (int i = 0; i < segments; i++)
-            {
-                float angle = i * Mathf.PI * 2f / segments;
-
-                Vector3 pos = new Vector3(
-                    Mathf.Cos(angle) * drawRadius,
-                    Mathf.Sin(angle) * drawRadius,
-                    -0.01f);
-
-                line.SetPosition(i, pos);
-            }
+            startAngle = -90f;
+            endAngle = 90f;
         }
-        else
+
+        for (int i = 0; i < segments; i++)
         {
-            line.loop = false;
-            line.positionCount = segments;
+            float t = (float)i / (segments - 1);
 
-            float startAngle = -90f;
-            float endAngle = 90f;
+            float angle =
+                Mathf.Lerp(startAngle, endAngle, t) *
+                Mathf.Deg2Rad;
 
-            for (int i = 0; i < segments; i++)
-            {
-                float t = (float)i / (segments - 1);
+            Vector3 pos =
+                new Vector3(
+                    Mathf.Cos(angle),
+                    Mathf.Sin(angle),
+                    -0.01f) * drawRadius;
 
-                float angle =
-                    Mathf.Lerp(startAngle, endAngle, t) * Mathf.Deg2Rad;
-
-                Vector3 pos = new Vector3(
-                    Mathf.Cos(angle) * drawRadius,
-                    Mathf.Sin(angle) * drawRadius,
-                    -0.01f);
-
-                line.SetPosition(i, pos);
-            }
+            line.SetPosition(i, pos);
         }
     }
 
+    //------------------------------------------------
+
     public void Show()
     {
-        line.enabled = true;
+        if (line != null)
+            line.enabled = true;
     }
 
     public void Hide()
     {
-        line.enabled = false;
+        if (line != null)
+            line.enabled = false;
     }
 }
