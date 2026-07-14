@@ -17,7 +17,7 @@ public class JudgeRingManager : MonoBehaviour
             if (nearest != null)
             {
                 float remain =
-                    nearest.hitTime - GameManager.Instance.MusicTime;
+                    nearest.hitTime - SongManager.Instance.MusicTime;
 
                 if (remain <= showTime)
                 {
@@ -53,7 +53,7 @@ public class JudgeRingManager : MonoBehaviour
                 continue;
 
             float remain =
-                note.hitTime - GameManager.Instance.MusicTime;
+                note.hitTime - SongManager.Instance.MusicTime;
 
             if (remain < 0)
                 continue;

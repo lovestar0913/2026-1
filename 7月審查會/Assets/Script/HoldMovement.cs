@@ -75,13 +75,13 @@ public class HoldMovement : MonoBehaviour
             return;
 
 
-        if (GameManager.Instance == null)
+        if (SongManager.Instance == null)
             return;
 
 
 
         float currentTime =
-            GameManager.Instance.MusicTime;
+            SongManager.Instance.MusicTime;
 
 
 

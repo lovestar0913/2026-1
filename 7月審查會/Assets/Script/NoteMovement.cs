@@ -1,8 +1,9 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Note))]
 public class NoteMovement : MonoBehaviour
 {
-    public Note note;
+    private Note note;
 
     [HideInInspector]
     public Vector3 startPos;
@@ -10,58 +11,66 @@ public class NoteMovement : MonoBehaviour
     [HideInInspector]
     public Vector3 targetPos;
 
-    [Header("提前幾秒生成")]
+    [HideInInspector]
     public float approachTime = 2f;
 
-    [Header("音符大小")]
+    [Header("Scale")]
     public float startScale = 0.4f;
-    public float endScale = 1.0f;
+    public float endScale = 1f;
 
-    void Awake()
+    private float spawnTime;
+
+    private bool initialized;
+
+    private void Awake()
     {
         note = GetComponent<Note>();
     }
 
-    void Update()
+    private void Start()
     {
-        if (GameManager.Instance == null || note == null)
+        if (note == null)
             return;
 
-        float currentTime = GameManager.Instance.MusicTime;
+        spawnTime = note.hitTime - approachTime;
 
-        // 音符開始出現時間
-        float spawnTime = note.hitTime - approachTime;
+        transform.position = startPos;
+        transform.localScale = Vector3.one * startScale;
 
-        // 計算進度
-        float t = (currentTime - spawnTime) / approachTime;
+        initialized = true;
+    }
 
-        // 超過判定點後繼續往前飛
-        transform.position = Vector3.LerpUnclamped(
-            startPos,
-            targetPos,
-            t
-        );
+    private void Update()
+    {
+        if (!initialized)
+            return;
 
-        // 音符由小變大
-        float scale = Mathf.Lerp(
-            startScale,
-            endScale,
-            Mathf.Clamp01(t)
-        );
+        if (SongManager.Instance == null)
+            return;
 
-        transform.localScale = Vector3.one * scale;
+        float currentTime =
+            SongManager.Instance.MusicTime;
 
-        // Miss
-        if (!note.judged && currentTime > note.hitTime + GameManager.Instance.goodWindow)
-        {
-            note.judged = true;
+        // 進度
+        float progress =
+            (currentTime - spawnTime) /
+            approachTime;
 
-            GameManager.Instance.Miss();
+        // 位置
+        transform.position =
+            Vector3.LerpUnclamped(
+                startPos,
+                targetPos,
+                progress);
 
-            // 從目前場上的音符移除
-            GameManager.Instance.activeNotes.Remove(note);
+        // 大小
+        float scale =
+            Mathf.Lerp(
+                startScale,
+                endScale,
+                Mathf.Clamp01(progress));
 
-            Destroy(gameObject);
-        }
+        transform.localScale =
+            Vector3.one * scale;
     }
 }

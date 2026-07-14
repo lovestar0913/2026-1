@@ -144,8 +144,13 @@ MonoBehaviour:
     endAngle: 0
     color: 0
     spawned: 0
+  firstJudgeDone: 1
+  startColor: 0
+  currentColor: 0
+  holdButton: 0
   isHolding: 0
   finished: 0
+  nextTickTime: 0
 --- !u!114 &4756681747695478785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +180,8 @@ MonoBehaviour:
   body: {fileID: 6134853926190927216}
   tail: {fileID: 7449818118326587751}
   bodyWidth: 1
-  headLength: 0.35
+  currentColor: 0
+  headOffset: 0
 --- !u!1 &5842950855660553359
 GameObject:
   m_ObjectHideFlags: 0

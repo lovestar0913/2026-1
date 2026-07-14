@@ -4,30 +4,28 @@ public class HoldNote : MonoBehaviour
 {
     public HoldData data;
 
-    public bool firstJudgeDone = false;
+    [HideInInspector]
+    public float judgeAngle;
 
+    public bool firstJudgeDone = false;
 
     // 開始時顏色
     public HoldColor startColor;
 
-
     // 目前顏色
     public HoldColor currentColor;
 
+    public CircleTrack judgeTrack;
 
     public int holdButton;
-
 
     [HideInInspector]
     public bool isHolding = false;
 
-
     [HideInInspector]
     public bool finished = false;
 
-
     public float nextTickTime;
-
 
     public void StartHold()
     {
@@ -35,23 +33,19 @@ public class HoldNote : MonoBehaviour
 
         currentColor = data.color;
 
-
         if (startColor == HoldColor.Red)
             holdButton = 0;
         else
             holdButton = 1;
 
-
         isHolding = true;
         firstJudgeDone = true;
     }
-
 
     public void ChangeColor(HoldColor color)
     {
         currentColor = color;
     }
-
 
     public void Miss()
     {
