@@ -20,11 +20,7 @@ public class HoldRenderer : MonoBehaviour
     // Head 與 Body 的距離
     public float headOffset = 0f;
 
-
-    // =========================
     // Shrink
-    // =========================
-
     private bool shrinking = false;
 
     private float shrinkTimer = 0f;
@@ -37,7 +33,6 @@ public class HoldRenderer : MonoBehaviour
         bodyRenderer = body.GetComponent<SpriteRenderer>();
     }
 
-
     /// <summary>
     /// 初始化 Hold
     /// </summary>
@@ -49,7 +44,6 @@ public class HoldRenderer : MonoBehaviour
         UpdateVisual(0f);
     }
 
-
     /// <summary>
     /// 開始縮短
     /// </summary>
@@ -59,22 +53,17 @@ public class HoldRenderer : MonoBehaviour
         shrinkTimer = 0f;
     }
 
-
     private void Update()
     {
         if (!shrinking)
             return;
 
-
         shrinkTimer += Time.deltaTime;
-
 
         float progress =
             shrinkTimer / shrinkDuration;
 
-
         SetProgress(progress);
-
 
         if (progress >= 1f)
         {
@@ -82,7 +71,6 @@ public class HoldRenderer : MonoBehaviour
             SetProgress(1f);
         }
     }
-
 
     /// <summary>
     /// 設定縮短時間
@@ -92,7 +80,6 @@ public class HoldRenderer : MonoBehaviour
         shrinkDuration = duration;
     }
 
-
     /// <summary>
     /// 更新 Hold 縮短
     /// </summary>
@@ -100,7 +87,6 @@ public class HoldRenderer : MonoBehaviour
     {
         UpdateVisual(progress);
     }
-
 
     /// <summary>
     /// 更新外觀
@@ -111,58 +97,81 @@ public class HoldRenderer : MonoBehaviour
 
 
         float currentLength =
-            Mathf.Lerp(holdLength, 0f, progress);
+            Mathf.Lerp(
+                holdLength,
+                0f,
+                progress
+            );
 
 
+        //--------------------------------
+        // Hold頭固定
+        //--------------------------------
 
-        //------------------------------------------------
-        // Head 永遠在最前面
-        //------------------------------------------------
-
-        head.localPosition =
+        Vector3 headPos =
             Vector3.up * headOffset;
 
 
+        head.localPosition =
+            headPos;
 
-        //------------------------------------------------
-        // Tail 往 Head 靠近
-        //------------------------------------------------
+
+
+        //--------------------------------
+        // 尾巴位置
+        //--------------------------------
+
+        Vector3 tailPos =
+            Vector3.down * currentLength
+            +
+            headPos;
+
 
         tail.localPosition =
-            Vector3.down * currentLength;
+            tailPos;
 
 
 
-        //------------------------------------------------
-        // Body 在中間
-        //------------------------------------------------
+        //--------------------------------
+        // Body中心
+        //--------------------------------
 
         body.localPosition =
-            (head.localPosition + tail.localPosition) * 0.5f;
+            (headPos + tailPos) * 0.5f;
+
 
 
         body.localRotation =
             Quaternion.identity;
 
 
+
+        //--------------------------------
+        // Body長度
+        //--------------------------------
+
+        float bodyLength =
+            Vector3.Distance(
+                headPos,
+                tailPos
+            );
+
+
         bodyRenderer.size =
             new Vector2(
                 bodyWidth,
-                currentLength + headOffset);
+                bodyLength
+            );
     }
-
-
-
     public void SetColor(Color color)
     {
-        head.GetComponent<SpriteRenderer>().color = color;
-        bodyRenderer.color = color;
-        tail.GetComponent<SpriteRenderer>().color = color;
+        if (head != null)
+            head.GetComponent<SpriteRenderer>().color = color;
 
+        if (bodyRenderer != null)
+            bodyRenderer.color = color;
 
-        if (color == Color.red)
-            currentColor = HoldColor.Red;
-        else
-            currentColor = HoldColor.Blue;
+        if (tail != null)
+            tail.GetComponent<SpriteRenderer>().color = color;
     }
 }

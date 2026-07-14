@@ -403,15 +403,21 @@ public class GameManager : MonoBehaviour
 
             if (now >= hold.data.endTime)
             {
-                hold.finished = true;
+                if (renderer != null)
+                {
+                    renderer.SetProgress(1f);
+                }
 
+
+                hold.finished = true;
                 score += 200;
 
                 UIManager.Instance.UpdateScore(score);
 
+
                 activeHolds.RemoveAt(i);
 
-                Destroy(hold.gameObject);
+                Destroy(hold.gameObject, 0.05f);
             }
         }
     }

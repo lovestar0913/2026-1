@@ -1740,7 +1740,7 @@ MonoBehaviour:
   segments: 90
   width: 0
   currentAngle: 0
-  holdAngleRange: 15
+  holdAngleRange: 90
 --- !u!120 &667693357
 LineRenderer:
   serializedVersion: 2
@@ -2786,7 +2786,7 @@ MonoBehaviour:
   segments: 90
   width: 0
   currentAngle: 0
-  holdAngleRange: 0
+  holdAngleRange: 90
 --- !u!120 &1344173101
 LineRenderer:
   serializedVersion: 2
@@ -3701,9 +3701,9 @@ MonoBehaviour:
   blueTrack: {fileID: 1344173100}
   chartData: {fileID: 1809922846}
   approachTime: 2
-  perfectWindow: 0.05
-  greatWindow: 0.1
-  goodWindow: 0.15
+  perfectWindow: 0.08
+  greatWindow: 0.16
+  goodWindow: 0.24
   combo: 0
   score: 0
   nextTickTime: 0
