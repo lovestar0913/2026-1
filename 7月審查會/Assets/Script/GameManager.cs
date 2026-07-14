@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour
     public int combo = 0;
     public int score = 0;
 
+    [HideInInspector]
+    public float nextTickTime;
+
     // 場上所有尚未消失的音符
     [HideInInspector]
     public List<Note> activeNotes = new List<Note>();
@@ -259,6 +262,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
+
             if (hold.finished)
             {
                 activeHolds.RemoveAt(i);
@@ -267,69 +271,143 @@ public class GameManager : MonoBehaviour
 
             float now = MusicTime;
 
-            //------------------------------------------------
             // 還沒到判定時間
-            //------------------------------------------------
-
             if (now < hold.data.hitTime)
                 continue;
 
-            //------------------------------------------------
-            // 判斷按鍵
-            //------------------------------------------------
+            HoldRenderer renderer =
+                hold.GetComponent<HoldRenderer>();
 
-            bool pressed =
-            hold.data.color == HoldColor.Red
-        ? Input.GetMouseButton(0)
-        : Input.GetMouseButton(1);
-
-            //------------------------------------------------
-            // 開始 Hold
-            //------------------------------------------------
-
+            // 開始 Hold 判定
             if (!hold.isHolding)
             {
-                if (!hold.isHolding)
+                bool pressDown =
+                    hold.data.color == HoldColor.Red
+                    ? Input.GetMouseButtonDown(0)
+                    : Input.GetMouseButtonDown(1);
+
+
+                // 超過 Good 判定時間
+                if (now > hold.data.hitTime + goodWindow)
                 {
-                    // 超過判定還沒按
-                    if (now > hold.data.hitTime + goodWindow)
+                    hold.Miss();
+                    activeHolds.RemoveAt(i);
+                    continue;
+                }
+
+                if (pressDown)
+                {
+                    float error =
+                        Mathf.Abs(
+                            now - hold.data.hitTime
+                        );
+
+                    if (error <= perfectWindow)
                     {
-                        hold.Miss();
-                        activeHolds.RemoveAt(i);
+                        hold.StartHold();
+
+                        score += 200;
+                        combo++;
+
+                        UIManager.Instance.UpdateJudge("PERFECT");
+                    }
+                    else if (error <= greatWindow)
+                    {
+                        hold.StartHold();
+
+                        score += 100;
+                        combo++;
+
+                        UIManager.Instance.UpdateJudge("GREAT");
+                    }
+                    else if (error <= goodWindow)
+                    {
+                        hold.StartHold();
+
+                        score += 50;
+                        combo++;
+
+                        UIManager.Instance.UpdateJudge("GOOD");
+                    }
+                    else
+                    {
                         continue;
                     }
 
-                    if (pressed)
-                    {
-                        hold.isHolding = true;
+                    UIManager.Instance.UpdateCombo(combo);
+                    UIManager.Instance.UpdateScore(score);
 
-                        HoldRenderer renderer =
-                            hold.GetComponent<HoldRenderer>();
+                    hold.nextTickTime =
+                        now + 0.5f;
+
+                    if (renderer != null)
+                    {
+                        float duration =
+                            hold.data.endTime -
+                            hold.data.hitTime;
+
+
+                        renderer.SetShrinkDuration(duration);
+                        renderer.StartShrink();
                     }
-                    continue;
                 }
+
+                continue;
             }
 
-            //------------------------------------------------
-            // 中途放開
-            //------------------------------------------------
+            // Tick 分數
+            while (
+                now >= hold.nextTickTime &&
+                hold.nextTickTime < hold.data.endTime
+            )
+            {
+                score += 200;
 
-            if (!pressed)
+                UIManager.Instance.UpdateScore(score);
+
+                hold.nextTickTime += 0.5f;
+            }
+
+            // 判斷目前按鍵
+            bool holding =
+                hold.holdButton == 0
+                ? Input.GetMouseButton(0)
+                : Input.GetMouseButton(1);
+
+            if (!holding)
             {
                 hold.Miss();
+
                 activeHolds.RemoveAt(i);
                 continue;
             }
 
-            //------------------------------------------------
-            // Hold完成
-            //------------------------------------------------
+            // 判斷紅藍圈是否正確
+            CircleTrack track =
+                hold.startColor == HoldColor.Red
+                ? redTrack
+                : blueTrack;
+
+            if (track != null)
+            {
+                if (!track.IsCorrectHoldPosition(hold))
+                {
+                    hold.Miss();
+
+                    activeHolds.RemoveAt(i);
+                    continue;
+                }
+            }
+
+            // Hold 完成
 
             if (now >= hold.data.endTime)
             {
                 hold.finished = true;
 
-                Perfect();
+                score += 200;
+
+                UIManager.Instance.UpdateScore(score);
 
                 activeHolds.RemoveAt(i);
 

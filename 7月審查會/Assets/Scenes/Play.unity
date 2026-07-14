@@ -760,8 +760,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6eb3e26b079f864e8ff72eed6a8cca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redTrack: {fileID: 667693355}
-  blueTrack: {fileID: 1344173099}
+  redTrack: {fileID: 667693356}
+  blueTrack: {fileID: 1344173100}
 --- !u!1 &306445098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,6 +1739,8 @@ MonoBehaviour:
   radius: 0
   segments: 90
   width: 0
+  currentAngle: 0
+  holdAngleRange: 15
 --- !u!120 &667693357
 LineRenderer:
   serializedVersion: 2
@@ -2783,6 +2785,8 @@ MonoBehaviour:
   radius: 0
   segments: 90
   width: 0
+  currentAngle: 0
+  holdAngleRange: 0
 --- !u!120 &1344173101
 LineRenderer:
   serializedVersion: 2
@@ -3036,6 +3040,8 @@ MonoBehaviour:
   radius: 15
   segments: 180
   width: 0.08
+  currentAngle: 0
+  holdAngleRange: 0
 --- !u!120 &1372505108
 LineRenderer:
   serializedVersion: 2
@@ -3700,6 +3706,7 @@ MonoBehaviour:
   goodWindow: 0.15
   combo: 0
   score: 0
+  nextTickTime: 0
   activeNotes: []
   activeHolds: []
 --- !u!4 &1809922844
@@ -3828,26 +3835,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c66f921f4b0825948b39663439603fed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notes:
-  - lane: 1
-    hitTime: 2
-    noteType: 0
-    judgeShape: 2
-    spawned: 0
-  - lane: 0
-    hitTime: 3
-    noteType: 0
-    judgeShape: 1
-    spawned: 0
-  - lane: 2
-    hitTime: 4
-    noteType: 0
-    judgeShape: 0
-    spawned: 0
+  notes: []
   holds:
-  - hitTime: 5
-    endTime: 7
-    startAngle: 46
+  - hitTime: 3
+    endTime: 5
+    startAngle: 0
     endAngle: 0
     color: 0
     spawned: 0
