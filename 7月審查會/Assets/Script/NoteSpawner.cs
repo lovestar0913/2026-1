@@ -17,13 +17,9 @@ public class NoteSpawner : MonoBehaviour
 
 
 
-    [Header("Spawned Note")]
-    private HashSet<NoteData> spawnedNotes = new();
-
-
-
     [Header("Prefab")]
     public GameObject notePrefab;
+
     public GameObject holdPrefab;
 
 
@@ -50,10 +46,29 @@ public class NoteSpawner : MonoBehaviour
 
     [Header("Hold")]
     public Transform rotateCenter;
-
     public CircleTrack spawnCircle;
     public CircleTrack redCircle;
     public CircleTrack blueCircle;
+
+
+
+    private int spawnIndex = 0;
+
+
+
+    public bool AllNotesFinished
+    {
+        get
+        {
+            if (chartData == null)
+                return false;
+
+
+            return spawnIndex >= chartData.notes.Count &&
+                   activeNotes.Count == 0 &&
+                   activeHolds.Count == 0;
+        }
+    }
 
 
 
@@ -66,6 +81,7 @@ public class NoteSpawner : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
@@ -73,29 +89,103 @@ public class NoteSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (SongManager.Instance == null)
+        ResetSpawner();
+    }
+
+
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+    }
+
+
+
+    //=========================
+    // Reset
+    //=========================
+
+    public void ResetSpawner()
+    {
+        Debug.Log("NoteSpawner Reset");
+
+
+        // 清除音符
+        foreach (Note note in activeNotes)
         {
-            Debug.LogError("找不到 SongManager");
+            if (note != null)
+                Destroy(note.gameObject);
+        }
+
+
+        activeNotes.Clear();
+
+
+
+        foreach (HoldNote hold in activeHolds)
+        {
+            if (hold != null)
+                Destroy(hold.gameObject);
+        }
+
+
+        activeHolds.Clear();
+
+
+
+        // 重置 index
+        spawnIndex = 0;
+
+
+
+        // 重新讀 Chart
+        if (ChartLoader.Instance == null)
+        {
+            Debug.LogError("沒有 ChartLoader");
             return;
         }
 
 
+        ChartLoader.Instance.ReloadChart();
+
+
+
         chartData =
-            SongManager.Instance.chartData;
+            ChartLoader.Instance.GetChart();
+
 
 
         if (chartData == null)
         {
-            Debug.LogError("ChartData 為空");
+            Debug.LogError("ChartData Null");
+            return;
         }
+
+
+
+        Debug.Log(
+            "Chart Ready Notes:"
+            +
+            chartData.notes.Count
+        );
     }
 
 
 
     private void Update()
     {
+        if (SongManager.Instance == null)
+            return;
+
+
+        if (!SongManager.Instance.Started)
+            return;
+
+
         if (chartData == null)
             return;
+
 
 
         SpawnNotes();
@@ -103,10 +193,11 @@ public class NoteSpawner : MonoBehaviour
 
 
 
-    // =========================
-    // Spawn
-    // =========================
 
+
+    //=========================
+    // Spawn
+    //=========================
 
     void SpawnNotes()
     {
@@ -115,45 +206,67 @@ public class NoteSpawner : MonoBehaviour
 
 
 
-        foreach (NoteData data in chartData.notes)
+        while (spawnIndex < chartData.notes.Count)
         {
-            if (spawnedNotes.Contains(data))
-                continue;
+
+            NoteData data =
+                chartData.notes[spawnIndex];
 
 
 
-            if (now >= data.hitTime - approachTime)
+            if (now < data.hitTime - approachTime)
+                break;
+
+
+
+            Debug.Log(
+                "Spawn Note Index:"
+                +
+                spawnIndex
+                +
+                " HitTime:"
+                +
+                data.hitTime
+                +
+                " Now:"
+                +
+                now
+            );
+
+
+
+            if (data.noteType == NoteType.Tap)
             {
-                if (data.noteType == NoteType.Tap)
-                {
-                    CreateTap(data);
-                }
-                else if (data.noteType == NoteType.Hold)
-                {
-                    CreateHold(data);
-                }
-
-
-                spawnedNotes.Add(data);
+                CreateTap(data);
             }
+            else
+            {
+                CreateHold(data);
+            }
+
+
+
+            spawnIndex++;
         }
     }
 
 
 
-    // =========================
-    // Tap
-    // =========================
 
+
+    //=========================
+    // Tap
+    //=========================
 
     void CreateTap(NoteData data)
     {
+
         GameObject obj =
             Instantiate(
                 notePrefab,
                 centerSpawn.position,
-                Quaternion.identity);
-
+                Quaternion.identity
+            );
 
 
         Note note =
@@ -162,22 +275,39 @@ public class NoteSpawner : MonoBehaviour
 
         if (note == null)
         {
-            Debug.LogError("NotePrefab 缺少 Note");
+            Debug.LogError(
+                "Prefab沒有 Note"
+            );
+
             Destroy(obj);
             return;
         }
 
 
 
-        // 加入管理
+        note.lane = data.lane;
+
+        note.hitTime = data.hitTime;
+
+        note.noteType = data.noteType;
+
+        note.judgeShape = data.judgeShape;
+
+
+
         activeNotes.Add(note);
 
 
 
-        note.lane = data.lane;
-        note.hitTime = data.hitTime;
-        note.noteType = data.noteType;
-        note.judgeShape = data.judgeShape;
+        Debug.Log(
+            "Create Note : "
+            +
+            note.name
+            +
+            " Hit:"
+            +
+            note.hitTime
+        );
 
 
 
@@ -191,12 +321,15 @@ public class NoteSpawner : MonoBehaviour
                 centerSpawn.position;
 
 
+            move.targetPos =
+                GetJudgePosition(data.lane);
+
+
             move.approachTime =
                 approachTime;
 
 
-            move.targetPos =
-                GetJudgePosition(data.lane);
+            move.Initialize();
         }
 
 
@@ -212,42 +345,28 @@ public class NoteSpawner : MonoBehaviour
 
 
 
+
     Vector3 GetJudgePosition(Lane lane)
     {
         switch (lane)
         {
-            case Lane.Q:
-                return qJudge.position;
-
-            case Lane.W:
-                return wJudge.position;
-
-            case Lane.E:
-                return eJudge.position;
-
-            case Lane.D:
-                return dJudge.position;
-
-            case Lane.S:
-                return sJudge.position;
-
-            case Lane.A:
-                return aJudge.position;
+            case Lane.Q: return qJudge.position;
+            case Lane.W: return wJudge.position;
+            case Lane.E: return eJudge.position;
+            case Lane.D: return dJudge.position;
+            case Lane.S: return sJudge.position;
+            case Lane.A: return aJudge.position;
         }
 
 
         return centerSpawn.position;
     }
 
+//=========================
+// Hold
+//=========================
 
-
-
-    // =========================
-    // Hold
-    // =========================
-
-
-    void CreateHold(NoteData data)
+void CreateHold(NoteData data)
     {
         CircleTrack judgeCircle =
             data.color == HoldColor.Red
@@ -257,14 +376,12 @@ public class NoteSpawner : MonoBehaviour
 
 
         Vector3 spawnPos =
-            spawnCircle.GetPoint(
-                data.startAngle);
+            spawnCircle.GetPoint(data.startAngle);
 
 
 
         Vector3 judgePos =
-            judgeCircle.GetPoint(
-                data.endAngle);
+            judgeCircle.GetPoint(data.endAngle);
 
 
 
@@ -276,7 +393,8 @@ public class NoteSpawner : MonoBehaviour
         Quaternion rot =
             Quaternion.LookRotation(
                 Vector3.forward,
-                dir);
+                dir
+            );
 
 
 
@@ -284,7 +402,8 @@ public class NoteSpawner : MonoBehaviour
             Instantiate(
                 holdPrefab,
                 spawnPos,
-                rot);
+                rot
+            );
 
 
 
@@ -292,9 +411,13 @@ public class NoteSpawner : MonoBehaviour
             obj.GetComponent<HoldNote>();
 
 
+
         if (hold == null)
         {
-            Debug.LogError("HoldPrefab 缺少 HoldNote");
+            Debug.LogError(
+                "HoldPrefab 缺少 HoldNote"
+            );
+
             Destroy(obj);
             return;
         }
@@ -306,14 +429,8 @@ public class NoteSpawner : MonoBehaviour
 
 
         hold.data = data;
-
-
-        hold.judgeTrack =
-            judgeCircle;
-
-
-        hold.judgeAngle =
-            data.endAngle;
+        hold.judgeTrack = judgeCircle;
+        hold.judgeAngle = data.endAngle;
 
 
 
@@ -321,22 +438,26 @@ public class NoteSpawner : MonoBehaviour
             obj.GetComponent<HoldRenderer>();
 
 
+
         if (renderer != null)
         {
             float length =
                 Mathf.Max(
                     0.5f,
-                    (data.endTime - data.hitTime) * 2f);
+                    (data.endTime - data.hitTime) * 2f
+                );
 
 
 
             renderer.Generate(length);
 
 
+
             renderer.SetColor(
                 data.color == HoldColor.Red
                 ? Color.red
-                : Color.cyan);
+                : Color.cyan
+            );
         }
 
 
@@ -345,10 +466,12 @@ public class NoteSpawner : MonoBehaviour
             obj.GetComponent<HoldMovement>();
 
 
+
         if (movement != null)
         {
             movement.approachTime =
                 approachTime;
+
 
 
             movement.Initialize(
@@ -357,7 +480,8 @@ public class NoteSpawner : MonoBehaviour
                 data.endAngle,
                 spawnCircle,
                 judgeCircle,
-                rotateCenter);
+                rotateCenter
+            );
         }
     }
 }

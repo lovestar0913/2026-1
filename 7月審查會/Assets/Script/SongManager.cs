@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+
 
 public class SongManager : MonoBehaviour
 {
@@ -21,81 +23,198 @@ public class SongManager : MonoBehaviour
     public float musicOffset = 0f;
 
 
+    [Header("Start Delay")]
+    public float startDelay = 3f;
+
+
+
+    public bool Started { get; private set; }
+
+
+    private Coroutine startCoroutine;
+
+
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
+            return;
         }
     }
 
+
+
     private void Start()
     {
+        ResetSong();
+    }
+
+
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
+
+
+    //=========================
+    // Reset Song
+    //=========================
+
+    public void ResetSong()
+    {
+        if (startCoroutine != null)
+        {
+            StopCoroutine(startCoroutine);
+        }
+
+
+        Stop();
+
+
+        Started = false;
+
+
+
+        //重新取得Chart
+        if (ChartLoader.Instance != null)
+        {
+            chartData =
+                ChartLoader.Instance.GetChart();
+
+
+            if (chartData != null)
+            {
+                bpm =
+                    chartData.bpm;
+
+                musicOffset =
+                    chartData.offset;
+            }
+        }
+
+
+
+        startCoroutine =
+            StartCoroutine(StartGame());
+    }
+
+
+
+    IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(startDelay);
+
+
+        Started = true;
+
+
         Play();
     }
 
-    // Play Control
+
+
+    //=========================
+    // Audio Control
+    //=========================
+
+
     public void Play()
     {
         if (musicSource == null)
+        {
+            Debug.LogError("沒有 AudioSource");
             return;
+        }
+
+
+        musicSource.Stop();
+
+        musicSource.time = 0f;
 
         musicSource.Play();
     }
+
+
 
     public void Pause()
     {
         if (musicSource == null)
             return;
 
+
         musicSource.Pause();
     }
+
+
 
     public void Stop()
     {
         if (musicSource == null)
             return;
 
+
         musicSource.Stop();
+
+        musicSource.time = 0f;
     }
+
+
 
     public void Restart()
     {
-        if (musicSource == null)
-            return;
-
-        musicSource.Stop();
-        musicSource.time = 0f;
-        musicSource.Play();
+        ResetSong();
     }
+
+
 
     public void Seek(float time)
     {
         if (musicSource == null)
             return;
 
-        musicSource.time = Mathf.Max(0f, time);
+
+        musicSource.time =
+            Mathf.Max(0f, time);
     }
+
+
 
     public void SetVolume(float volume)
     {
         if (musicSource == null)
             return;
 
+
         musicSource.volume =
             Mathf.Clamp01(volume);
     }
 
+
+
+    //=========================
     // Rhythm Time
+    //=========================
+
+
     public float MusicTime
     {
         get
         {
+            if (!Started)
+                return 0f;
+
+
             if (musicSource == null)
                 return 0f;
 
@@ -104,33 +223,44 @@ public class SongManager : MonoBehaviour
         }
     }
 
-    // 小節時間
+
+
     public float BeatTime
     {
         get
         {
             if (bpm <= 0)
-                return 0;
+                return 0f;
 
 
             return 60f / bpm;
         }
     }
 
-    // 目前第幾拍
+
+
     public float CurrentBeat
     {
         get
         {
+            if (!Started)
+                return 0f;
+
+
             return MusicTime / BeatTime;
         }
     }
 
-    // State
+
+
     public bool IsPlaying
     {
         get
         {
+            if (!Started)
+                return false;
+
+
             if (musicSource == null)
                 return false;
 
@@ -138,6 +268,8 @@ public class SongManager : MonoBehaviour
             return musicSource.isPlaying;
         }
     }
+
+
 
     public float Length
     {

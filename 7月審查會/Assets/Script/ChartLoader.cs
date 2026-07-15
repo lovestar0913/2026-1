@@ -10,9 +10,7 @@ public class ChartLoader : MonoBehaviour
     public TextAsset chartFile;
 
 
-
     private ChartData chartData;
-
 
 
     public bool IsLoaded { get; private set; }
@@ -24,7 +22,6 @@ public class ChartLoader : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -38,11 +35,31 @@ public class ChartLoader : MonoBehaviour
 
 
 
-    private void LoadChart()
+    private void OnDestroy()
     {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
+
+
+    //=========================
+    // Load Chart
+    //=========================
+
+    public void LoadChart()
+    {
+        IsLoaded = false;
+
+
         if (chartFile == null)
         {
-            Debug.LogError("沒有指定 .chart 檔案");
+            Debug.LogError(
+                "沒有指定 Chart File"
+            );
+
             return;
         }
 
@@ -57,7 +74,21 @@ public class ChartLoader : MonoBehaviour
 
         if (chartData == null)
         {
-            Debug.LogError("Chart 解析失敗");
+            Debug.LogError(
+                "Chart 解析失敗"
+            );
+
+            return;
+        }
+
+
+
+        if (chartData.notes == null)
+        {
+            Debug.LogError(
+                "Chart 沒有 notes 資料"
+            );
+
             return;
         }
 
@@ -66,17 +97,30 @@ public class ChartLoader : MonoBehaviour
         IsLoaded = true;
 
 
+    }
 
-        Debug.Log(
-            "Chart Loaded : "
-            + chartData.songName
-        );
+
+
+    //重新讀取歌曲
+    public void ReloadChart()
+    {
+        LoadChart();
     }
 
 
 
     public ChartData GetChart()
     {
+        if (!IsLoaded)
+        {
+            Debug.LogWarning(
+                "Chart 尚未載入"
+            );
+
+            return null;
+        }
+
+
         return chartData;
     }
 }

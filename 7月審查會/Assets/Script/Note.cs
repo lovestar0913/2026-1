@@ -12,13 +12,11 @@ public enum Lane
 }
 
 
-
 public enum NoteType
 {
     Tap,
     Hold
 }
-
 
 
 public enum JudgeShape
@@ -51,4 +49,60 @@ public class Note : MonoBehaviour
 
     [Header("判定")]
     public bool judged = false;
+
+
+
+    //=========================
+    // Debug
+    //=========================
+
+    private void Awake()
+    {
+        Debug.Log(
+            "Note Awake : "
+            + gameObject.name
+        );
+    }
+
+
+    private void OnEnable()
+    {
+        Debug.Log(
+            "Note Enable : "
+            + gameObject.name
+        );
+    }
+
+
+    private void Start()
+    {
+        Debug.Log(
+            "Note Start : "
+            + gameObject.name
+            +
+            " HitTime:"
+            + hitTime
+        );
+    }
+
+
+    private void OnDisable()
+    {
+        Debug.LogWarning(
+            "Note Disable : "
+            + gameObject.name
+        );
+    }
+
+
+    private void OnDestroy()
+    {
+        Debug.LogError(
+            "Note Destroy : "
+            + gameObject.name
+            +
+            " Time:"
+            + Time.time
+        );
+    }
 }

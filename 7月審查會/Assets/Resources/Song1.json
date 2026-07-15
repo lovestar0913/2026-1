@@ -1,0 +1,45 @@
+{
+  "songName": "Song1",
+  "bpm": 80,
+  "offset": 0,
+  "notes": [
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    }
+
+
+  ]
+}
