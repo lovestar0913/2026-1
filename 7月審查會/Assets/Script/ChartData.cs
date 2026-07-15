@@ -1,30 +1,60 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class ChartData : MonoBehaviour
+
+[Serializable]
+public class ChartData
 {
-    // Tap
-    public List<NoteData> notes = new();
+    // 歌曲資訊
+    public string songName;
 
-    // Hold
-    public List<HoldData> holds = new();
+    public float bpm;
+
+    public float offset;
+
+
+    // 所有音符
+    public List<NoteData> notes = new();
 }
+
+
 
 [Serializable]
 public class NoteData
 {
-    [Header("基本資料")]
+    // 軌道
     public Lane lane;
 
+
+    // 判定時間
     public float hitTime;
 
-    [Header("音符種類")]
+
+    // 音符種類
     public NoteType noteType = NoteType.Tap;
 
-    [Header("判定環")]
+
+    // 判定形狀
     public JudgeShape judgeShape = JudgeShape.Circle;
 
-    [HideInInspector]
-    public bool spawned = false;
+
+
+    // =================
+    // Hold資料
+    // =================
+
+    // 結束時間
+    public float endTime;
+
+
+    // 出生角度
+    public float startAngle;
+
+
+    // 判定角度
+    public float endAngle;
+
+
+    // 顏色
+    public HoldColor color;
 }

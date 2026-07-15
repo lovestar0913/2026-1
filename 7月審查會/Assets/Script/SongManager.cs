@@ -4,17 +4,29 @@ public class SongManager : MonoBehaviour
 {
     public static SongManager Instance;
 
+
     [Header("Audio")]
     public AudioSource musicSource;
 
+
+    [Header("Chart")]
+    public ChartData chartData;
+
+
+    [Header("Song Info")]
+    public float bpm = 180f;
+
+
     [Header("Offset")]
     public float musicOffset = 0f;
+
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -27,7 +39,7 @@ public class SongManager : MonoBehaviour
         Play();
     }
 
-    // 播放
+    // Play Control
     public void Play()
     {
         if (musicSource == null)
@@ -36,7 +48,6 @@ public class SongManager : MonoBehaviour
         musicSource.Play();
     }
 
-    // 暫停
     public void Pause()
     {
         if (musicSource == null)
@@ -45,7 +56,6 @@ public class SongManager : MonoBehaviour
         musicSource.Pause();
     }
 
-    // 停止
     public void Stop()
     {
         if (musicSource == null)
@@ -54,7 +64,6 @@ public class SongManager : MonoBehaviour
         musicSource.Stop();
     }
 
-    // 重播
     public void Restart()
     {
         if (musicSource == null)
@@ -65,7 +74,6 @@ public class SongManager : MonoBehaviour
         musicSource.Play();
     }
 
-    // 跳到指定時間
     public void Seek(float time)
     {
         if (musicSource == null)
@@ -74,16 +82,16 @@ public class SongManager : MonoBehaviour
         musicSource.time = Mathf.Max(0f, time);
     }
 
-    // 音量
     public void SetVolume(float volume)
     {
         if (musicSource == null)
             return;
 
-        musicSource.volume = Mathf.Clamp01(volume);
+        musicSource.volume =
+            Mathf.Clamp01(volume);
     }
 
-    // 目前播放時間
+    // Rhythm Time
     public float MusicTime
     {
         get
@@ -91,11 +99,34 @@ public class SongManager : MonoBehaviour
             if (musicSource == null)
                 return 0f;
 
+
             return musicSource.time + musicOffset;
         }
     }
 
-    // 是否播放中
+    // 小節時間
+    public float BeatTime
+    {
+        get
+        {
+            if (bpm <= 0)
+                return 0;
+
+
+            return 60f / bpm;
+        }
+    }
+
+    // 目前第幾拍
+    public float CurrentBeat
+    {
+        get
+        {
+            return MusicTime / BeatTime;
+        }
+    }
+
+    // State
     public bool IsPlaying
     {
         get
@@ -103,11 +134,11 @@ public class SongManager : MonoBehaviour
             if (musicSource == null)
                 return false;
 
+
             return musicSource.isPlaying;
         }
     }
 
-    // 音樂長度
     public float Length
     {
         get
@@ -115,8 +146,10 @@ public class SongManager : MonoBehaviour
             if (musicSource == null)
                 return 0f;
 
+
             if (musicSource.clip == null)
                 return 0f;
+
 
             return musicSource.clip.length;
         }

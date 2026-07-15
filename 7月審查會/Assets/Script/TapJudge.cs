@@ -34,7 +34,7 @@ public class TapJudge : MonoBehaviour
         Note target = null;
         float smallestError = Mathf.Infinity;
 
-        foreach (Note note in GameManager.Instance.activeNotes)
+        foreach (Note note in NoteSpawner.Instance.activeNotes)
         {
             if (note == null)
                 continue;
@@ -79,7 +79,7 @@ public class TapJudge : MonoBehaviour
 
         target.judged = true;
 
-        GameManager.Instance.activeNotes.Remove(target);
+        NoteSpawner.Instance.activeNotes.Remove(target);
 
         Destroy(target.gameObject);
     }
@@ -89,14 +89,14 @@ public class TapJudge : MonoBehaviour
     {
         float now = SongManager.Instance.MusicTime;
 
-        for (int i = GameManager.Instance.activeNotes.Count - 1; i >= 0; i--)
+        for (int i = NoteSpawner.Instance.activeNotes.Count - 1; i >= 0; i--)
         {
             Note note =
-                GameManager.Instance.activeNotes[i];
+                NoteSpawner.Instance.activeNotes[i];
 
             if (note == null)
             {
-                GameManager.Instance.activeNotes.RemoveAt(i);
+                NoteSpawner.Instance.activeNotes.RemoveAt(i);
                 continue;
             }
 
@@ -111,7 +111,7 @@ public class TapJudge : MonoBehaviour
 
                 GameManager.Instance.Miss();
 
-                GameManager.Instance.activeNotes.RemoveAt(i);
+                NoteSpawner.Instance.activeNotes.RemoveAt(i);
 
                 Destroy(note.gameObject);
             }

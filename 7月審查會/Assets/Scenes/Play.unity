@@ -2726,6 +2726,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicSource: {fileID: 1204157951}
+  chartData:
+    songName: 
+    bpm: 0
+    offset: 0
+    notes: []
+  bpm: 180
   musicOffset: 0
 --- !u!82 &1204157951
 AudioSource:
@@ -3184,7 +3190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1ba24249c4754242a2c992cdfbf1806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chartData: {fileID: 1920367941}
+  chartFile: {fileID: 0}
 --- !u!4 &1347211625
 Transform:
   m_ObjectHideFlags: 0
@@ -3894,14 +3900,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47690121d387fa47b6f05b6f27be477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chartData: {fileID: 0}
   perfectWindow: 0.08
   greatWindow: 0.16
   goodWindow: 0.24
   combo: 0
   score: 0
-  activeNotes: []
-  activeHolds: []
 --- !u!4 &1809922844
 Transform:
   m_ObjectHideFlags: 0
@@ -3931,7 +3934,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1920367939}
   - component: {fileID: 1920367940}
-  - component: {fileID: 1920367941}
   m_Layer: 0
   m_Name: NoteSpawner
   m_TagString: Untagged
@@ -3966,7 +3968,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed01b9501a4c78d4eae6d01deb473b11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chartData: {fileID: 1920367941}
+  activeNotes: []
+  activeHolds: []
   notePrefab: {fileID: 4647981500946433290, guid: fb3dac4f53f920942a6baa200163db24,
     type: 3}
   holdPrefab: {fileID: 4525331954912209166, guid: 522446db38944a44694c5ffb789dd974,
@@ -3983,32 +3986,6 @@ MonoBehaviour:
   spawnCircle: {fileID: 1372505107}
   redCircle: {fileID: 667693356}
   blueCircle: {fileID: 1344173100}
---- !u!114 &1920367941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1920367938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c66f921f4b0825948b39663439603fed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  notes: []
-  holds:
-  - hitTime: 2
-    endTime: 4
-    startAngle: 0
-    endAngle: 0
-    color: 0
-    spawned: 0
-  - hitTime: 2
-    endTime: 4
-    startAngle: 180
-    endAngle: 180
-    color: 1
-    spawned: 0
 --- !u!1 &1941728932
 GameObject:
   m_ObjectHideFlags: 0

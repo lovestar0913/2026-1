@@ -1,19 +1,42 @@
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public class NoteSpawner : MonoBehaviour
 {
-    [Header("Chart")]
-    public ChartData chartData;
+    public static NoteSpawner Instance;
+
+
+    private ChartData chartData;
+
+
+    [Header("Active Notes")]
+    public List<Note> activeNotes = new();
+
+    public List<HoldNote> activeHolds = new();
+
+
+
+    [Header("Spawned Note")]
+    private HashSet<NoteData> spawnedNotes = new();
+
+
 
     [Header("Prefab")]
     public GameObject notePrefab;
     public GameObject holdPrefab;
 
+
+
     [Header("Spawn")]
     public float approachTime = 2f;
 
+
+
     [Header("Tap Spawn")]
     public Transform centerSpawn;
+
+
 
     [Header("Tap Judge")]
     public Transform qJudge;
@@ -23,6 +46,8 @@ public class NoteSpawner : MonoBehaviour
     public Transform sJudge;
     public Transform aJudge;
 
+
+
     [Header("Hold")]
     public Transform rotateCenter;
 
@@ -30,36 +55,96 @@ public class NoteSpawner : MonoBehaviour
     public CircleTrack redCircle;
     public CircleTrack blueCircle;
 
-    private void Update()
+
+
+    private void Awake()
     {
-        if (SongManager.Instance == null)
-            return;
-
-        SpawnTap();
-
-        SpawnHold();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    //------------------------------------------------
-    // Tap
-    //------------------------------------------------
 
-    void SpawnTap()
+
+    private void Start()
     {
-        float now = SongManager.Instance.MusicTime;
+        if (SongManager.Instance == null)
+        {
+            Debug.LogError("找不到 SongManager");
+            return;
+        }
+
+
+        chartData =
+            SongManager.Instance.chartData;
+
+
+        if (chartData == null)
+        {
+            Debug.LogError("ChartData 為空");
+        }
+    }
+
+
+
+    private void Update()
+    {
+        if (chartData == null)
+            return;
+
+
+        SpawnNotes();
+    }
+
+
+
+    // =========================
+    // Spawn
+    // =========================
+
+
+    void SpawnNotes()
+    {
+        float now =
+            SongManager.Instance.MusicTime;
+
+
 
         foreach (NoteData data in chartData.notes)
         {
-            if (data.spawned)
+            if (spawnedNotes.Contains(data))
                 continue;
+
+
 
             if (now >= data.hitTime - approachTime)
             {
-                CreateTap(data);
-                data.spawned = true;
+                if (data.noteType == NoteType.Tap)
+                {
+                    CreateTap(data);
+                }
+                else if (data.noteType == NoteType.Hold)
+                {
+                    CreateHold(data);
+                }
+
+
+                spawnedNotes.Add(data);
             }
         }
     }
+
+
+
+    // =========================
+    // Tap
+    // =========================
+
 
     void CreateTap(NoteData data)
     {
@@ -69,97 +154,131 @@ public class NoteSpawner : MonoBehaviour
                 centerSpawn.position,
                 Quaternion.identity);
 
+
+
         Note note =
             obj.GetComponent<Note>();
+
+
+        if (note == null)
+        {
+            Debug.LogError("NotePrefab 缺少 Note");
+            Destroy(obj);
+            return;
+        }
+
+
+
+        // 加入管理
+        activeNotes.Add(note);
+
+
 
         note.lane = data.lane;
         note.hitTime = data.hitTime;
         note.noteType = data.noteType;
         note.judgeShape = data.judgeShape;
 
+
+
         NoteMovement move =
             obj.GetComponent<NoteMovement>();
 
-        move.startPos = centerSpawn.position;
-        move.approachTime = approachTime;
 
-        switch (data.lane)
+        if (move != null)
         {
-            case Lane.Q:
-                move.targetPos = qJudge.position;
-                break;
+            move.startPos =
+                centerSpawn.position;
 
-            case Lane.W:
-                move.targetPos = wJudge.position;
-                break;
 
-            case Lane.E:
-                move.targetPos = eJudge.position;
-                break;
+            move.approachTime =
+                approachTime;
 
-            case Lane.D:
-                move.targetPos = dJudge.position;
-                break;
 
-            case Lane.S:
-                move.targetPos = sJudge.position;
-                break;
-
-            case Lane.A:
-                move.targetPos = aJudge.position;
-                break;
+            move.targetPos =
+                GetJudgePosition(data.lane);
         }
 
-        GameManager.Instance.activeNotes.Add(note);
+
 
         NoteSprite sprite =
             obj.GetComponent<NoteSprite>();
+
 
         if (sprite != null)
             sprite.UpdateSprite();
     }
 
-    //------------------------------------------------
-    // Hold
-    //------------------------------------------------
 
-    void SpawnHold()
+
+
+    Vector3 GetJudgePosition(Lane lane)
     {
-        float now = SongManager.Instance.MusicTime;
-
-        foreach (HoldData data in chartData.holds)
+        switch (lane)
         {
-            if (data.spawned)
-                continue;
+            case Lane.Q:
+                return qJudge.position;
 
-            if (now >= data.hitTime - approachTime)
-            {
-                CreateHold(data);
-                data.spawned = true;
-            }
+            case Lane.W:
+                return wJudge.position;
+
+            case Lane.E:
+                return eJudge.position;
+
+            case Lane.D:
+                return dJudge.position;
+
+            case Lane.S:
+                return sJudge.position;
+
+            case Lane.A:
+                return aJudge.position;
         }
+
+
+        return centerSpawn.position;
     }
 
-    void CreateHold(HoldData data)
+
+
+
+    // =========================
+    // Hold
+    // =========================
+
+
+    void CreateHold(NoteData data)
     {
         CircleTrack judgeCircle =
             data.color == HoldColor.Red
             ? redCircle
             : blueCircle;
 
+
+
         Vector3 spawnPos =
-            spawnCircle.GetPoint(data.startAngle);
+            spawnCircle.GetPoint(
+                data.startAngle);
+
+
 
         Vector3 judgePos =
-            judgeCircle.GetPoint(data.endAngle);
+            judgeCircle.GetPoint(
+                data.endAngle);
+
+
 
         Vector3 dir =
             (judgePos - spawnPos).normalized;
+
+
 
         Quaternion rot =
             Quaternion.LookRotation(
                 Vector3.forward,
                 dir);
+
+
 
         GameObject obj =
             Instantiate(
@@ -167,22 +286,40 @@ public class NoteSpawner : MonoBehaviour
                 spawnPos,
                 rot);
 
-        //------------------------------------------------
+
 
         HoldNote hold =
             obj.GetComponent<HoldNote>();
 
+
+        if (hold == null)
+        {
+            Debug.LogError("HoldPrefab 缺少 HoldNote");
+            Destroy(obj);
+            return;
+        }
+
+
+
+        activeHolds.Add(hold);
+
+
+
         hold.data = data;
 
-        hold.judgeTrack = judgeCircle;
-        hold.judgeAngle = data.endAngle;
 
-        GameManager.Instance.activeHolds.Add(hold);
+        hold.judgeTrack =
+            judgeCircle;
 
-        //------------------------------------------------
+
+        hold.judgeAngle =
+            data.endAngle;
+
+
 
         HoldRenderer renderer =
             obj.GetComponent<HoldRenderer>();
+
 
         if (renderer != null)
         {
@@ -191,7 +328,10 @@ public class NoteSpawner : MonoBehaviour
                     0.5f,
                     (data.endTime - data.hitTime) * 2f);
 
+
+
             renderer.Generate(length);
+
 
             renderer.SetColor(
                 data.color == HoldColor.Red
@@ -199,14 +339,17 @@ public class NoteSpawner : MonoBehaviour
                 : Color.cyan);
         }
 
-        //------------------------------------------------
+
 
         HoldMovement movement =
             obj.GetComponent<HoldMovement>();
 
+
         if (movement != null)
         {
-            movement.approachTime = approachTime;
+            movement.approachTime =
+                approachTime;
+
 
             movement.Initialize(
                 data.hitTime,

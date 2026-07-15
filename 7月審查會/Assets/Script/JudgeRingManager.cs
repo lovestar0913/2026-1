@@ -41,7 +41,7 @@ public class JudgeRingManager : MonoBehaviour
 
         float nearestTime = Mathf.Infinity;
 
-        foreach (Note note in GameManager.Instance.activeNotes)
+        foreach (Note note in NoteSpawner.Instance.activeNotes)
         {
             if (note == null)
                 continue;

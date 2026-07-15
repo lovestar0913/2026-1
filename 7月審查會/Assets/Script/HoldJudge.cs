@@ -20,20 +20,20 @@ public class HoldJudge : MonoBehaviour
 
     void UpdateHold()
     {
-        for (int i = GameManager.Instance.activeHolds.Count - 1; i >= 0; i--)
+        for (int i = NoteSpawner.Instance.activeHolds.Count - 1; i >= 0; i--)
         {
             HoldNote hold =
-                GameManager.Instance.activeHolds[i];
+                NoteSpawner.Instance.activeHolds[i];
 
             if (hold == null)
             {
-                GameManager.Instance.activeHolds.RemoveAt(i);
+                NoteSpawner.Instance.activeHolds.RemoveAt(i);
                 continue;
             }
 
             if (hold.finished)
             {
-                GameManager.Instance.activeHolds.RemoveAt(i);
+                NoteSpawner.Instance.activeHolds.RemoveAt(i);
                 continue;
             }
 
@@ -72,7 +72,7 @@ public class HoldJudge : MonoBehaviour
                 {
                     hold.Miss();
 
-                    GameManager.Instance.activeHolds.RemoveAt(i);
+                    NoteSpawner.Instance.activeHolds.RemoveAt(i);
 
                     continue;
                 }
@@ -120,7 +120,7 @@ public class HoldJudge : MonoBehaviour
                 {
                     hold.Miss();
 
-                    GameManager.Instance.activeHolds.RemoveAt(i);
+                    NoteSpawner.Instance.activeHolds.RemoveAt(i);
 
                     continue;
                 }
@@ -131,7 +131,7 @@ public class HoldJudge : MonoBehaviour
                 {
                     hold.Miss();
 
-                    GameManager.Instance.activeHolds.RemoveAt(i);
+                    NoteSpawner.Instance.activeHolds.RemoveAt(i);
 
                     continue;
                 }
@@ -142,7 +142,7 @@ public class HoldJudge : MonoBehaviour
             {
                 hold.Miss();
 
-                GameManager.Instance.activeHolds.RemoveAt(i);
+                NoteSpawner.Instance.activeHolds.RemoveAt(i);
 
                 continue;
             }
@@ -163,7 +163,7 @@ public class HoldJudge : MonoBehaviour
 
                 GameManager.Instance.Perfect();
 
-                GameManager.Instance.activeHolds.RemoveAt(i);
+                NoteSpawner.Instance.activeHolds.RemoveAt(i);
 
                 Destroy(hold.gameObject);
             }
