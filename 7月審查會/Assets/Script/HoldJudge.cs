@@ -40,28 +40,32 @@ public class HoldJudge : MonoBehaviour
             float now =
                 SongManager.Instance.MusicTime;
 
-            //------------------------------------------------
             // 尚未開始
-            //------------------------------------------------
-
             if (now < hold.data.hitTime)
                 continue;
 
-            //------------------------------------------------
-            // 判斷按鍵
-            //------------------------------------------------
-
+            // 按鍵狀態
             bool pressed =
                 hold.data.color == HoldColor.Red
                 ? Input.GetMouseButton(0)
                 : Input.GetMouseButton(1);
 
-            //------------------------------------------------
-            // 第一次判定
-            //------------------------------------------------
+            bool pressedDown =
+                hold.data.color == HoldColor.Red
+                ? Input.GetMouseButtonDown(0)
+                : Input.GetMouseButtonDown(1);
 
+            bool pressedUp =
+                hold.data.color == HoldColor.Red
+                ? Input.GetMouseButtonUp(0)
+                : Input.GetMouseButtonUp(1);
+
+            // 第一次判定
             if (!hold.isHolding)
             {
+                float error =
+                    Mathf.Abs(now - hold.data.hitTime);
+
                 if (now >
                     hold.data.hitTime +
                     GameManager.Instance.goodWindow)
@@ -73,21 +77,35 @@ public class HoldJudge : MonoBehaviour
                     continue;
                 }
 
-                if (pressed)
+                if (pressedDown)
                 {
+                    if (error <= GameManager.Instance.perfectWindow)
+                    {
+                        GameManager.Instance.Perfect();
+                    }
+                    else if (error <= GameManager.Instance.greatWindow)
+                    {
+                        GameManager.Instance.Great();
+                    }
+                    else if (error <= GameManager.Instance.goodWindow)
+                    {
+                        GameManager.Instance.Good();
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
                     hold.StartHold();
 
                     hold.nextTickTime =
                         now + tickInterval;
                 }
 
-                continue;
+            continue;
             }
 
-            //------------------------------------------------
-            // 是否仍在正確顏色
-            //------------------------------------------------
-
+            // 是否在正確顏色
             bool onRed =
                 redCircle.IsInsideTrack(
                     hold.judgeAngle);
@@ -98,7 +116,6 @@ public class HoldJudge : MonoBehaviour
 
             if (hold.data.color == HoldColor.Red)
             {
-                // 離開紅圈或跑到藍圈
                 if (!onRed || onBlue)
                 {
                     hold.Miss();
@@ -110,7 +127,6 @@ public class HoldJudge : MonoBehaviour
             }
             else
             {
-                // 離開藍圈或跑到紅圈
                 if (!onBlue || onRed)
                 {
                     hold.Miss();
@@ -121,10 +137,7 @@ public class HoldJudge : MonoBehaviour
                 }
             }
 
-            //------------------------------------------------
             // 中途放開
-            //------------------------------------------------
-
             if (!pressed)
             {
                 hold.Miss();
@@ -134,10 +147,7 @@ public class HoldJudge : MonoBehaviour
                 continue;
             }
 
-            //------------------------------------------------
             // Tick 加分
-            //------------------------------------------------
-
             if (now >= hold.nextTickTime &&
                 now < hold.data.endTime)
             {
@@ -146,10 +156,7 @@ public class HoldJudge : MonoBehaviour
                 hold.nextTickTime += tickInterval;
             }
 
-            //------------------------------------------------
             // Hold 完成
-            //------------------------------------------------
-
             if (now >= hold.data.endTime)
             {
                 hold.finished = true;
