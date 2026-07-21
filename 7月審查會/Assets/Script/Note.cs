@@ -27,14 +27,12 @@ public enum JudgeShape
 }
 
 
-
 public class Note : MonoBehaviour
 {
     [Header("基本資料")]
     public Lane lane;
 
     public float hitTime;
-
 
 
     [Header("音符種類")]
@@ -47,8 +45,44 @@ public class Note : MonoBehaviour
 
 
 
+    [Header("譜面資訊")]
+    public int noteID;
+
+    public string comment;
+
+
+
     [Header("判定")]
     public bool judged = false;
+
+
+
+    //=========================
+    // 初始化
+    //=========================
+
+    public void Initialize(
+        int id,
+        Lane lane,
+        float time,
+        NoteType type,
+        JudgeShape shape,
+        string text = "")
+    {
+        noteID = id;
+
+        this.lane = lane;
+
+        hitTime = time;
+
+        noteType = type;
+
+        judgeShape = shape;
+
+        comment = text;
+
+        judged = false;
+    }
 
 
 
@@ -56,53 +90,66 @@ public class Note : MonoBehaviour
     // Debug
     //=========================
 
+
     private void Awake()
     {
         Debug.Log(
-            "Note Awake : "
-            + gameObject.name
+            $"Note Awake : {gameObject.name}"
         );
     }
+
 
 
     private void OnEnable()
     {
         Debug.Log(
-            "Note Enable : "
-            + gameObject.name
+            $"Note Enable : {gameObject.name}"
         );
     }
+
 
 
     private void Start()
     {
         Debug.Log(
-            "Note Start : "
-            + gameObject.name
-            +
-            " HitTime:"
-            + hitTime
+            $"Note Start : ID:{noteID} " +
+            $"Lane:{lane} " +
+            $"HitTime:{hitTime} " +
+            $"Comment:{comment}"
         );
     }
+
 
 
     private void OnDisable()
     {
-        Debug.LogWarning(
-            "Note Disable : "
-            + gameObject.name
+        Debug.Log(
+            $"Note Disable : {gameObject.name}"
         );
     }
 
 
+
     private void OnDestroy()
     {
-        Debug.LogError(
-            "Note Destroy : "
-            + gameObject.name
-            +
-            " Time:"
-            + Time.time
+        Debug.Log(
+            $"Note Destroy : ID:{noteID} " +
+            $"Time:{Time.time}"
         );
+    }
+
+
+
+    //=========================
+    // Reset
+    //=========================
+
+    public void ResetNote()
+    {
+        judged = false;
+
+        noteID = 0;
+
+        comment = "";
     }
 }

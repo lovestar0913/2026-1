@@ -35,11 +35,1243 @@
     },
     {
       "lane": 4,
+      "hitTime": 3.05,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.3625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.55,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 5.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.8625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 2,
+      "hitTime": 6.05,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 0,
+      "hitTime": 6.8,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 4,
+      "hitTime": 6.9875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 5,
+      "hitTime": 7.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 7.3625,
+      "noteType": 0,
+      "judgeShape": 0,
+      "comment": "第3段前全OK"
+    },
+    {
+      "lane": 5,
+      "hitTime": 8.4875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 9.8,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 10.925,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 4,
+      "hitTime": 11.1125,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 11.3,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 2,
+      "hitTime": 11.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 0,
+      "hitTime": 12.425,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 2,
+      "hitTime": 12.9875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 13.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 14.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 15.05,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 15.8,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 16.3625,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 2,
+      "hitTime": 16.925,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 18.05,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime":18.425,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 19.175,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 19.3625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 19.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 19.925,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 20.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 20.675,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 20.8625,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 21.05,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 21.425,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 21.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 22.175,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 22.3625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 22.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 23.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 23.675,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 23.8625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 24.05,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 25.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 26.3,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 26.4875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 26.675,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 26.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 27.05,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 27.425,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 27.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 28.3625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 28.55,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 28.925,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 29.3,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 29.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 30.05,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 30.425,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 30.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 31.3625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 31.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 31.925,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 32.3,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 32.4875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 32.675,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 32.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 33.05,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 33.425,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 33.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 34.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 35.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 36.05,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 36.425,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 36.6125,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 36.8,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 37.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 37.3625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 37.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 37.925,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 38.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 38.4875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 38.675,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 38.8625,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 39.05,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 39.425,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 39.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 40.3625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 40.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 40.925,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 41.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 41.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 42.05,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 42.425,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 42.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 43.3625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 43.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 43.925,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 44.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 44.4875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 44.675,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 45.05,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 45.425,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 45.6125,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 45.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 46.175,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 46.3625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 46.55,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 46.925,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 47.1125,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 47.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 47.675,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 48.05,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 5,
+      "hitTime": 48.425,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 48.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 49.175,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 49.3625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 49.55,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 50.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
       "hitTime": 3.2375,
       "noteType": 0,
       "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 0.8,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 0.9875,
+      "noteType": 0,
+      "judgeShape": 1
+    },
+    {
+      "lane": 0,
+      "hitTime": 1.175,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 1.55,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
+      "hitTime": 2.8625,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 3.2375,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 4,
+      "hitTime": 4.125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "第2節最後"
+    },
+    {
+      "lane": 5,
+      "hitTime": 4.5,
+      "noteType": 0,
+      "judgeShape": 2
+    },
+    {
+      "lane": 0,
+      "hitTime": 4.875,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 1,
+      "hitTime": 5.0625,
+      "noteType": 0,
+      "judgeShape": 1
     }
-
-
   ]
 }

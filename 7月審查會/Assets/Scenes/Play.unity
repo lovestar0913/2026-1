@@ -504,7 +504,7 @@ MonoBehaviour:
   - {fileID: 1202416261}
   - {fileID: 2143208097}
   - {fileID: 306445101}
-  showTime: 2
+  showTime: 3
 --- !u!114 &149068294
 MonoBehaviour:
   m_ObjectHideFlags: 0
