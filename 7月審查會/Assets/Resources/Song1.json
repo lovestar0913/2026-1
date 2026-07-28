@@ -88,11 +88,13 @@
       "judgeShape": 0
     },
     {
-      "lane": 4,
-      "hitTime": 8.4875,
-      "noteType": 0,
-      "judgeShape": 0,
-      "comment": "第3段前全OK"
+      "hitTime": 8.3,
+      "endTime": 9.05,
+      "noteType": 1,
+      "color": 1,
+      "startAngle": 300,
+      "endAngle": 270,
+      "comment": "長按"
     },
     {
       "lane": 5,
@@ -107,22 +109,24 @@
       "judgeShape": 1
     },
     {
-      "lane": 5,
+      "lane": 0,
       "hitTime": 11.1125,
       "noteType": 0,
-      "judgeShape": 2
+      "judgeShape": 1,
+      "comment": "一個Q代表"
     },
     {
       "lane": 4,
-      "hitTime": 11.3,
+      "hitTime": 11.675,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 1
     },
     {
       "lane": 3,
       "hitTime": 11.8625,
       "noteType": 0,
-      "judgeShape": 1
+      "judgeShape": 1,
+      "comment": "一個D代表"
     },
     {
       "lane": 2,
@@ -173,163 +177,169 @@
       "judgeShape": 2
     },
     {
-      "lane": 2,
+      "lane": 0,
       "hitTime": 17.3,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 2,
       "hitTime": 18.05,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 4,
       "hitTime": 19.175,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
       "hitTime": 19.3625,
-      "noteType": 0,
-      "judgeShape": 1
+      "endTime": 19.925,
+      "noteType": 1,
+      "HoldColor": 0,
+      "startAngle": 270,
+      "endAngle": 270,
+      "comment": "長按"
     },
     {
       "lane": 0,
-      "hitTime": 19.55,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
       "hitTime": 20.3,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 5,
       "hitTime": 20.675,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
       "hitTime": 20.8625,
+      "endTime": 21.425,
+      "noteType": 1,
+      "HoldColor": 1,
+      "startAngle": 225,
+      "endAngle": 225,
+      "comment": "長按"
+    },
+    {
+      "lane": 4,
+      "hitTime": 21.8,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
-      "hitTime": 21.05,
-      "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 5,
-      "hitTime": 21.8,
-      "noteType": 0,
-      "judgeShape": 2
-    },
-    {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 22.175,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "hitTime": 22.3625,
+      "endTime": 23.3,
+      "noteType": 1,
+      "HoldColor": 0,
+      "startAngle": 180,
+      "endAngle": 180,
+      "comment": "長按"
+    },
+    {
+      "lane": 0,
       "hitTime": 23.3,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 23.675,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 4,
       "hitTime": 23.8625,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
-      "hitTime": 24.05,
-      "noteType": 0,
-      "judgeShape": 0
+      "hitTime": 22.3625,
+      "endTime": 25.55,
+      "noteType": 1,
+      "HoldColor": 1,
+      "startAngle": 270,
+      "endAngle": 270,
+      "comment": "長按"
     },
     {
-      "lane": 3,
+      "lane": 0,
       "hitTime": 26.3,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 1,
       "hitTime": 26.4875,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 0,
       "hitTime": 26.675,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 2,
       "hitTime": 27.05,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 5,
+      "lane": 3,
       "hitTime": 28.3625,
       "noteType": 0,
       "judgeShape": 2
     },
     {
-      "lane": 0,
+      "lane": 4,
       "hitTime": 28.55,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 4,
       "hitTime": 29.8625,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 5,
       "hitTime": 30.05,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 0,
       "hitTime": 30.8,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 1,
       "hitTime": 31.3625,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 2,
       "hitTime": 31.55,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 0,
       "hitTime": 32.4875,
       "noteType": 0,
       "judgeShape": 0
@@ -341,25 +351,31 @@
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 5,
       "hitTime": 32.8625,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 5,
+      "lane": 4,
       "hitTime": 33.8,
       "noteType": 0,
       "judgeShape": 2
     },
     {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 34.55,
       "noteType": 0,
       "judgeShape": 0
     },
     {
       "lane": 1,
+      "hitTime": 35.3,
+      "noteType": 0,
+      "judgeShape": 0
+    },
+    {
+      "lane": 3,
       "hitTime": 36.05,
       "noteType": 0,
       "judgeShape": 1
@@ -368,16 +384,11 @@
       "lane": 0,
       "hitTime": 36.6125,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 1,
+      "comment": "一個Q代表"
     },
     {
-      "lane": 1,
-      "hitTime": 36.8,
-      "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
+      "lane": 4,
       "hitTime": 37.175,
       "noteType": 0,
       "judgeShape": 0
@@ -386,16 +397,11 @@
       "lane": 3,
       "hitTime": 37.3625,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個D代表"
     },
     {
-      "lane": 3,
-      "hitTime": 37.55,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
+      "lane": 5,
       "hitTime": 38.4875,
       "noteType": 0,
       "judgeShape": 0
@@ -413,25 +419,25 @@
       "judgeShape": 2
     },
     {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 40.3625,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 4,
       "hitTime": 40.55,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 4,
       "hitTime": 41.8625,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 3,
       "hitTime": 42.05,
       "noteType": 0,
       "judgeShape": 1
@@ -443,25 +449,25 @@
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 2,
       "hitTime": 43.55,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 2,
       "hitTime": 44.4875,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 1,
       "hitTime": 44.675,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 0,
       "hitTime": 45.05,
       "noteType": 0,
       "judgeShape": 1
@@ -473,34 +479,24 @@
       "judgeShape": 2
     },
     {
-      "lane": 0,
+      "lane": 5,
       "hitTime": 45.6125,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個A代表"
     },
     {
-      "lane": 1,
-      "hitTime": 45.8,
-      "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 46.175,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 4,
       "hitTime": 46.3625,
       "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
-      "hitTime": 46.55,
-      "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 1,
+      "comment": "一個S代表"
     },
     {
       "lane": 3,
@@ -509,25 +505,20 @@
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 2,
       "hitTime": 47.1125,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個E代表"
     },
     {
-      "lane": 4,
-      "hitTime": 47.3,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
+      "lane": 3,
       "hitTime": 48.05,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 5,
+      "lane": 1,
       "hitTime": 48.425,
       "noteType": 0,
       "judgeShape": 2
@@ -539,44 +530,38 @@
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 2,
       "hitTime": 49.175,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 50.8625,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 4,
       "hitTime": 51.05,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 51.425,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 0,
       "hitTime": 51.8,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 1,
       "hitTime": 52.3625,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
-      "hitTime": 52.55,
       "noteType": 0,
       "judgeShape": 0
     },
@@ -584,10 +569,11 @@
       "lane": 4,
       "hitTime": 53.8625,
       "noteType": 0,
-      "judgeShape": 1
+      "judgeShape": 1,
+      "comment": "一個E代表"
     },
     {
-      "lane": 5,
+      "lane": 1,
       "hitTime": 54.05,
       "noteType": 0,
       "judgeShape": 2
@@ -599,7 +585,7 @@
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 0,
       "hitTime": 54.8,
       "noteType": 0,
       "judgeShape": 1
@@ -611,19 +597,19 @@
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 2,
       "hitTime": 55.55,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 56.8625,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 4,
       "hitTime": 57.05,
       "noteType": 0,
       "judgeShape": 0
@@ -635,37 +621,37 @@
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 0,
       "hitTime": 57.8,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 5,
       "hitTime": 58.55,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 5,
+      "lane": 4,
       "hitTime": 58.925,
       "noteType": 0,
       "judgeShape": 2
     },
     {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 59.1125,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 4,
       "hitTime": 59.3,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 4,
       "hitTime": 60.05,
       "noteType": 0,
       "judgeShape": 0
@@ -677,37 +663,27 @@
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 1,
       "hitTime": 60.6125,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個W代表"
     },
     {
-      "lane": 3,
-      "hitTime": 60.8,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
+      "lane": 4,
       "hitTime": 61.175,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 5,
       "hitTime": 61.3625,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個A代表"
     },
     {
-      "lane": 4,
-      "hitTime": 61.55,
-      "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 5,
+      "lane": 3,
       "hitTime": 61.925,
       "noteType": 0,
       "judgeShape": 2
@@ -716,31 +692,21 @@
       "lane": 0,
       "hitTime": 62.1125,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個Q代表"
     },
     {
       "lane": 1,
-      "hitTime": 62.3,
-      "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
       "hitTime": 62.675,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 2,
       "hitTime": 62.8625,
       "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
-      "hitTime": 63.05,
-      "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 1,
+      "comment": "一個E代表"
     },
     {
       "lane": 3,
@@ -749,13 +715,22 @@
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "hitTime": 63.425,
+      "endTime": 64.55,
+      "noteType": 1,
+      "HoldColor": 0,
+      "startAngle": 270,
+      "endAngle": 270,
+      "comment": "長按"
+    },
+    {
+      "lane": 1,
       "hitTime": 67.925,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 5,
       "hitTime": 68.3,
       "noteType": 0,
       "judgeShape": 0
@@ -764,41 +739,35 @@
       "lane": 4,
       "hitTime": 68.8625,
       "noteType": 0,
-      "judgeShape": 1,
-      "comment": "第2節最後"
+      "judgeShape": 1
     },
     {
-      "lane": 5,
+      "lane": 3,
       "hitTime": 69.05,
       "noteType": 0,
       "judgeShape": 2
     },
     {
-      "lane": 0,
+      "lane": 5,
       "hitTime": 69.8,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 4,
       "hitTime": 70.175,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 1,
       "hitTime": 70.3625,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個W代表"
     },
     {
-      "lane": 1,
-      "hitTime": 70.55,
-      "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
+      "lane": 3,
       "hitTime": 71.3,
       "noteType": 0,
       "judgeShape": 0
@@ -807,56 +776,34 @@
       "lane": 3,
       "hitTime": 71.8625,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個D代表"
     },
     {
-      "lane": 3,
-      "hitTime": 72.05,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
+      "lane": 2,
       "hitTime": 73.175,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 1,
       "hitTime": 73.3625,
       "noteType": 0,
       "judgeShape": 1,
-      "comment": "第2節最後"
+      "comment": "一個W代表"
     },
     {
-      "lane": 5,
-      "hitTime": 73.55,
-      "noteType": 0,
-      "judgeShape": 2
-    },
-    {
-      "lane": 0,
-      "hitTime": 74.3,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 1,
+      "lane": 3,
       "hitTime": 74.4875,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 4,
       "hitTime": 74.8625,
       "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 1,
-      "hitTime": 75.05,
-      "noteType": 0,
-      "judgeShape": 1
+      "judgeShape": 0,
+      "comment": "一個A代表"
     },
     {
       "lane": 0,
@@ -865,19 +812,14 @@
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 0,
       "hitTime": 75.6125,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個Q代表"
     },
     {
-      "lane": 3,
-      "hitTime": 75.8,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
+      "lane": 5,
       "hitTime": 76.175,
       "noteType": 0,
       "judgeShape": 0
@@ -887,53 +829,30 @@
       "hitTime": 76.3625,
       "noteType": 0,
       "judgeShape": 1,
-      "comment": "第2節最後"
+      "comment": "一個S代表"
     },
     {
       "lane": 5,
-      "hitTime": 76.55,
-      "noteType": 0,
-      "judgeShape": 2
-    },
-    {
-      "lane": 0,
       "hitTime": 76.925,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 2,
       "hitTime": 77.1125,
       "noteType": 0,
-      "judgeShape": 1
+      "judgeShape": 1,
+      "comment": "一個E代表"
     },
     {
-      "lane": 0,
-      "hitTime": 77.3,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 1,
+      "lane": 5,
       "hitTime": 77.8625,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
-      "hitTime": 78.05,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
+      "lane": 5,
       "hitTime": 78.425,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
-      "hitTime": 78.7,
       "noteType": 0,
       "judgeShape": 0
     },
@@ -944,93 +863,77 @@
       "judgeShape": 0
     },
     {
-      "lane": 4,
+      "lane": 3,
       "hitTime": 79.175,
       "noteType": 0,
-      "judgeShape": 1,
-      "comment": "第2節最後"
+      "judgeShape": 1
+    },
+    {
+      "lane": 3,
+      "hitTime": 79.3625,
+      "noteType": 0,
+      "judgeShape": 2,
+      "comment": "一個D代表"
     },
     {
       "lane": 5,
-      "hitTime": 79.3625,
-      "noteType": 0,
-      "judgeShape": 2
-    },
-    {
-      "lane": 0,
-      "hitTime": 79.55,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 1,
       "hitTime": 80.3,
       "noteType": 0,
       "judgeShape": 1
     },
     {
-      "lane": 0,
+      "lane": 4,
       "hitTime": 80.675,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
       "hitTime": 80.8625,
-      "noteType": 0,
-      "judgeShape": 1
+      "endTime": 81.8,
+      "noteType": 1,
+      "HoldColor": 0,
+      "startAngle": 315,
+      "endAngle": 315,
+      "comment": "長按"
     },
     {
       "lane": 0,
-      "hitTime": 81.05,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
       "hitTime": 81.8,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 4,
       "hitTime": 82.175,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 4,
       "hitTime": 82.3625,
-      "noteType": 0,
-      "judgeShape": 0
+      "endTime": 83.3,
+      "noteType": 1,
+      "HoldColor": 1,
+      "startAngle": 270,
+      "endAngle": 270,
+      "comment": "長按"
     },
     {
-      "lane": 4,
-      "hitTime": 82.55,
-      "noteType": 0,
-      "judgeShape": 1,
-      "comment": "第2節最後"
-    },
-    {
-      "lane": 5,
+      "lane": 3,
       "hitTime": 83.3,
       "noteType": 0,
       "judgeShape": 2
     },
     {
-      "lane": 0,
       "hitTime": 83.8625,
-      "noteType": 0,
-      "judgeShape": 0
+      "endTime": 84.425,
+      "noteType": 1,
+      "HoldColor": 0,
+      "startAngle": 270,
+      "endAngle": 270,
+      "comment": "長按"
     },
     {
-      "lane": 1,
-      "hitTime": 84.05,
-      "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
+      "lane": 2,
       "hitTime": 85.175,
       "noteType": 0,
       "judgeShape": 0
@@ -1039,54 +942,43 @@
       "lane": 1,
       "hitTime": 85.3625,
       "noteType": 0,
-      "judgeShape": 1
+      "judgeShape": 1,
+      "comment": "一個W代表"
     },
     {
-      "lane": 0,
-      "hitTime": 85.55,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
+      "lane": 5,
       "hitTime": 86.675,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 4,
       "hitTime": 86.8625,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個S代表"
     },
     {
-      "lane": 4,
-      "hitTime": 87.05,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
+      "lane": 3,
       "hitTime": 87.425,
       "noteType": 0,
-      "judgeShape": 1,
-      "comment": "第2節最後"
+      "judgeShape": 1
     },
     {
-      "lane": 5,
+      "lane": 0,
       "hitTime": 87.8,
       "noteType": 0,
       "judgeShape": 2
     },
     {
       "lane": 0,
-      "hitTime": 88.3625,
+      "hitTime": 88.175,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 2
     },
     {
       "lane": 1,
-      "hitTime": 88.55,
+      "hitTime": 89.925,
       "noteType": 0,
       "judgeShape": 1
     },
@@ -1094,13 +986,8 @@
       "lane": 0,
       "hitTime": 89.1125,
       "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 1,
-      "hitTime": 89.3,
-      "noteType": 0,
-      "judgeShape": 1
+      "judgeShape": 0,
+      "comment": "一個Q代表"
     },
     {
       "lane": 0,
@@ -1109,53 +996,37 @@
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 5,
       "hitTime": 90.425,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 3,
+      "lane": 4,
       "hitTime": 90.6125,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 0,
+      "comment": "一個S代表"
     },
     {
-      "lane": 4,
-      "hitTime": 90.8,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
+      "lane": 3,
       "hitTime": 91.175,
-      "noteType": 0,
-      "judgeShape": 1,
-      "comment": "第2節最後"
-    },
-    {
-      "lane": 5,
-      "hitTime": 91.3625,
-      "noteType": 0,
-      "judgeShape": 2
-    },
-    {
-      "lane": 0,
-      "hitTime": 91.55,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 1,
-      "hitTime": 92.1125,
       "noteType": 0,
       "judgeShape": 1
     },
     {
       "lane": 0,
-      "hitTime": 92.3,
+      "hitTime": 91.3625,
       "noteType": 0,
-      "judgeShape": 0
+      "judgeShape": 2,
+      "comment": "一個Q代表"
+    },
+    {
+      "lane": 5,
+      "hitTime": 92.1125,
+      "noteType": 0,
+      "judgeShape": 1,
+      "comment": "一個A代表"
     },
     {
       "lane": 1,
@@ -1164,96 +1035,57 @@
       "judgeShape": 1
     },
     {
-      "lane": 0,
       "hitTime": 92.8625,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
-      "hitTime": 93.05,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
-      "hitTime": 94.925,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
-      "hitTime": 95.1125,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
-      "hitTime": 95.3,
-      "noteType": 0,
-      "judgeShape": 1,
-      "comment": "第2節最後"
+      "endTime": 94.55,
+      "noteType": 1,
+      "HoldColor": 0,
+      "startAngle": 315,
+      "endAngle": 315,
+      "comment": "長按"
     },
     {
       "lane": 5,
+      "hitTime": 95.1125,
+      "noteType": 0,
+      "judgeShape": 0,
+      "comment": "一個A代表"
+    },
+    {
+      "lane": 3,
       "hitTime": 95.675,
       "noteType": 0,
       "judgeShape": 2
     },
     {
-      "lane": 0,
       "hitTime": 95.8625,
-      "noteType": 0,
-      "judgeShape": 0
+      "endTime": 96.05,
+      "noteType": 1,
+      "HoldColor": 0,
+      "startAngle": 225,
+      "endAngle": 225,
+      "comment": "長按"
     },
     {
-      "lane": 1,
-      "hitTime": 96.05,
-      "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
+      "lane": 4,
       "hitTime": 97.925,
       "noteType": 0,
       "judgeShape": 0
     },
     {
-      "lane": 1,
+      "lane": 3,
       "hitTime": 98.1125,
       "noteType": 0,
-      "judgeShape": 1
-    },
-    {
-      "lane": 0,
-      "hitTime": 98.3,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
-      "hitTime": 98.675,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 3,
-      "hitTime": 99.05,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
-      "hitTime": 101.3,
-      "noteType": 0,
-      "judgeShape": 0
-    },
-    {
-      "lane": 4,
-      "hitTime": 95.3,
-      "noteType": 0,
       "judgeShape": 1,
-      "comment": "最尾休息"
+      "comment": "一個D代表"
+    },
+    {
+      "hitTime": 98.8625,
+      "endTime": 102,
+      "noteType": 1,
+      "HoldColor": 0,
+      "startAngle": 225,
+      "endAngle": 225,
+      "comment": "長按 歌曲結束"
     }
   ]
 }
